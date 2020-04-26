@@ -9,6 +9,10 @@ export default function Login({ navigation }) {
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
+    function handleSignIn() {
+        signIn(userName, password);
+    }
+
     return(
         <View style={styles.container}>
             <TextInput 
@@ -24,11 +28,7 @@ export default function Login({ navigation }) {
             />
 
             <Touchable 
-                onPress={() => {
-                    console.log(userName, password)
-                    signIn(userName, password);
-                    navigation.navigate('Home');
-                }}
+                onPress={handleSignIn}
                 background={Touchable.SelectableBackground()}
             >
                 <Text>Login</Text>

@@ -1,28 +1,24 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard } from 'react-native';
+
+import Touchable from 'react-native-platform-touchable';
+import { systemWeights } from 'react-native-typography'
 import CreateQuestionComponent from '../../components/CreateQuestionComponent';
 import Picker from './utils/StyledPicker';
 import TagInput from './utils/TagInput';
-import { systemWeights } from 'react-native-typography'
-import Touchable from 'react-native-platform-touchable';
-import api from '../../services/api';
+import showAlertError from '../../components/AlertError';
 
-import AuthContext  from '../../contexts/auth';
+import api from '../../services/api';
 
 // Title, category, tags([string]), numQuestions, quentions([question]), private(bool), timer
 // question: questionTitle, options[string], correctOptionIndex
 
 export default function CreateQuiz({ navigation }) {
-    const { user } = useContext(AuthContext);
-
     const [quizTitle, setQuizTitle] = useState('');
     const [category, setCategory] = useState("educativo");
     const [isPrivate, setIsPrivate] = useState(false);
     const [tags, setTags] = useState([]);
     const [questions, setQuestions] = useState([]);
-
-    console.log(user);
-    
 
     function toggleSwitch(){
         setIsPrivate(previousState => !previousState);
@@ -41,24 +37,13 @@ export default function CreateQuiz({ navigation }) {
         setCategory(selection);
     }
 
-    function showUncompleteFieldsAlert(message) {
-        Alert.alert(
-            'Preencha os campos necessários',
-            message,
-            [
-                { text: 'OK', onPress: () => null },
-            ],
-            { cancelable: true },
-        );
-    }
-
     async function onSubmit(){
         if (quizTitle.trim().length===0){
-            showUncompleteFieldsAlert('Título do Quiz em branco!');
+            showAlertError('Preencha os campos necessários', 'Título do Quiz em branco!')
             return;
         } 
         if (questions.length<3){
-            showUncompleteFieldsAlert('Crie pelo menos 3 perguntas!');
+            showAlertError('Preencha os campos necessários', 'Crie pelo menos 3 perguntas!')
             return;
         }
 
@@ -81,14 +66,7 @@ export default function CreateQuiz({ navigation }) {
         } catch (err) {
             console.log(err.response.data.error);
 
-            Alert.alert(
-                '',
-                err.response.data.error,
-                [
-                    { text: 'OK', onPress: () => null },
-                ],
-                { cancelable: true },
-            );
+            showAlertError('', err.response.data.error);
         }
     }
 
