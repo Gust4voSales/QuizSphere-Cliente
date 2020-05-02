@@ -64,9 +64,10 @@ export default function CreateQuiz({ navigation }) {
             );
             
         } catch (err) {
-            console.log(err.response.data.error);
-
-            showAlertError('', err.response.data.error);
+            showAlertError('', err.response === undefined 
+                ? 'Erro ao tentar conectar com o servidor. Tente novamente'
+                : err.response.data.error
+            );
         }
     }
 

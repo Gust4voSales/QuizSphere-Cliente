@@ -49,6 +49,8 @@ export default StyleSheet.create({
         paddingVertical: 0,
         borderBottomWidth: 1,
         borderColor: '#58AAFF',
+        justifyContent: 'center',
+        alignItems: 'center',
         width: '70%',
         fontSize: 18,
         marginBottom: 10,

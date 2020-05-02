@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect }  from 'react';
 import { View, Text, TextInput, StyleSheet, FlatList, Alert } from 'react-native';
 import TagComponent from '../../../components/TagComponent';
-import { set } from 'react-native-reanimated';
+
 
 export default function TitleInput(props) {
     const scroll = useRef();
