@@ -10,7 +10,7 @@ import styles from './styles';
 
 
 export default function CreateQuestionComponent(props) {
-    const scroll = useRef();
+    const scroll = useRef(null);
     const [questionModalVisible, setModalVisible] = useState(false);  
     const [isNewQuestion, setIsNewQuestion] = useState(true);  
 
@@ -31,9 +31,13 @@ export default function CreateQuestionComponent(props) {
     }, [questions]);
 
     useEffect(() => {
-        setTimeout(() => {
+        let timer = null;
+
+        timer = setTimeout(() => {
             scroll.current.scrollToEnd();
         }, 750);
+
+        return () => clearTimeout(timer);
     }, [questionModalVisible]);
 
     function clearActualVariables() {

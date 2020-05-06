@@ -1,42 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, ActivityIndicator } from 'react-native';
-import Touchable from 'react-native-platform-touchable';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert } from 'react-native';
 import QuizListByCategory from '../../components/QuizListByCategory';
 
 import api from '../../services/api';
 
-export default function FeedHotQuizzes({ navigation }) {
+
+export default function FeedHotQuizzes({ navigation, route }) {
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState({
-        quizzes: []
+        quizzes: [],
     });
     const categoriesString = ['entretenimento', 'educacionais'];
 
     useEffect(() => {
+        let fetchData = true;
         for (let category of categoriesString) {
-            loadAndSetQuizzesByCategory(category);
+            loadAndSetQuizzesByCategory(category, fetchData);
         }
+
+        return() => fetchData = false;
     }, []);
 
     useEffect(() => {        
+        let isSubscribed = true
         if (categories.quizzes.length === categoriesString.length) {
-            setLoading(false);
+            if (isSubscribed) setLoading(false);
         }
+
+        return() => isSubscribed = false;
     }, [categories]);
     
-    async function loadAndSetQuizzesByCategory(category) {
-        const { data } = await api.get(`/quiz/?category=${category}`);
-        const quizzesByCategory = data.quizzes.docs;
-        
-        let quizzes = categories.quizzes;
-        quizzes.push(quizzesByCategory);
-        
-        setCategories({ quizzes });
+    async function loadAndSetQuizzesByCategory(category, fetch) {
+        try{
+            const { data } = await api.get(`/quiz/?category=${category}`);
+            const quizzesByCategory = data.quizzes.docs;
+            
+            let quizzes = categories.quizzes;
+            quizzes.push(quizzesByCategory);
+            
+            if (fetch) setCategories({ quizzes });
+        } catch(err) {
+            console.log(err);
+            Alert.alert('err');
+        }
     }
 
-    function createQuizHandler(){
-        navigation.navigate('CreateQuiz');
+    function onPlayQuizHandler(quizId) {
+        navigation.navigate('PlayQuiz', { quizId });
     }
 
     function getQuizzesByCategory(category) {
@@ -65,15 +75,11 @@ export default function FeedHotQuizzes({ navigation }) {
                 renderItem={({item, index, separators}) => (
                     <View>
                         <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-                        <QuizListByCategory category={item} quizzes={getQuizzesByCategory(item)} />
+                        <QuizListByCategory category={item} quizzes={getQuizzesByCategory(item)} onPlayQuizHandler={onPlayQuizHandler} />
                     </View> 
                 )}
             />
-            <View style={styles.btnContainer}>
-                <Touchable onPress={createQuizHandler} style={styles.createQuizBtn} background={Touchable.SelectableBackgroundBorderless()}>
-                    <Icon name="add" size={40} color="#06A3FF"/>
-                </Touchable>
-            </View>
+            
         </View>
     );
 }
@@ -85,21 +91,6 @@ const styles = StyleSheet.create({
         // height: '100%',
         backgroundColor: '#7B99AF',
     },
-    btnContainer: {
-        borderRadius: 30, 
-        position: 'absolute',
-        bottom: 30, 
-        right: 20, 
-        elevation: 5,
-    },
-    createQuizBtn: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: '#F9F9F9',
-        // backgroundColor: 'pink',
-        alignItems: 'center',
-        justifyContent: 'center',
-        // elevation: 5,
-    }
+  
+    
 });

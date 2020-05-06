@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard } from 'react-native';
-
+import AuthContext from '../../contexts/auth';
 import Touchable from 'react-native-platform-touchable';
 import { systemWeights } from 'react-native-typography'
+import { CommonActions } from '@react-navigation/native';
 import CreateQuestionComponent from '../../components/CreateQuestionComponent';
 import Picker from './utils/StyledPicker';
 import TagInput from './utils/TagInput';
@@ -14,6 +15,7 @@ import api from '../../services/api';
 // question: questionTitle, options[string], correctOptionIndex
 
 export default function CreateQuiz({ navigation }) {
+    // const { userId } = useContext(AuthContext);
     const [quizTitle, setQuizTitle] = useState('');
     const [category, setCategory] = useState("educativo");
     const [isPrivate, setIsPrivate] = useState(false);
@@ -58,7 +60,7 @@ export default function CreateQuiz({ navigation }) {
                 '',
                 `Quiz "${quizData.quizTitle}" criado com sucesso!`,
                 [
-                    { text: 'OK', onPress: () => navigation.navigate('Home', ) },
+                    { text: 'OK', onPress: () => goBack() },
                     // { text: 'OK', onPress: () => null },
                 ],    
             );
@@ -69,6 +71,17 @@ export default function CreateQuiz({ navigation }) {
                 : err.response.data.error
             );
         }
+    }
+
+    function goBack() {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'HomePage' }
+                ],
+            })
+        );
     }
 
     return(

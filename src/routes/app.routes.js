@@ -1,60 +1,54 @@
 import React, { useContext } from 'react';
-
-import { View, Button, Text } from 'react-native'; //Remove later
+import { View } from 'react-native';
 import AuthContext from '../contexts/auth'; //Remove later
 
+import { CommonActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView,  DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 
-import FeedHotQuizzes from '../screens/FeedHotQuizzes';
+import Feed from '../screens/Feed';
 import CreateQuiz from '../screens/CreateQuiz';
+import PlayQuiz from '../screens/PlayQuiz';
 
 
 const AppDrawer = createDrawerNavigator();
 const AppStack = createStackNavigator();
 
 
-//   <View>
-//     <Button title="IR criar" onPress={() => {navigation.navigate("CreateQuiz")}}/>
-//     <Button title="Feed" onPress={() => {navigation.navigate("Feed")}}/>
-//     <Button title="Logout" onPress={signOut}/>
-//   </View>
-
-
 function HomePage() {
     return (
         <AppStack.Navigator>
-            <AppStack.Screen name="FeedHotQuizzes" component={FeedHotQuizzes} />
-            <AppStack.Screen name="CreateQuiz" component={CreateQuiz} />
-            {/* <AppStack.Screen name="Search" component={() => <View><Text>SEARCH</Text></View>} /> */}
+            <AppStack.Screen name="Feed" component={Feed} />
+            <AppStack.Screen name="PlayQuiz" component={PlayQuiz} options={{ headerShown: false }}/>
         </AppStack.Navigator>
     );
 }
 
-// <AppStack.Navigator
-        //     initialRouteName="Home"
-        //     screenOptions={{
-        //     headerStyle: {
-        //         backgroundColor: '#37516D',
-        //     },
-        //     headerTitleStyle: {
-        //         fontSize: 26,
-        //     },
-        //     headerTintColor: '#fff',
-        //     headerTitleAlign: 'center',
-        //     }}
-        // >
-        //     <AppStack.Screen name="Home" component={Home} />
-        //     <AppStack.Screen name="Feed" component={Feed} />
-        //     <AppStack.Screen name="CreateQuiz" component={CreateQuiz} />
-        // </AppStack.Navigator>
+
+// Put this on components later
 function CustomDrawerContent(props) {
     const { signOut } = useContext(AuthContext);
+    const navigation = props.navigation;
+    
+    function signOutHandler() {
+        console.log('saindo');
+        
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'CreateQuiz' }
+                ],
+            })
+        );
+        
+        signOut();
+    }
 
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />  
-            <DrawerItem label="Logout" onPress={ signOut } />
+            <DrawerItem label="Logout" onPress={ signOutHandler } />
         </DrawerContentScrollView>
     );
 }
@@ -62,7 +56,7 @@ function CustomDrawerContent(props) {
 export default function AppRoutes(){
     return (
         <AppDrawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-            <AppDrawer.Screen name="HomePage" component={HomePage} />
+            <AppDrawer.Screen name="HomePage" component={HomePage}/>
             <AppDrawer.Screen name="CreateQuiz" component={CreateQuiz} />
         </AppDrawer.Navigator>
     );

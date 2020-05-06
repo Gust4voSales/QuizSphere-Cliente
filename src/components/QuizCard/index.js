@@ -1,26 +1,31 @@
 import React from 'react';
-import { StyleSheet, View, Text, } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
 
-export default function QuizCard({ data }) {
+export default function QuizCard({ data, onPlayQuizHandler }) {
+    // On long press the card, show the options
+
     return(
-        <View style={styles.container}>
-            <Text style={styles.title}>{data.quizTitle}</Text>
-            <View style={styles.separator}/>
-            <Text style={styles.questions}>{data.questionsLength} questões</Text>
-            <Text style={styles.author}>por {data.author.name}</Text>
-        </View>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => onPlayQuizHandler(data._id)}> 
+            <View style={styles.container}>
+                <Text style={styles.title}>{data.quizTitle}</Text>
+                <View style={styles.separator}/>
+                <Text style={styles.questions}>{data.questionsLength} questões</Text>
+                <Text style={styles.author}>por {data.author.name}</Text>
+            </View>
+        </TouchableOpacity>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: 400,
         width: 250,
         backgroundColor: '#3A6584',
-        marginRight: 8,
+        marginLeft: 5,
     },
     title: {
         fontSize: 24,

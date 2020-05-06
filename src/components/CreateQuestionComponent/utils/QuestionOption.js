@@ -19,6 +19,7 @@ export default function Option(props) {
                     props.setQuestionOption(text)
                 }}            
                 value={props.value}
+                maxLength={52}
                 placeholder={'Opção '+props.option}
             />
             <Touchable 

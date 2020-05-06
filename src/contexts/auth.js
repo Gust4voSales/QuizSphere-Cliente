@@ -4,7 +4,7 @@ import showAlertError from '../components/AlertError';
 
 import api from '../services/api';
 
-const AuthContext = createContext( { signed: false, user: {} } ); //value types 
+const AuthContext = createContext({ signed: false, user: {}, loading: true }); //value types 
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
