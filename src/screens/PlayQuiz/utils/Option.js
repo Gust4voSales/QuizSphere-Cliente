@@ -1,43 +1,71 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Player } from '@react-native-community/audio-toolkit';
 import PlayQuizContext from '../../../contexts/playQuiz';
 
-
+const correctSound = new Player('correct.mp3', { autoDestroy: false });
+const wrongSound = new Player('wrong.mp3', { autoDestroy: false });
 export default function Option(props) {
-    const { quiz, questionIndex, options, onSelectionHandler, showCorrectAnswer }= useContext(PlayQuizContext)
+    const { quiz, questionIndex, options, answeredQuestions, setAnsweredQuestions, updateQuestion, setAnimation }= useContext(PlayQuizContext)
     const [backgroundColor, setBackgroundColor] = useState('#DFF2FF');
-    // const [showCorrectAnswer, setShowCorrectAnswer] = useState(props.showCorrectAnswer);
 
 
     useEffect(() => {
-        // It's time to show the correct answer and this is the one
-        if (!showCorrectAnswer) {
+        if (questionIndex>(answeredQuestions.length-1)) {
             setBackgroundColor('#DFF2FF');
-        } else if (showCorrectAnswer && props.isTheCorrectAnswer) {
+            return ;
+        }
+        // Question has been answered
+
+        if (props.isTheCorrectAnswer) // Option is the correct answer
             setBackgroundColor('#13F4A3');
-        } 
-    }, [showCorrectAnswer]);
+        else if (props.index===answeredQuestions[questionIndex].userAnswer) // This option is not the correct answer but it's the user answer
+            setBackgroundColor('#FF5454');
+        else // Neither the correct answer nor the user choice
+            setBackgroundColor('#DFF2FF'); 
+    }, [questionIndex, answeredQuestions]);
 
 
-    function onSelectOptionHandler() {
+    function setNewAnswer() {
+        // Add the new answered question with the user choice and the correct answer
         const question = quiz.questions[questionIndex]
 
+        const newAnsweredQuestion = { 
+            userAnswer: props.index,
+            correctAnswer: question.correctOptionIndex,
+        };
+
+        setAnsweredQuestions([...answeredQuestions, newAnsweredQuestion]); 
+    }
+
+    function onSelectOptionHandler() {
+        // Run the proper animation, when the animation is done a function at the parent component will call function that updates the question.
         if (props.isTheCorrectAnswer) {
-            console.log('Acertou');
-            onSelectionHandler(true);
+            runCorrectSelectionAnimation();
         } else {
-            console.log('Errou');
-            setBackgroundColor('#FF5454');
-            onSelectionHandler(false);
+            runWrongSelectionAnimation();
         }
+
+        setNewAnswer();
     }
     
+    function runCorrectSelectionAnimation() {
+        correctSound.play();        
+        setAnimation('pulse');
+    }
+    
+    function runWrongSelectionAnimation() {
+        wrongSound.play();        
+        setAnimation('jello');
+    }
+
+
     return(
         <TouchableOpacity 
             style={[styles.container, { backgroundColor }]} 
             onPress={onSelectOptionHandler} 
             activeOpacity={0.8}
-            disabled={showCorrectAnswer} // If it's time to show the correct answer the user can't select another option
+            disabled={questionIndex <= (answeredQuestions.length-1 )} // If the user has answered this question already then he can't select another option
         >
             <Text style={styles.text}>{options[props.index]}</Text>
         </TouchableOpacity>

@@ -1,34 +1,36 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Text, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
+import * as Animatable from 'react-native-animatable';
 import { systemWeights } from 'react-native-typography';
 import LinearGradient from 'react-native-linear-gradient';
+import QuestionsList from './utils/QuestionsList';
 import Option from './utils/Option';
 
-// import data from './utils/Mock';
+import data from './utils/Mock';
 import api from '../../services/api';
 
 
+AnimatableLinear = Animatable.createAnimatableComponent(LinearGradient);
+
 export default function PlayQuiz({ route, navigation }) {
+    const scroll = useRef(null);
     const { quizId } = route.params;
-    let answeredQuestions = [];
+    const [answeredQuestions, setAnsweredQuestions] = useState([]);
     const [quiz, setQuiz] = useState({}); //Quiz with all the data
-    const [questionIndex, setQuestionIndex] = useState(-1); // The question index from the actual question
+    const [questionIndex, setQuestionIndex] = useState(0); // The question index from the actual question
     const [questionTitle, setQuestionTitle] = useState(''); // The actual question asked
     const [options, setOptions] = useState([]); // The actual available options
-    const [correctAnswers, setCorrectAnswers] = useState([]); // Array with the correct answers only
+    const [correctAnswers, setCorrectAnswers] = useState(0); // Array with the correct answers only
     
-    const [showCorrectAnswer, setShowCorrectAnswer] = useState(false) // If true then the user selected an option and we need to show the correct answer
+    const [animation, setAnimation] = useState(null);
     const [questionFontSize, setFontSize] = useState(22) // Fontsize configs
 
     useEffect(() => {
         async function loadQuizData() {
-            const { data } = await api.get(`/quiz/${quizId}`); // Should load the data before entering into this screen
+            // const { data } = await api.get(`/quiz/${quizId}`); // Should load the data before entering into this screen
             
             setQuiz(data.quiz);
-
-            setQuestionIndex(0);
-
             // console.log(data.quiz);
         }
 
@@ -41,14 +43,16 @@ export default function PlayQuiz({ route, navigation }) {
     }, []);
 
     useEffect(() => {
-        if (quiz.questions===undefined || questionIndex===-1) return;  // Verification necessary for the beginning when the data has not been fetched yet 
+        if (quiz.questions===undefined) return;  // Verification necessary for the beginning when the data has not been fetched  
 
         const actualQuestion = quiz.questions[questionIndex];
-        // console.log(actualQuestion);
         
+        scroll.current.scrollToIndex({
+            index: questionIndex,
+            viewOffset: 10,
+        });
         setQuestionTitle(actualQuestion.questionTitle);
         setOptions(actualQuestion.options);
-        setShowCorrectAnswer(false);
     }, [quiz, questionIndex]);
 
     useEffect(() => {        
@@ -57,32 +61,36 @@ export default function PlayQuiz({ route, navigation }) {
         else setFontSize(24);
     }, [questionTitle]);
 
+  
     // useEffect(() => {}, []);
 
-    function onSelectionHandler(isCorrect) {
-        setShowCorrectAnswer(true);
-
-        if (isCorrect) {
-            setCorrectAnswers([...correctAnswers, questionIndex]);
-        } 
+    function updateQuestion() {
         if (questionIndex+1===quiz.questionsLength) {
             console.log('acabou');
             return;
         }
-
-        setTimeout(() => updateQuestion(), 1000);
-    }
-
-
-    function updateQuestion() {
-        console.log('nova questão');
-
+        
         setQuestionIndex(questionIndex => questionIndex+1);
     }
 
+    function onFinishAnimation(endState) {
+        // After the user's selection animation ends it's time to call the next question 
+        if(endState) { 
+            setAnimation(null);
+            updateQuestion();
+        }
+    }
+
     return(
-        <PlayQuizContext.Provider value={{ quiz, questionIndex, options, correctAnswers, onSelectionHandler, showCorrectAnswer }}>
-        <LinearGradient colors={['#364F6B', '#3E81A7']} style={styles.container}>
+        <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, updateQuestion, answeredQuestions, setAnsweredQuestions, setAnimation }}>
+        <AnimatableLinear 
+            colors={['#364F6B', '#3E81A7']} 
+            style={styles.container} 
+            animation={animation} 
+            duration={1500} 
+            easing='ease-out-expo' 
+            onAnimationEnd={endState => onFinishAnimation(endState)}
+        >
             <ImageBackground source={require('../../assets/quizBox.png')} style={styles.imgBackground} resizeMode="stretch" />
         
             <View style={styles.quizBoxContainer}>
@@ -90,25 +98,7 @@ export default function PlayQuiz({ route, navigation }) {
                     <Text style={styles.quizTitle}>{quiz.quizTitle}</Text>
                 </View>
 
-                <FlatList 
-                    horizontal
-                    style={styles.questionList}
-                    showsHorizontalScrollIndicator={false}
-                    data={quiz.questions}
-                    keyExtractor={item => (item._id).toString()}
-                    renderItem={({item, index, separator}) => {
-                        let actualQuestion;
-                        if (index===questionIndex) actualQuestion = true;
-
-                        return (
-                            <TouchableOpacity onPress={() => setQuestionIndex(index)}>
-                                <Text style={[styles.questionIndex, actualQuestion && { backgroundColor: '#0E78F4', }]}>
-                                    {index+1}
-                                </Text>
-                            </TouchableOpacity>
-                        );
-                    }}
-                />
+                <QuestionsList scrollRef={scroll} />
 
                 <Text style={[styles.questionTitle, { fontSize: questionFontSize }]}>{questionTitle}</Text>
             </View>
@@ -128,7 +118,7 @@ export default function PlayQuiz({ route, navigation }) {
             <View style={styles.rankingContainer}>
                 <Text>Ranking 🏆</Text>
             </View>
-        </LinearGradient>
+        </AnimatableLinear>
         </PlayQuizContext.Provider >
     );
 }
@@ -153,6 +143,7 @@ const styles = StyleSheet.create({
         height: '35%',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        
         // backgroundColor: 'gray'
     },
     headerContainer: {
@@ -170,25 +161,7 @@ const styles = StyleSheet.create({
         ...systemWeights.semibold,
         textAlign: 'center',
     },
-    questionList: {
-        flexGrow: 0,
-        marginTop: 55
-    },
-    questionIndex: {
-        fontSize: 24,
-        color: 'white',
-        ...systemWeights.light,
-        width: 40,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        paddingHorizontal: 5,
-        // backgroundColor: 'gray',
-        borderColor: '#0E78F4',
-        borderWidth: 1.5,
-        borderRadius: 20,
-        paddingVertical: 5,
-        marginHorizontal: 5,
-    },
+    
 
     questionTitle: {
         color: 'white',

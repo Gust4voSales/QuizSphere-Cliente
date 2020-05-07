@@ -13,7 +13,7 @@ const data = {
             }, 
             {
                 questionTitle: "Qual a capital do Brasil?",
-                correctOptionIndex: 2,
+                correctOptionIndex: 1,
                 options: [
                     "AFOASKMF", "rrrrrrr", "KKKKKK", "OOOOO"
                 ],
@@ -21,7 +21,7 @@ const data = {
             }, 
             {
                 questionTitle: "Qual a capital do Brasil?",
-                correctOptionIndex: 2,
+                correctOptionIndex: 0,
                 options: [
                     "AFOASKMF", "rrrrrrr", "KKKKKK", "OOOOO"
                 ],

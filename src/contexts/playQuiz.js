@@ -2,11 +2,12 @@ import React, { useState, useEffect, createContext } from 'react';
 
 
 const PlayQuizContext = createContext({
-    questionIndex: -1,
+    quiz: {},
+    questionIndex: 0,
     questionTitle: '',
     options: [],
-    correctAnswers: [],
-    showCorrectAnswer: false,
+    correctAnswers: 0,
+    answeredQuestions: [],
 });
 
 
