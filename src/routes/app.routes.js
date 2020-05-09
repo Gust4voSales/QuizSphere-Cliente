@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { View } from 'react-native';
-import AuthContext from '../contexts/auth'; //Remove later
+
+import AuthContext from '../contexts/auth'; 
+import UserActionsContext, { UserActionsProvider } from '../contexts/userActions'; //Remove later
 
 import { CommonActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -55,9 +56,11 @@ function CustomDrawerContent(props) {
 
 export default function AppRoutes(){
     return (
-        <AppDrawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-            <AppDrawer.Screen name="HomePage" component={HomePage}/>
-            <AppDrawer.Screen name="CreateQuiz" component={CreateQuiz} />
-        </AppDrawer.Navigator>
+        <UserActionsProvider>
+            <AppDrawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+                <AppDrawer.Screen name="HomePage" component={HomePage}/>
+                <AppDrawer.Screen name="CreateQuiz" component={CreateQuiz} />
+            </AppDrawer.Navigator>
+        </UserActionsProvider>
     );
 }

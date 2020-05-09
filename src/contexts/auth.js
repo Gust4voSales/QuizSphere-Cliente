@@ -12,13 +12,15 @@ export function AuthProvider({ children }) {
 
     useEffect(() => {
         async function loadStorageData() {
-            const storageUser = await AsyncStorage.getItem('@QuizApp_user');
-            const storageToken = await AsyncStorage.getItem('@QuizApp_userToken');
+            const storagedUser = await AsyncStorage.getItem('@QuizApp_user');
+            const storagedToken = await AsyncStorage.getItem('@QuizApp_userToken');
 
-            if (storageUser && storageToken) {
-                setUser(JSON.parse(storageUser));
+            if (storagedUser && storagedToken) {
+                api.defaults.headers.authorization = `Bearer ${storagedToken}`;
+
+                setUser(JSON.parse(storagedUser));
                 setLoading(false);
-            } else if (!storageUser && !storageToken) {
+            } else if (!storagedUser && !storagedToken) {
                 setLoading(false);
             }
         }
@@ -31,6 +33,8 @@ export function AuthProvider({ children }) {
             const { data } = await api.post('/auth/authenticate', { userName, password });
 
             setUser(data.user);
+            api.defaults.headers.authorization = `Bearer ${data.token}`;
+
             //Save data on AsyncStorage
             try {
                 await AsyncStorage.multiSet([
@@ -50,10 +54,6 @@ export function AuthProvider({ children }) {
         }
     }
 
-    async function signInAsGuest() {
-        console.log('Signing In as a guest ');
-    }
-
     function signOut() {
         AsyncStorage.clear().then(() => {
             setUser(null);
@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
     }
 
     return(
-        <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, setUser, signIn, signOut, loading }}>
             {children}
         </AuthContext.Provider>
     );

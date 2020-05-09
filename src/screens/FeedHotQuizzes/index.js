@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert } from 'react-native';
+import React, { useState, useEffect, } from 'react';
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, ToastAndroid } from 'react-native';
 import QuizListByCategory from '../../components/QuizListByCategory';
 
 import api from '../../services/api';
@@ -23,6 +23,7 @@ export default function FeedHotQuizzes({ navigation, route }) {
 
     useEffect(() => {        
         let isSubscribed = true
+        // data fetching has been completed
         if (categories.quizzes.length === categoriesString.length) {
             if (isSubscribed) setLoading(false);
         }
@@ -49,10 +50,10 @@ export default function FeedHotQuizzes({ navigation, route }) {
         navigation.navigate('PlayQuiz', { quizId });
     }
 
-    function getQuizzesByCategory(category) {
+    function getQuizzesByCategory(category, index) {
         let categoryIndex;
         for (let quizzesByCategory of categories.quizzes) {
-            if (quizzesByCategory[0].category===category) {
+            if (quizzesByCategory[index].category===category) {
                 categoryIndex = categories.quizzes.indexOf(quizzesByCategory);
                 break;
             }
@@ -60,6 +61,7 @@ export default function FeedHotQuizzes({ navigation, route }) {
         
         return categories.quizzes[categoryIndex];
     }
+
 
     if (loading) {
         return(
@@ -75,11 +77,14 @@ export default function FeedHotQuizzes({ navigation, route }) {
                 renderItem={({item, index, separators}) => (
                     <View>
                         <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
-                        <QuizListByCategory category={item} quizzes={getQuizzesByCategory(item)} onPlayQuizHandler={onPlayQuizHandler} />
+                        <QuizListByCategory 
+                            category={item} 
+                            quizzes={getQuizzesByCategory(item, index)} 
+                            onPlayQuizHandler={onPlayQuizHandler} 
+                        />
                     </View> 
                 )}
             />
-            
         </View>
     );
 }

@@ -6,7 +6,7 @@ import PlayQuizContext from '../../../contexts/playQuiz';
 const correctSound = new Player('correct.mp3', { autoDestroy: false });
 const wrongSound = new Player('wrong.mp3', { autoDestroy: false });
 export default function Option(props) {
-    const { quiz, questionIndex, options, answeredQuestions, setAnsweredQuestions, updateQuestion, setAnimation }= useContext(PlayQuizContext)
+    const { quiz, questionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, setAnimation }= useContext(PlayQuizContext)
     const [backgroundColor, setBackgroundColor] = useState('#DFF2FF');
 
 
@@ -41,6 +41,7 @@ export default function Option(props) {
     function onSelectOptionHandler() {
         // Run the proper animation, when the animation is done a function at the parent component will call function that updates the question.
         if (props.isTheCorrectAnswer) {
+            setCorrectAnswers(correctAnswers => correctAnswers+1);
             runCorrectSelectionAnimation();
         } else {
             runWrongSelectionAnimation();

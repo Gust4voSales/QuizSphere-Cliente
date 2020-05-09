@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Text, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, ImageBackground, Alert, ActivityIndicator } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
 import * as Animatable from 'react-native-animatable';
 import { systemWeights } from 'react-native-typography';
@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import QuestionsList from './utils/QuestionsList';
 import Option from './utils/Option';
 
-import data from './utils/Mock';
+// import data from './utils/Mock';
 import api from '../../services/api';
 
 
@@ -23,14 +23,19 @@ export default function PlayQuiz({ route, navigation }) {
     const [options, setOptions] = useState([]); // The actual available options
     const [correctAnswers, setCorrectAnswers] = useState(0); // Array with the correct answers only
     
+    const [loading, setLoading] = useState(true);
     const [animation, setAnimation] = useState(null);
     const [questionFontSize, setFontSize] = useState(22) // Fontsize configs
 
     useEffect(() => {
         async function loadQuizData() {
-            // const { data } = await api.get(`/quiz/${quizId}`); // Should load the data before entering into this screen
+            const { data } = await api.get(`/quiz/${quizId}`); // Should load the data before entering into this screen
             
             setQuiz(data.quiz);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+            
             // console.log(data.quiz);
         }
 
@@ -47,10 +52,6 @@ export default function PlayQuiz({ route, navigation }) {
 
         const actualQuestion = quiz.questions[questionIndex];
         
-        scroll.current.scrollToIndex({
-            index: questionIndex,
-            viewOffset: 10,
-        });
         setQuestionTitle(actualQuestion.questionTitle);
         setOptions(actualQuestion.options);
     }, [quiz, questionIndex]);
@@ -65,8 +66,8 @@ export default function PlayQuiz({ route, navigation }) {
     // useEffect(() => {}, []);
 
     function updateQuestion() {
-        if (questionIndex+1===quiz.questionsLength) {
-            console.log('acabou');
+        if (questionIndex===quiz.questionsLength-1) {
+            finishQuiz();
             return;
         }
         
@@ -77,12 +78,35 @@ export default function PlayQuiz({ route, navigation }) {
         // After the user's selection animation ends it's time to call the next question 
         if(endState) { 
             setAnimation(null);
+            scroll.current.scrollToIndex({
+                index: questionIndex,
+                viewOffset: 10,
+            });
             updateQuestion();
         }
     }
 
+    function finishQuiz() {
+        console.log('acabou');
+        Alert.alert(
+            '',
+            `PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
+            [
+                { text: 'Retornar', onPress: () => navigation.goBack() },
+            ]
+        );
+    }
+
+    if (loading) {
+        return(
+            <View style={{ flex: 1, justifyContent: 'center', alignItem: 'center' }}>
+                <ActivityIndicator size='large' />
+            </View>
+        );
+    }
+
     return(
-        <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, updateQuestion, answeredQuestions, setAnsweredQuestions, setAnimation }}>
+        <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, setAnimation }}>
         <AnimatableLinear 
             colors={['#364F6B', '#3E81A7']} 
             style={styles.container} 

@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import Touchable from 'react-native-platform-touchable';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import UserActionsContext from '../../contexts/userActions';
+import QuizOptions from '../QuizOptions';
 
 
-export default function QuizCard({ data, onPlayQuizHandler }) {
-    // On long press the card, show the options
+export default function QuizCard({ data, onPlayQuizHandler, }) {
+    const [showOptions, setShowOptions] = useState(false);
+    
+    function openOptionsHandler() {
+        setShowOptions(true);
+    }
+
+    function closeOptionsHandler() {
+        setShowOptions(false);
+    }
+
 
     return(
-        <TouchableOpacity activeOpacity={0.7} onPress={() => onPlayQuizHandler(data._id)}> 
+        <TouchableOpacity activeOpacity={0.7} onPress={() => onPlayQuizHandler(data._id)} onLongPress={openOptionsHandler}> 
             <View style={styles.container}>
                 <Text style={styles.title}>{data.quizTitle}</Text>
-                <View style={styles.separator}/>
+                <Touchable background={Touchable.SelectableBackgroundBorderless()} style={styles.moreIcon} onPress={openOptionsHandler}>
+                    <Icon name="more-vert" size={30} color="white" />
+                </Touchable>
                 <Text style={styles.questions}>{data.questionsLength} questões</Text>
-                <Text style={styles.author}>por {data.author.name}</Text>
+                <Text style={styles.author}>por {data.author.userName}</Text>
             </View>
+
+            <QuizOptions show={showOptions} closeOptions={closeOptionsHandler} quizId={data._id}/>
         </TouchableOpacity>
     );
 }
@@ -27,15 +44,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#3A6584',
         marginLeft: 5,
     },
+ 
     title: {
+        position: 'absolute',
+        top: 10,
+        width: '85%',
         fontSize: 24,
         textAlign: 'center',
         color: 'white',
+        paddingBottom: 5,
+        // borderBottomWidth: StyleSheet.hairlineWidth,
+        // borderColor: 'white',
     },
-    separator: {
-        width: '90%',
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: 'white',
+    moreIcon: {
+        position: 'absolute',
+        top: 14,
+        right: 10,
     },
     questions: {
         color: 'white',
