@@ -10,6 +10,7 @@ import { createDrawerNavigator, DrawerContentScrollView,  DrawerItem, DrawerItem
 import Feed from '../screens/Feed';
 import CreateQuiz from '../screens/CreateQuiz';
 import PlayQuiz from '../screens/PlayQuiz';
+import AddFriend from '../screens/AddFriend';
 
 
 const AppDrawer = createDrawerNavigator();
@@ -59,6 +60,7 @@ export default function AppRoutes(){
         <UserActionsProvider>
             <AppDrawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
                 <AppDrawer.Screen name="HomePage" component={HomePage}/>
+                <AppDrawer.Screen name="AddFriend" component={AddFriend}/>
                 <AppDrawer.Screen name="CreateQuiz" component={CreateQuiz} />
             </AppDrawer.Navigator>
         </UserActionsProvider>

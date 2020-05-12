@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import FeedHotQuizzes from '../FeedHotQuizzes';
+import FeedTrendingQuizzes from '../FeedTrendingQuizzes';
 import FeedSavedQuizzes from '../FeedSavedQuizzes';
 
 
@@ -17,7 +17,7 @@ export default function Feed({ navigation }) {
     return(
         <View style={{flex: 1}}>
             <AppTab.Navigator>
-                <AppTab.Screen name="FeedHotQuizzes" component={FeedHotQuizzes} />
+                <AppTab.Screen name="FeedTrendingQuizzes" component={FeedTrendingQuizzes} />
                 <AppTab.Screen name="FeedSavedQuizzes" component={FeedSavedQuizzes} />
             </AppTab.Navigator>
 

@@ -1,11 +1,13 @@
-import React, { useState, useEffect, } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, ToastAndroid } from 'react-native';
 import QuizListByCategory from '../../components/QuizListByCategory';
 
+import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
 
-export default function FeedHotQuizzes({ navigation, route }) {
+export default function FeedTrendingQuizzes({ navigation, route }) {
+    const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState({
         quizzes: [],
@@ -19,7 +21,7 @@ export default function FeedHotQuizzes({ navigation, route }) {
         }
 
         return() => fetchData = false;
-    }, []);
+    }, [user]);
 
     useEffect(() => {        
         let isSubscribed = true
@@ -81,6 +83,7 @@ export default function FeedHotQuizzes({ navigation, route }) {
                             category={item} 
                             quizzes={getQuizzesByCategory(item, index)} 
                             onPlayQuizHandler={onPlayQuizHandler} 
+                            
                         />
                     </View> 
                 )}

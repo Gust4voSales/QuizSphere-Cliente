@@ -9,6 +9,30 @@ const UserActionsContext = createContext({}); //value types
 export function UserActionsProvider({ children }) {
     const { user, setUser } = useContext(AuthProvider);
 
+    
+    async function addFriend(userName) {
+        const response = {};
+        try {
+            const { data } = await api.post(`/user/addFriend?userName=${userName}`);
+            console.log(data);
+            response.success = true;
+            response.message = data.message;
+            
+            ToastAndroid.show(data.message, ToastAndroid.SHORT);
+            return response;
+        } catch (err) {
+            if (err.response===undefined) {
+                showAlertError('', 'Erro ao tentar conectar com o servidor. Tente novamente');
+                return;
+            }
+
+            response.success = false;
+            response.message = err.response.data.error;
+            
+            return response;
+        }
+    }
+
     async function saveQuiz(quizId) {
         try {
             const { data } = await api.put('/user/quiz/', { quizId, });
@@ -40,7 +64,7 @@ export function UserActionsProvider({ children }) {
     }   
 
     return(
-        <UserActionsContext.Provider value={{ saveQuiz, removeQuizFromSavedQuizzes }}>
+        <UserActionsContext.Provider value={{ addFriend, saveQuiz, removeQuizFromSavedQuizzes }}>
             {children}
         </UserActionsContext.Provider>
     );
