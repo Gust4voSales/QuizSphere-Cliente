@@ -11,6 +11,7 @@ import Feed from '../screens/Feed';
 import CreateQuiz from '../screens/CreateQuiz';
 import PlayQuiz from '../screens/PlayQuiz';
 import AddFriend from '../screens/AddFriend';
+import Notifications from '../screens/Notifications';
 
 
 const AppDrawer = createDrawerNavigator();
@@ -22,6 +23,7 @@ function HomePage() {
         <AppStack.Navigator>
             <AppStack.Screen name="Feed" component={Feed} />
             <AppStack.Screen name="PlayQuiz" component={PlayQuiz} options={{ headerShown: false }}/>
+            <AppStack.Screen name="Notifications" component={Notifications}/>
         </AppStack.Navigator>
     );
 }
@@ -39,7 +41,7 @@ function CustomDrawerContent(props) {
             CommonActions.reset({
                 index: 0,
                 routes: [
-                    { name: 'CreateQuiz' }
+                    { name: 'HomePage' }
                 ],
             })
         );

@@ -23,12 +23,13 @@ export default function QuizOptions(props) {
 
     function removeQuizFromSavedQuizzesHandler() {
         removeQuizFromSavedQuizzes(props.quizId);
-        props.closeOptions();
+        if (!!props)
+            props.closeOptions();
     }
 
     function shareWithFriendHandler() {
         console.log('Share with a friend');
-        props.closeOptions();
+        
     }
 
     function isQuizSavedOnSavedQuizzes() {

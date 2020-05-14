@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
         // flex: 1,
         // width: '100%',
         // height: '100%',
-        backgroundColor: '#7B99AF',
+        backgroundColor: '#3D6F95'
+        // backgroundColor: 'white'
     },
   
     

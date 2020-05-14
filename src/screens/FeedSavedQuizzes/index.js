@@ -12,7 +12,7 @@ export default function FeedSavedQuizzes({ navigation }) {
 
     useEffect(() => {
         async function loadQuizzes() {
-            const { data } = await api.get('/user/quiz?type=saved');
+            const { data } = await api.get('/user/savedQuizzes');
             
             setQuizzes(data.quizzes.savedQuizzes);
         }
@@ -28,7 +28,7 @@ export default function FeedSavedQuizzes({ navigation }) {
         <View style={{flex: 1}}>
             <Text>Salvos de {user.name}</Text>
             <FlatList 
-                // style={{flex: 1}}
+                style={{flex: 1}}
                 horizontal
                 data={quizzes}
                 keyExtractor={item => item._id}

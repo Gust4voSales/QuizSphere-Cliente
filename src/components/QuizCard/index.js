@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
 import UserActionsContext from '../../contexts/userActions';
 import QuizOptions from '../QuizOptions';
+
 
 
 export default function QuizCard({ data, onPlayQuizHandler, }) {
@@ -19,32 +21,40 @@ export default function QuizCard({ data, onPlayQuizHandler, }) {
 
 
     return(
-        <TouchableOpacity activeOpacity={0.7} onPress={() => onPlayQuizHandler(data._id)} onLongPress={openOptionsHandler}> 
-            <View style={styles.container}>
-                <Text style={styles.title}>{data.quizTitle}</Text>
-                <Touchable background={Touchable.SelectableBackgroundBorderless()} style={styles.moreIcon} onPress={openOptionsHandler}>
-                    <Icon name="more-vert" size={30} color="white" />
-                </Touchable>
-                <Text style={styles.questions}>{data.questionsLength} questões</Text>
-                <Text style={styles.author}>por {data.author.userName}</Text>
-            </View>
+        <Touchable
+            foreground={TouchableNativeFeedback.SelectableBackground()}
+            onPress={() => onPlayQuizHandler(data._id)} 
+            onLongPress={openOptionsHandler}
+            style={{borderRadius: 20,}}
+        > 
+        
+        <LinearGradient colors={['#364F6B', '#3E7B9D']} style={styles.container}>
+            <Text style={styles.title}>{data.quizTitle}</Text>
+            <Touchable foreground={Touchable.SelectableBackgroundBorderless()} style={styles.moreIcon} onPress={openOptionsHandler}>
+                <Icon name="more-vert" size={30} color="white" />
+            </Touchable>
+            <Text style={styles.questions}>{data.questionsLength} questões</Text>
+            <Text style={styles.author}>por {data.author.userName}</Text>
 
-            <QuizOptions show={showOptions} closeOptions={closeOptionsHandler} quizId={data._id}/>
-        </TouchableOpacity>
+            <QuizOptions show={showOptions} closeOptions={closeOptionsHandler} quizId={data._id} />
+        </LinearGradient>
+        </Touchable>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: 315,
+        width: 250,
+        marginHorizontal: 5,
+        marginBottom: 10,
+        borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 400,
-        width: 250,
-        backgroundColor: '#3A6584',
-        marginLeft: 5,
+        elevation: 6,
+        // backgroundColor : "#0000" // invisible color
     },
- 
     title: {
         position: 'absolute',
         top: 10,

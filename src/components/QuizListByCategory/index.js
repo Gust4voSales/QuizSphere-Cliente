@@ -7,14 +7,14 @@ export default function QuizListByCategory({ category, quizzes, onPlayQuizHandle
     
     return(
         <FlatList 
-            style={{ flex: 1 }}
+            style={{ flex: 1, }}
             horizontal
             data={quizzes}
             keyExtractor={item => item._id}
             ListHeaderComponent={() => <View style={{ width: 5 }}/>}
             ListFooterComponent={() => <View style={{ width: 10 }}/>} // Add the PLUS button later
             renderItem={({item, index, separator}) => (
-                <QuizCard data={item} onPlayQuizHandler={onPlayQuizHandler}/>
+                <QuizCard data={item} onPlayQuizHandler={onPlayQuizHandler} style={{marginBottom: 10}}/>
             )}
         />
         // <Text>{category}</Text>

@@ -30,7 +30,8 @@
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.4.0",
     "react-native-typography": "^1.4.1",
-    "react-native-vector-icons": "^6.6.0"
+    "react-native-vector-icons": "^6.6.0",
+    "socket.io-client": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

@@ -3,15 +3,27 @@ import { View, Text, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback }
 import LinearGradient from 'react-native-linear-gradient';
 import Touchable from 'react-native-platform-touchable';
 import UserActionsContext from '../../contexts/userActions';
+import { useFocusEffect } from '@react-navigation/native';
 
-
-export default function AddFriend() {
+export default function AddFriend({ navigation }) {
     const { addFriend } = useContext(UserActionsContext);
     const input = useRef(null);
     const [username, setUsername] = useState('');
     const [errorMessage, setError] = useState('');
-    
-    
+
+    // When user leaves screen, clean up everything
+    useFocusEffect(
+        React.useCallback(() => {
+            const unsubscribe = () => {
+                    setUsername('');
+                    setError('');
+                    input.current.clear();
+            }
+
+            return () => unsubscribe();
+        }, [])
+    );
+
     async function addFriendHandler() {
         Keyboard.dismiss();
         if (username.length<1) return;
