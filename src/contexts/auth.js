@@ -7,6 +7,8 @@ import api from '../services/api';
 const AuthContext = createContext({ signed: false, user: {}, loading: true }); //value types 
 
 export function AuthProvider({ children }) {
+    let _isMounted = true;
+
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -26,6 +28,8 @@ export function AuthProvider({ children }) {
         }
 
         loadStorageData();
+
+        return() => { _isMounted = false }
     }, []);
 
     async function signIn(userName, password) {

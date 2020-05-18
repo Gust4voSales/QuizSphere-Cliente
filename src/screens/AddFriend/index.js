@@ -6,7 +6,7 @@ import UserActionsContext from '../../contexts/userActions';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function AddFriend({ navigation }) {
-    const { addFriend } = useContext(UserActionsContext);
+    const { sendFriendInvitation } = useContext(UserActionsContext);
     const input = useRef(null);
     const [username, setUsername] = useState('');
     const [errorMessage, setError] = useState('');
@@ -28,7 +28,7 @@ export default function AddFriend({ navigation }) {
         Keyboard.dismiss();
         if (username.length<1) return;
         
-        const response = await addFriend(username);
+        const response = await sendFriendInvitation(username);
 
         if (!response.success) {
             setError(response.message);

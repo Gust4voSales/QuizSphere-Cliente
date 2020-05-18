@@ -7,6 +7,8 @@ import { CommonActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView,  DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomDrawer from './components/CustomDrawer';
 import Feed from '../screens/Feed';
 import CreateQuiz from '../screens/CreateQuiz';
 import PlayQuiz from '../screens/PlayQuiz';
@@ -29,42 +31,46 @@ function HomePage() {
 }
 
 
-// Put this on components later
-function CustomDrawerContent(props) {
-    const { signOut } = useContext(AuthContext);
-    const navigation = props.navigation;
-    
-    function signOutHandler() {
-        console.log('saindo');
-        
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [
-                    { name: 'HomePage' }
-                ],
-            })
-        );
-        
-        signOut();
-    }
-
-    return (
-        <DrawerContentScrollView {...props}>
-            <DrawerItemList {...props} />  
-            <DrawerItem label="Logout" onPress={ signOutHandler } />
-        </DrawerContentScrollView>
-    );
-}
-
 export default function AppRoutes(){
     return (
         <UserActionsProvider>
-            <AppDrawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-                <AppDrawer.Screen name="HomePage" component={HomePage}/>
-                <AppDrawer.Screen name="AddFriend" component={AddFriend}/>
+            <AppDrawer.Navigator 
+                drawerContent={props => <CustomDrawer {...props} />}
+                initialRouteName="HomePage"
+                backBehavior="initialRoute"
+                drawerStyle={{ backgroundColor: '#37516D',}}
+                drawerContentOptions={{
+                    itemStyle: { marginHorizontal: 0, padding: 0, borderRadius: 0 },
+                    activeTintColor: "#06A3FF",
+                    activeBackgroundColor: "#486381",
+                    inactiveTintColor: "white",
+                    labelStyle: { fontSize: 16 }
+                }} 
+            >
+                <AppDrawer.Screen 
+                    name="HomePage" 
+                    component={HomePage} 
+                    options={{ 
+                        drawerLabel: "Home",
+                        drawerIcon: ({color, size}) => <Icon name="home" color={color} size={size} />
+                    }} 
+                />
+                <AppDrawer.Screen 
+                    name="AddFriend" 
+                    component={AddFriend}
+                    options={{ 
+                        drawerLabel: "Adicionar amigos",
+                        drawerIcon: ({color, size}) => <Icon name="person-add" color={color} size={size} />
+                    }} 
+                />
                 <AppDrawer.Screen name="CreateQuiz" component={CreateQuiz} />
             </AppDrawer.Navigator>
         </UserActionsProvider>
     );
+}
+
+const drawerContentStyles = {
+    activeTintColor: '#06A3FF',
+    activeBackgroundColor: '#486381',
+    inactiveTintColor: 'white'
 }

@@ -5,48 +5,68 @@ import AuthProvider from '../contexts/auth';
 import socketio from 'socket.io-client';
 import api from '../services/api';
 
-const UserActionsContext = createContext({ friendInvitations: [], notificationsCounter: 0 }); //value types 
+const UserActionsContext = createContext({ friendInvitations: [], notificationIndicator: false, newActivity: false }); //value types 
+// const UserActionsContext = createContext({ friendInvitations: [], mentions: [], invitationsCounter: 0, mentionsCounter: 0 }); //value types 
 
 export function UserActionsProvider({ children }) {
     let _isMounted = true;
 
     const { user, setUser } = useContext(AuthProvider);
 
-    const [userId, setUserId] = useState(user._id);
     const [friendInvitations, setFriendInvitations] = useState([]);
-    const [notificationsCounter, setNotificationsCounter] = useState(0);
-
+    const [notificationIndicator, setNotificationIndicator] = useState(false);
+    const [newActivity, setNewActivity] = useState(false);
 
     const socket = useMemo(() => socketio(api.defaults.baseURL, {
         query: { userId: user._id }
-    }), [userId]);    
+    }), [user]);    
+
+    useEffect(() => {
+        async function loadMentions() {
+            try {
+                const { data } = await api.get('/user/notifications/info');
+
+                if (data.newActivities){
+                    setNotificationIndicator(true);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+               
+        }
+
+        loadMentions();
+    }, []);
 
     useEffect(() => {
         socket.on('friend_invitation', data => {
             if (Array.isArray(data)) {
                 if (_isMounted)
-                setFriendInvitations([...data, ...friendInvitations]);
-                setNotificationsCounter(oldCounter => oldCounter+data.length);
-            }  // It's an array with pending invitations objects
+                    setFriendInvitations([...data, ...friendInvitations]); // It's an array with pending invitations objects that is sent by the serve whenever the user connects
+                if (data.length>0) 
+                    setNotificationIndicator(true);
+            }  
             else {
                 if (_isMounted)
-                setFriendInvitations([data, ...friendInvitations]); // It's simply a new invitation object
-                setNotificationsCounter(notificationsCounter+1);
+                    setFriendInvitations([data, ...friendInvitations]); // It's simply a new invitation object
+                setNotificationIndicator(true);
             }
+
+        });
+
+        socket.on('new_activity', data => {
+            setNotificationIndicator(true);
+            setNewActivity(true);
         });
 
         return () => { _isMounted=false }
-    }, [friendInvitations, socket]);
+    }, [friendInvitations]);
 
-    // useEffect(() => {
-    //     console.log(friendInvitations);
-    // }, [friendInvitations]);
-
-    async function addFriend(userName) {
+    async function sendFriendInvitation(userName) {
         const response = {};
         try {
             const { data } = await api.post(`/user/friend?userName=${userName}`);
-            console.log(data);
+
             response.success = true;
             response.message = data.message;
             
@@ -99,9 +119,11 @@ export function UserActionsProvider({ children }) {
         <UserActionsContext.Provider value={{ 
             friendInvitations, 
             setFriendInvitations,
-            notificationsCounter, 
-            setNotificationsCounter, 
-            addFriend, 
+            notificationIndicator,
+            setNotificationIndicator,
+            newActivity, 
+            setNewActivity ,
+            sendFriendInvitation, 
             saveQuiz, 
             removeQuizFromSavedQuizzes }}
         >

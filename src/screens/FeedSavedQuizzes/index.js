@@ -11,6 +11,7 @@ export default function FeedSavedQuizzes({ navigation }) {
     const [quizzes, setQuizzes] = useState([]);
 
     useEffect(() => {
+        // Tratar erro
         async function loadQuizzes() {
             const { data } = await api.get('/user/savedQuizzes');
             
@@ -26,7 +27,7 @@ export default function FeedSavedQuizzes({ navigation }) {
 
     return(
         <View style={{flex: 1}}>
-            <Text>Salvos de {user.name}</Text>
+            <Text>Salvos de {user.userName}</Text>
             <FlatList 
                 style={{flex: 1}}
                 horizontal

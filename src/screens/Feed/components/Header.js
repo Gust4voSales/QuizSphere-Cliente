@@ -9,11 +9,11 @@ import UserActionsContext from '../../../contexts/userActions';
 
 export default function Header(props) {
     const { user } = useContext(AuthContext);
-    const { notificationsCounter } = useContext(UserActionsContext);
+    const { notificationIndicator } = useContext(UserActionsContext);
 
     function displayNotificationCounter() {
-        if (notificationsCounter>0) {
-            return <Text style={styles.notificationIndicator}>{notificationsCounter}</Text>;
+        if (notificationIndicator) {
+            return <Text style={styles.notificationIndicator}>!</Text>;
         }
     }
     
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     },
 
     notificationIndicator: {
-        ...systemWeights.semibold,
-        fontSize: 12,
+        ...systemWeights.bold,
+        fontSize: 16,
         position: 'absolute',
         top: -5, 
         right: -4,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import { systemWeights } from 'react-native-typography';
