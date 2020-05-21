@@ -1,39 +1,51 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, ToastAndroid } from 'react-native';
 import QuizListByCategory from '../../components/QuizListByCategory';
-
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
 
 export default function FeedTrendingQuizzes({ navigation, route }) {
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [categories, setCategories] = useState({
         quizzes: [],
     });
     const categoriesString = ['entretenimento', 'educacionais'];
 
     useEffect(() => {
-        let fetchData = true;
-        for (let category of categoriesString) {
-            loadAndSetQuizzesByCategory(category, fetchData);
+        async function loadCategories() {
+            for (let category of categoriesString) {
+                await loadAndSetQuizzesByCategory(category);
+            }
         }
 
-        return() => fetchData = false;
-    }, [user]);
+        loadCategories();
+    }, []);
 
+    // Check whether data fetching has been completed or not, if so then set loading to false
     useEffect(() => {        
-        let isSubscribed = true
-        // data fetching has been completed
         if (categories.quizzes.length === categoriesString.length) {
-            if (isSubscribed) setLoading(false);
+            setLoading(false);
         }
-
-        return() => isSubscribed = false;
     }, [categories]);
     
-    async function loadAndSetQuizzesByCategory(category, fetch) {
+    async function refreshHandler() {
+        setCategories({ quizzes: [], });
+        setRefreshing(true);
+
+        // Refresh user info as well 
+        api.get(`/user/${user._id}`)
+            .then(({data}) => setUser(data.user)).catch(() => {});
+
+        for (let category of categoriesString) {
+            await loadAndSetQuizzesByCategory(category);
+        }
+        setRefreshing(false);
+    }
+
+    async function loadAndSetQuizzesByCategory(category) {
         try{
             const { data } = await api.get(`/quiz/?category=${category}`);
             const quizzesByCategory = data.quizzes.docs;
@@ -41,17 +53,17 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
             let quizzes = categories.quizzes;
             quizzes.push(quizzesByCategory);
             
-            if (fetch) setCategories({ quizzes });
+            setCategories({ quizzes });
         } catch(err) {
             console.log(err);
-            Alert.alert('err');
+            if (categoriesString[categoriesString.length-1]!==category) return; // This will prevent error messages at each iteration. 
+            setCategories({ quizzes: [], });
+            setLoading(false);
+            ToastAndroid.show('Não foi possível buscar os quizzes', ToastAndroid.SHORT);
         }
     }
 
-    function onPlayQuizHandler(quizId) {
-        navigation.navigate('PlayQuiz', { quizId });
-    }
-
+    // Get the corresponding array of quizzes from that category
     function getQuizzesByCategory(category, index) {
         let categoryIndex;
         for (let quizzesByCategory of categories.quizzes) {
@@ -67,7 +79,9 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
 
     if (loading) {
         return(
-            <ActivityIndicator size='large' />
+            <View style={styles.container}>
+                <ActivityIndicator size='large' color="white" />
+            </View>
         );
     }
 
@@ -75,15 +89,15 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
         <View style={styles.container}>
             <FlatList 
                 data={ categoriesString }
+                refreshing={refreshing}
+                onRefresh={refreshHandler}
                 keyExtractor={item => item}
                 renderItem={({item, index, separators}) => (
                     <View>
-                        <Text>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
+                        <Text style={styles.categoryText}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>
                         <QuizListByCategory 
                             category={item} 
-                            quizzes={getQuizzesByCategory(item, index)} 
-                            onPlayQuizHandler={onPlayQuizHandler} 
-                            
+                            quizzes={getQuizzesByCategory(item, index)}  
                         />
                     </View> 
                 )}
@@ -94,12 +108,22 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
+        flex: 1,
         // width: '100%',
         // height: '100%',
         backgroundColor: '#3D6F95'
         // backgroundColor: 'white'
     },
-  
+    categoryText: {
+        fontSize: 22, 
+        color: '#eeee',
+        paddingLeft: 12,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#4E4E4E',
+        marginVertical: 5,
+        // ...systemWeights.bold,
+
+    }
     
 });

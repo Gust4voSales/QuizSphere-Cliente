@@ -19,10 +19,11 @@ export default function Header(props) {
     
     return(
         <View style={styles.header}>
-            <Touchable background={Touchable.SelectableBackground()} onPress={props.openDrawer}>
+            <Touchable background={Touchable.SelectableBackground()} onPress={props.openDrawer} hitSlop={{
+                top: 10, bottom: 10, left: 10, right: 10
+            }}>
                 <View style={styles.userLeftContainer}>
-                    <Text style={styles.userName}>{user.userName}</Text>
-                    <Icon name="arrow-drop-down" size={25} color="white" style={{alignSelf: 'center', paddingTop: 3,}}/>
+                    <Icon name="menu" size={30} color="white" />
                 </View>
             </Touchable>
             
@@ -61,8 +62,6 @@ const styles = StyleSheet.create({
     },
     userLeftContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 10,
-        paddingVertical: 15,
     },
     userName: {
         color: 'white',

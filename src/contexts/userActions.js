@@ -4,8 +4,9 @@ import showAlertError from '../components/AlertError';
 import AuthProvider from '../contexts/auth';
 import socketio from 'socket.io-client';
 import api from '../services/api';
+import { set } from 'react-native-reanimated';
 
-const UserActionsContext = createContext({ friendInvitations: [], notificationIndicator: false, newActivity: false }); //value types 
+const UserActionsContext = createContext({ friendInvitations: false, notificationIndicator: false, newActivity: false }); //value types 
 // const UserActionsContext = createContext({ friendInvitations: [], mentions: [], invitationsCounter: 0, mentionsCounter: 0 }); //value types 
 
 export function UserActionsProvider({ children }) {
@@ -13,54 +14,55 @@ export function UserActionsProvider({ children }) {
 
     const { user, setUser } = useContext(AuthProvider);
 
-    const [friendInvitations, setFriendInvitations] = useState([]);
+    const [userId, setUserId] = useState(user._id);
     const [notificationIndicator, setNotificationIndicator] = useState(false);
+    const [friendInvitations, setFriendInvitations] = useState(false);
     const [newActivity, setNewActivity] = useState(false);
 
     const socket = useMemo(() => socketio(api.defaults.baseURL, {
-        query: { userId: user._id }
-    }), [user]);    
+        query: { userId },
+        'reconnection'        : true,
+        'reconnectionDelay'   : 1000,
+        'reconnectionAttempts': Infinity,
+    }), [userId]);    
+
 
     useEffect(() => {
-        async function loadMentions() {
-            try {
-                const { data } = await api.get('/user/notifications/info');
-
-                if (data.newActivities){
-                    setNotificationIndicator(true);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-               
-        }
-
-        loadMentions();
-    }, []);
-
-    useEffect(() => {
-        socket.on('friend_invitation', data => {
-            if (Array.isArray(data)) {
-                if (_isMounted)
-                    setFriendInvitations([...data, ...friendInvitations]); // It's an array with pending invitations objects that is sent by the serve whenever the user connects
-                if (data.length>0) 
-                    setNotificationIndicator(true);
-            }  
-            else {
-                if (_isMounted)
-                    setFriendInvitations([data, ...friendInvitations]); // It's simply a new invitation object
-                setNotificationIndicator(true);
-            }
-
+        socket.on('connect', () => {
+            loadUserInfo();
+        })
+        socket.on('friend_invitation', () => {
+            console.log('new invitations');
+            
+            setNotificationIndicator(true);
+            setFriendInvitations(true);
         });
 
-        socket.on('new_activity', data => {
+        socket.on('new_activity', () => {
+            console.log('new activity');
+
             setNotificationIndicator(true);
             setNewActivity(true);
         });
 
-        return () => { _isMounted=false }
-    }, [friendInvitations]);
+    }, [friendInvitations, newActivity, socket]);
+    
+    async function loadUserInfo() {
+        try {
+            const { data: userData } = await api.get(`/user/${user._id}`);
+            
+            const { data } = await api.get('/user/notifications/info');
+            
+            setUser(userData.user);
+            
+            if (data.newNotifications){
+                setNotificationIndicator(true);
+            }
+        } catch (err) {
+            ToastAndroid.show('Não foi possível atualizar informações do usuário', ToastAndroid.SHORT);
+        }
+    }
+
 
     async function sendFriendInvitation(userName) {
         const response = {};

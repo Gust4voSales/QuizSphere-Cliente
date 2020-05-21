@@ -3,7 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import { DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 import { systemWeights } from 'react-native-typography';
+import  { CommonActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 
 
@@ -20,28 +22,34 @@ export default function CustomDrawerContent(props) {
                 ],
             })
         );
-        
-        signOut();
+        // navigation.closeDrawer();
+        setTimeout(signOut, 1000);
+        // signOut();
     }
 
     return (
-        <DrawerContentScrollView {...props} >
-            <View style={styles.header}>
-                <Touchable background={Touchable.SelectableBackground()} onPress={props.navigation.closeDrawer} style={{width: '100%'}}>
-                    <View style={styles.userLeftContainer}>
-                        <Text style={styles.userName}>{user.userName}</Text>
-                        <Icon name="arrow-drop-down" size={25} color="white" style={{alignSelf: 'center', paddingTop: 3, transform: [{ rotate: '-90deg'}], }}/>
-                    </View>
-                </Touchable>
-            </View>
-            <DrawerItemList {...props}/>  
-            {/* <DrawerItem
-                label="Feed"
-                icon={({color, size}) => <Icon name="home" color={color} size={size} />}
-                onPress={() => navigation.jumpTo('HomePage')}
-            /> */}
-            {/* <DrawerItem label="Logout" onPress={ signOutHandler } drawerContentStyles /> */}
-        </DrawerContentScrollView>
+        <View style={{flex: 1}}>
+            <DrawerContentScrollView {...props} >
+                <View style={styles.header}>
+                    <Touchable background={Touchable.SelectableBackground()} onPress={props.navigation.closeDrawer} style={{width: '100%'}}>
+                        <View style={styles.userLeftContainer}>
+                            <Text style={styles.userName}>{user.userName}</Text>
+                            <Icon name="arrow-drop-down" size={25} color="white" style={{alignSelf: 'center', paddingTop: 3, transform: [{ rotate: '-90deg'}], }}/>
+                        </View>
+                    </Touchable>
+                </View>
+                {/* Screens */}
+                <DrawerItemList {...props}/>  
+            </DrawerContentScrollView>
+            <DrawerItem
+                label="Sair"
+                labelStyle={{ color: 'white', fontSize: 16 }}
+                icon={({color, size}) => <IconM name="logout" color="white" size={size} style={{ paddingLeft: 10 }}/>}
+                onPress={signOutHandler}
+                style={styles.signOutContainer}
+            />
+        </View>
+
     );
 }
 
@@ -54,7 +62,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: 'white',
+        borderColor: '#486390'
+
         // marginBottom: -6,
         // paddingHorizontal: 10,
         // justifyContent: 'space-between',
@@ -74,4 +83,14 @@ const styles = StyleSheet.create({
         marginRight: -4,
         ...systemWeights.regular,
     },
+    signOutContainer: {
+        position: 'absolute', 
+        bottom: 0, 
+        width: '100%', 
+        marginLeft: 0, 
+        borderRadius:0,
+        borderTopWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#486390'
+    }
 });

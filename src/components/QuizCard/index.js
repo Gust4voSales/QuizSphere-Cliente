@@ -3,12 +3,14 @@ import { StyleSheet, View, Text, TouchableOpacity, TouchableNativeFeedback } fro
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 import UserActionsContext from '../../contexts/userActions';
 import QuizOptions from '../QuizOptions';
 
 
 
-export default function QuizCard({ data, onPlayQuizHandler, }) {
+export default function QuizCard({ data, }) {
+    const navigation =  useNavigation();
     const [showOptions, setShowOptions] = useState(false);
     
     function openOptionsHandler() {
@@ -19,11 +21,14 @@ export default function QuizCard({ data, onPlayQuizHandler, }) {
         setShowOptions(false);
     }
 
+    function onPlayQuiz() {
+        navigation.navigate('PlayQuiz', { quizId: data._id });
+    }
 
     return(
         <Touchable
             foreground={TouchableNativeFeedback.SelectableBackground()}
-            onPress={() => onPlayQuizHandler(data._id)} 
+            onPress={onPlayQuiz} 
             onLongPress={openOptionsHandler}
             style={{borderRadius: 20,}}
         > 

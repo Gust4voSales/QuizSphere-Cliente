@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet, } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import LibraryIcon from './components/LibraryTabIcon';
 import Header from './components/Header';
 import FeedTrendingQuizzes from '../FeedTrendingQuizzes';
-import FeedSavedQuizzes from '../FeedSavedQuizzes';
+import FeedLibrary from '../FeedLibrary';
 import UserActionsContext from '../../contexts/userActions';
 
 
@@ -35,18 +36,47 @@ export default function Feed({ navigation }) {
             <View style={styles.elevationContainer}></View>
             <Header openDrawer={openDrawerHandler} openNotificationScreen={openNotificationsHandler}/>
             
-            <FeedTab.Navigator>
-                <FeedTab.Screen name="FeedTrendingQuizzes" component={FeedTrendingQuizzes} />
-                <FeedTab.Screen name="FeedSavedQuizzes" component={FeedSavedQuizzes} />
+            <FeedTab.Navigator
+                tabBarOptions={tabBarStyling}
+            >
+                <FeedTab.Screen 
+                    name="FeedTrendingQuizzes" 
+                    component={FeedTrendingQuizzes} 
+                    unmountOnBlur
+                    options={{
+                        title: 'Em alta',
+                        tabBarIcon: ({color, size}) => <Icon name="whatshot" color={color} size={size} />
+                    }}
+                />
+                <FeedTab.Screen 
+                    name="FeedLibrary" 
+                    component={FeedLibrary} 
+                    options={{
+                        title: 'Biblioteca',
+                        tabBarIcon: ({color, size}) => <LibraryIcon color={color} size={size} />
+                    }}
+                />
             </FeedTab.Navigator>
 
             <View style={styles.btnContainer}>
                 <Touchable onPress={createQuizHandler} style={styles.createQuizBtn} background={Touchable.SelectableBackgroundBorderless()}>
-                    <Icon name="add" size={40} color="#06A3FF"/>
+                    <Icon name="add" size={40} color="#f9f9f9"/>
                 </Touchable>
             </View>
         </View>
     );
+}
+
+const tabBarStyling = {
+    activeTintColor: '#06A3FF',
+    tabStyle: {
+        justifyContent: 'center',
+    },
+    labelStyle: {
+        fontSize: 12,
+        marginTop: -5,
+        marginBottom: 5,
+    },
 }
 
 const styles = StyleSheet.create({
@@ -62,15 +92,17 @@ const styles = StyleSheet.create({
     btnContainer: {
         borderRadius: 30, 
         position: 'absolute',
-        bottom: 30, 
-        right: 20, 
+        bottom: 20, 
+        alignSelf: 'center',
+        // center: 1,
+        // right: '1/2', 
         elevation: 5,
     },
     createQuizBtn: {
         width: 60,
         height: 60,
         borderRadius: 30,
-        backgroundColor: '#F9F9F9',
+        backgroundColor: '#06A3FF',
         alignItems: 'center',
         justifyContent: 'center',
     },

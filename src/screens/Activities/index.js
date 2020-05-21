@@ -16,12 +16,12 @@ export default function Activities() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-        if (!newActivity)
+        if (!newActivity) // There are no new activities just load the old ones
             loadActivities();
     }, []);
 
     useEffect(() => {
-        // Refresh the component
+        // New activity received then refresh the component state
         if (newActivity) {
             setActivities([]);
             setLoading(false);
@@ -33,7 +33,7 @@ export default function Activities() {
     useEffect(() => {
         if (activities.length>0) updateSeenActivities();
         
-        // Update again after refreshing (refreshing happens when newActiviry variable from context is set to true)
+        // Load activities after refreshing (refreshing happens when newActiviry variable from context is set to true)
         if (newActivity && activities.length===0)
             loadActivities();
 
@@ -72,6 +72,7 @@ export default function Activities() {
         setPage(oldPage => oldPage+1);
     }
 
+    // Function that sends the activities tha has been seen to update this info in the server
     async function updateSeenActivities() {
         try {
             let activitiesIdsToUpdate = [];
