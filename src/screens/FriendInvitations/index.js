@@ -2,48 +2,44 @@ import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { View, FlatList, StyleSheet, ToastAndroid, ActivityIndicator } from 'react-native';
 import FriendInvitationCard from './components/FriendInvitationCard';
 import UserActionsContext from '../../contexts/userActions';
-import { useFocusEffect } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import api from '../../services/api';
 
 
 export default function FriendInvitations() {
+    const isTabFocused = useIsFocused();
+    
     const { friendInvitations, setFriendInvitations, } = useContext(UserActionsContext);
     const [loading, setLoading] = useState(true);
-    const [finishedFetching, setFinishedFetching] = useState(false);
     const [invitations, setInvitations] = useState([]);
    
     useEffect(() => {
-        if (friendInvitations) {
-            console.log('new');
-            
-            setInvitations([]);
+        if (!friendInvitations) // There are no new invitations just load the old ones
             loadInvitations();
-        }
-    }, [friendInvitations]);
-
-    useEffect(() => {
-        loadInvitations();
     }, []);
 
+    useEffect(() => {
+        // New invitation received then refresh the component state
+        if (friendInvitations) {
+            setInvitations([]);
+            setLoading(false);
+            // setPage(1);
+            // setTotalPages(0);
+        }
+    }, [friendInvitations]);
+    
+    useEffect(() => {
+        // Load invitations after refreshing (refreshing happens when friendInvitations variable from context is set to true)
+        if (friendInvitations && invitations.length===0)
+            loadInvitations();
 
-    // useEffect(() => {
-    //     if (!friendInvitations) // There are no new invitations just load the old ones
-    //         loadInvitations();
-    // }, []);
+    }, [invitations]);
 
-    // useEffect(() => {
-    //     // New invitation received then refresh the component state
-    //     if (friendInvitations) {
-    //         setInvitations([]);
-    //     }
-    // }, [friendInvitations]);
+    // Check if the tab is focused, if so setNewActivity will be equals false because the user is seeing his invitations
+    useEffect(() => { 
+        if (isTabFocused) setFriendInvitations(false);
+    }, [isTabFocused, invitations]);
 
-    // useEffect(() => {
-    //     // Load invitations after refreshing (refreshing happens when friendInvitations variable from context is set to true)
-    //     if (friendInvitations && invitations.length===0)
-    //         loadInvitations();
-
-    // }, [invitations]);
 
     async function loadInvitations() {
         try {
@@ -55,22 +51,10 @@ export default function FriendInvitations() {
             setLoading(false);
         } catch (err) {
             console.log(err.response)
+            ToastAndroid.show('Não foi possível listar as solicitações de amizade.', ToastAndroid.SHORT);
             setLoading(false);
-            // setFinishedFetching(true);
-
         }
     }
-
-     // Function called when we leave
-     useFocusEffect(
-        useCallback(() => {
-            const unsubscribe = () => {
-                setFriendInvitations(false);
-            }
-
-            return () => unsubscribe();
-        }, [])
-    );
 
 
     async function acceptFriendInvitationHandler(recipientId) {

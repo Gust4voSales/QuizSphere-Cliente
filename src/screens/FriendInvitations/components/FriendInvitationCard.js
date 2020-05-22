@@ -1,5 +1,5 @@
 import React, { useEffect, useState, } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import { systemWeights } from 'react-native-typography';
 import api from '../../../services/api';
@@ -15,6 +15,7 @@ export default function FriendInvitation(props) {
                 setRecipientName(data.user.userName);
             } catch(err) {
                 console.log(err);
+                ToastAndroid.show('Não foi possível receber informações do usuário', ToastAndroid.SHORT);
                 // Message: couldn't load
             }
         }
@@ -24,10 +25,9 @@ export default function FriendInvitation(props) {
 
     return(
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.username}>{recipientName}</Text>
-                <Text> enviou uma solicitação de amizade.</Text>
-            </View>
+            <Text style={styles.textInfo}>
+                <Text style={styles.username}>{recipientName}</Text> enviou uma solicitação de amizade.
+            </Text>
             
             <View style={styles.optionsContainer}>
                 <Touchable onPress={() => props.acceptInvitation(props.data.recipient)} style={styles.btn} foreground={Touchable.SelectableBackground()}>
@@ -45,17 +45,17 @@ const styles = StyleSheet.create({
     container: {
         height: 90,
         width: '100%',
-        backgroundColor: '#ddd',
+        // backgroundColor: '#ddd',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
         marginBottom: 5,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderColor: '#fff',
     },
-    header: {
-        flexDirection:'row',
-        // justifyContent: 'center',
-        // alignSelf: 'flex-start',
-        paddingLeft: 15,
-        marginBottom: 10,
+    textInfo: {
+        // paddingLeft: 10,
+        color: 'white',
+        fontSize: 18,
     },
     username: {
         ...systemWeights.bold,
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     btn: {
         alignItems: 'center',
         justifyContent: 'center',
-        
     },
     optionsContainer: {
         flexDirection: 'row',
@@ -72,19 +71,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     accept: {
-        ...systemWeights.semibold,
+        ...systemWeights.bold,
         paddingHorizontal: 15,
         paddingVertical: 10,
         color: 'white',
-        backgroundColor: 'blue',
+        backgroundColor: '#00A3FF',
         borderRadius: 5,
     },  
     decline: {
-        ...systemWeights.semibold,
+        ...systemWeights.bold,
         paddingHorizontal: 15,
         paddingVertical: 10,
         color: 'white',
-        backgroundColor: 'red',
+        backgroundColor: '#FF5454',
         borderRadius: 5,
     },
 

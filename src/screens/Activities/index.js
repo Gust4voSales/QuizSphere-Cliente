@@ -42,7 +42,7 @@ export default function Activities() {
     // Check if the tab is focused, if so setNewActivity to false because the user is seeing his activities
     useEffect(() => { 
         if (isTabFocused) setNewActivity(false);
-    }, [isTabFocused]);
+    }, [isTabFocused, activities]);
 
 
     const loadActivities = async (page=1) => {
@@ -56,6 +56,7 @@ export default function Activities() {
             setLoading(false);
         } catch (err) {
             console.log(err) 
+            setLoading(false);
             ToastAndroid.show('Não foi possível carregar as atividades', ToastAndroid.SHORT);
         }
     }
