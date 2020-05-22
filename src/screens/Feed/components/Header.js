@@ -3,16 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { systemWeights } from 'react-native-typography';
-import AuthContext from '../../../contexts/auth';
 import UserActionsContext from '../../../contexts/userActions';
 
 
 export default function Header(props) {
-    const { user } = useContext(AuthContext);
-    const { notificationIndicator } = useContext(UserActionsContext);
+    const { friendInvitations, newActivity } = useContext(UserActionsContext);
 
-    function displayNotificationCounter() {
-        if (notificationIndicator) {
+    function displayNotificationIndicator() {
+        if (friendInvitations || newActivity) {
             return <Text style={styles.notificationIndicator}>!</Text>;
         }
     }
@@ -42,7 +40,7 @@ export default function Header(props) {
                 >   
                     <View>
                         <Icon name="notifications" size={30} color="white"/>
-                        {displayNotificationCounter()}
+                        {displayNotificationIndicator()}
                     </View>
                 </Touchable>
             </View>

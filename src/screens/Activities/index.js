@@ -1,13 +1,13 @@
-import React, { useContext, useCallback, useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useContext, useState, useEffect, } from 'react';
+import { View, StyleSheet, FlatList, ActivityIndicator, ToastAndroid } from 'react-native';
+import ActivityCard from './components/ActivityCard';
+import { useIsFocused } from '@react-navigation/native';
 import UserActionsContext from '../../contexts/userActions';
 import api from '../../services/api';
 
-// Don't load new Activities when the user opens the app. Just get info if there is new notifications. Load each notification here
 
-//tratar erro (msg no footer do flat?)
 export default function Activities() {
+    const isTabFocused = useIsFocused();
     const { newActivity, setNewActivity } = useContext(UserActionsContext);
 
     const [activities, setActivities] = useState([]);
@@ -39,29 +39,24 @@ export default function Activities() {
 
     }, [activities]);
 
-    // Function called when we leave
-    useFocusEffect(
-        useCallback(() => {
-            const unsubscribe = () => {
-                setNewActivity(false);
-            }
-
-            return () => unsubscribe();
-        }, [])
-    );
+    // Check if the tab is focused, if so setNewActivity to false because the user is seeing his activities
+    useEffect(() => { 
+        if (isTabFocused) setNewActivity(false);
+    }, [isTabFocused]);
 
 
     const loadActivities = async (page=1) => {
         try {
             setLoading(true);
-
+            
             const { data } = await api.get(`/user/notifications?page=${page}`);
-
+            
             setActivities([...data.notifications.docs, ...activities]);
             setTotalPages(data.notifications.totalPages);
             setLoading(false);
         } catch (err) {
-            console.log(err)
+            console.log(err) 
+            ToastAndroid.show('Não foi possível carregar as atividades', ToastAndroid.SHORT);
         }
     }
     
@@ -93,7 +88,7 @@ export default function Activities() {
         if (loading) {
             return(
                 <View>
-                    <ActivityIndicator />
+                    <ActivityIndicator color="white" />
                 </View>
             )
         } 
@@ -103,13 +98,11 @@ export default function Activities() {
     return(
         <View style={styles.container}>
             <FlatList 
-                style={{height: '100%', backgroundColor: '#ddd'}}
+                style={{flex: 1}}
                 data={activities}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
-                    <Text style={styles.activity}>
-                        {item.newFriend} aceitou sua solicitação de amizade. {item._id.substring(item._id.length-3, item._id.length)}
-                    </Text>
+                    <ActivityCard item={item}/>
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMoreActivities}
@@ -121,13 +114,8 @@ export default function Activities() {
 }
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    // },
-    activity: {
-        height: 60,
-        borderWidth: 2,
-        borderColor: 'black',
-        marginBottom: 50,
-    }
+    container: {
+        flex: 1,
+        backgroundColor: '#3D6F95',
+    },
 });

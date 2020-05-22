@@ -6,7 +6,7 @@ import socketio from 'socket.io-client';
 import api from '../services/api';
 import { set } from 'react-native-reanimated';
 
-const UserActionsContext = createContext({ friendInvitations: false, notificationIndicator: false, newActivity: false }); //value types 
+const UserActionsContext = createContext({ friendInvitations: false, newActivity: false }); //value types 
 // const UserActionsContext = createContext({ friendInvitations: [], mentions: [], invitationsCounter: 0, mentionsCounter: 0 }); //value types 
 
 export function UserActionsProvider({ children }) {
@@ -15,7 +15,6 @@ export function UserActionsProvider({ children }) {
     const { user, setUser } = useContext(AuthProvider);
 
     const [userId, setUserId] = useState(user._id);
-    const [notificationIndicator, setNotificationIndicator] = useState(false);
     const [friendInvitations, setFriendInvitations] = useState(false);
     const [newActivity, setNewActivity] = useState(false);
 
@@ -34,31 +33,34 @@ export function UserActionsProvider({ children }) {
         socket.on('friend_invitation', () => {
             console.log('new invitations');
             
-            setNotificationIndicator(true);
             setFriendInvitations(true);
         });
 
         socket.on('new_activity', () => {
             console.log('new activity');
 
-            setNotificationIndicator(true);
             setNewActivity(true);
         });
+
+        socket.on('reconnect', () => {
+            console.log('sending id after reconnecting');
+            
+            socket.emit('reconnected', { userId });
+        })
 
     }, [friendInvitations, newActivity, socket]);
     
     async function loadUserInfo() {
         try {
-            const { data: userData } = await api.get(`/user/${user._id}`);
+            const { data } = await api.get(`/user/${user._id}`);
             
-            const { data } = await api.get('/user/notifications/info');
+            setUser(data.user);
             
-            setUser(userData.user);
-            
-            if (data.newNotifications){
-                setNotificationIndicator(true);
-            }
+            if (data.newActivities) setNewActivity(true);
+            if (data.pendingInvitations) setFriendInvitations(true);
+
         } catch (err) {
+            if (err.response.data.user) setUser(err.response.data.user);
             ToastAndroid.show('Não foi possível atualizar informações do usuário', ToastAndroid.SHORT);
         }
     }
@@ -92,7 +94,6 @@ export function UserActionsProvider({ children }) {
             const { data } = await api.post(`/user/savedQuizzes/${quizId}`);
             setUser(data.user);
 
-            ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
             console.log(err);
             showAlertError('', err.response === undefined 
@@ -121,8 +122,6 @@ export function UserActionsProvider({ children }) {
         <UserActionsContext.Provider value={{ 
             friendInvitations, 
             setFriendInvitations,
-            notificationIndicator,
-            setNotificationIndicator,
             newActivity, 
             setNewActivity ,
             sendFriendInvitation, 
