@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
-import { View, FlatList, StyleSheet, ToastAndroid, ActivityIndicator } from 'react-native';
+import React, { useContext, useState, useEffect, } from 'react';
+import { View, FlatList, StyleSheet, ToastAndroid, ActivityIndicator, Text } from 'react-native';
 import FriendInvitationCard from './components/FriendInvitationCard';
 import UserActionsContext from '../../contexts/userActions';
 import { useIsFocused } from '@react-navigation/native';
@@ -56,34 +56,10 @@ export default function FriendInvitations() {
         }
     }
 
-
-    async function acceptFriendInvitationHandler(recipientId) {
-        try {   
-            const { data } = await api.post(`/user/friend/acceptInvitation/${recipientId}`);
-            // console.log(data.user);
-            removeInvitation(recipientId, data.message);
-        } catch (err) {
-            console.log(err);
-            if (err.response)
-                console.log(err.response.data.error);
-        }
-    }
-
-    async function declineFriendInvitationHandler(recipientId) {
-        try {   
-            const { data } = await api.post(`/user/friend/declineInvitation/${recipientId}`);
-            // console.log(data.user);
-            removeInvitation(recipientId, data.message);
-        } catch (err) {
-            console.log(err);
-            if (err.response)
-                console.log(err.response.data.error);
-        }
-    }
     
-    function removeInvitation(recipientId, feedbackMessage) {
+    function userFeedbackAfterPressing(recipientId, feedbackMessage, success) {
         ToastAndroid.show(feedbackMessage, ToastAndroid.SHORT);
-        setInvitations(invitations.filter(invitation => invitation.recipient!=recipientId));
+        if (success) setInvitations(invitations.filter(invitation => invitation.recipient!=recipientId));
     }
 
     if (loading) {
@@ -103,12 +79,14 @@ export default function FriendInvitations() {
                 renderItem={({item, index, separator}) => (
                     <FriendInvitationCard 
                         data={item} 
-                        acceptInvitation={recipientId => acceptFriendInvitationHandler(recipientId)} 
-                        declineInvitation={recipientId => declineFriendInvitationHandler(recipientId)}
+                        userFeedbackAfterPressing={userFeedbackAfterPressing}
                     />
                 )}
             />
-
+            {
+            invitations.length===0 &&
+            <Text style={styles.emptyInfoText}>Não há nada aqui 🙂</Text>
+            }
         </View>
     );
 }
@@ -119,5 +97,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#3D6F95',
     },
-
+    emptyInfoText: {
+        color: 'white',
+        fontSize: 18,
+        position: 'absolute',
+        alignSelf: 'center',
+        top: 5
+    }
 });

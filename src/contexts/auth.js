@@ -1,8 +1,9 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
-import showAlertError from '../components/AlertError';
+
 
 import api from '../services/api';
+
 
 const AuthContext = createContext({ signed: false, user: {}, loading: true }); //value types 
 

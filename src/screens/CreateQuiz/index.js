@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard } from 'react-native';
-import AuthContext from '../../contexts/auth';
 import Touchable from 'react-native-platform-touchable';
+import Header from '../../components/Header';
 import { systemWeights } from 'react-native-typography'
 import { CommonActions } from '@react-navigation/native';
 import CreateQuestionComponent from '../../components/CreateQuestionComponent';
@@ -10,6 +10,7 @@ import TagInput from './utils/TagInput';
 import showAlertError from '../../components/AlertError';
 
 import api from '../../services/api';
+
 
 // Title, category, tags([string]), numQuestions, quentions([question]), private(bool), timer
 // question: questionTitle, options[string], correctOptionIndex
@@ -87,6 +88,8 @@ export default function CreateQuiz({ navigation }) {
     return(
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+            <Header screenTitle="Criar Quiz"/>
+
             <View style={styles.informations}>
                 <Text style={styles.containerTitle}>Informações</Text>
                 <TextInput 
@@ -143,11 +146,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#4F7795',
+        backgroundColor: '#3D6F95',
     },
     informations: {
         width: '80%',
-        height: '45%',
+        height: '40%',
         justifyContent: 'space-around',
         alignItems: 'center',
     },
@@ -172,7 +175,7 @@ const styles = StyleSheet.create({
     
     questions: {
         width: '80%',
-        height: '45%',
+        height: '40%',
         justifyContent: 'space-around',
         alignItems: 'flex-start',
         // backgroundColor: '#ddd',

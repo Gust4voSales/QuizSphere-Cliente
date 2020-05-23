@@ -16,7 +16,6 @@ export default function Feed({ navigation }) {
     navigation.setOptions({
         headerShown: false,
     });
-    const { setNotificationsCounter } = useContext(UserActionsContext);
 
 
     function openDrawerHandler() {

@@ -49,6 +49,10 @@ export function UserActionsProvider({ children }) {
         })
 
     }, [friendInvitations, newActivity, socket]);
+
+    function disconnectSocket() {
+        socket.disconnect();
+    }
     
     async function loadUserInfo() {
         try {
@@ -77,14 +81,14 @@ export function UserActionsProvider({ children }) {
             ToastAndroid.show(data.message, ToastAndroid.SHORT);
             return response;
         } catch (err) {
+            response.success = false;
+            
             if (err.response===undefined) {
-                showAlertError('', 'Erro ao tentar conectar com o servidor. Tente novamente');
-                return;
+                response.message = err.response.data.error;
+                return response;
             }
 
-            response.success = false;
             response.message = err.response.data.error;
-            
             return response;
         }
     }
@@ -126,7 +130,9 @@ export function UserActionsProvider({ children }) {
             setNewActivity ,
             sendFriendInvitation, 
             saveQuiz, 
-            removeQuizFromSavedQuizzes }}
+            removeQuizFromSavedQuizzes ,
+            disconnectSocket,
+            }}
         >
             {children}
         </UserActionsContext.Provider>

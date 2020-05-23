@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, View, Text, TouchableNativeFeedback, Alert } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -22,7 +22,16 @@ export default function QuizCard({ data, }) {
     }
 
     function onPlayQuiz() {
-        navigation.navigate('PlayQuiz', { quizId: data._id });
+        Alert.alert(
+            '',
+            `Jogar "${data.quizTitle}"?`,
+            [
+                { text: 'Não', onPress: () => null },
+                { text: 'Sim', onPress: () => navigation.navigate('PlayQuiz', { quizId: data._id }) },
+            ],   
+            { cancelable: true } 
+        );
+        
     }
 
     return(

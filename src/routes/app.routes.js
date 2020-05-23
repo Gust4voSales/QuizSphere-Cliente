@@ -60,7 +60,7 @@ export default function AppRoutes(){
                     component={AddFriend}
                     options={{ 
                         drawerLabel: "Adicionar amigos",
-                        drawerIcon: ({color, size}) => <Icon name="person-add" color={color} size={size} style={iconStyle}/>
+                        drawerIcon: ({color, size}) => <Icon name="person-add" color={color} size={size} style={iconStyle}/>,
                     }} 
                 />
                 <AppDrawer.Screen 

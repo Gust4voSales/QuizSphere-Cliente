@@ -7,10 +7,12 @@ import IconM from 'react-native-vector-icons/MaterialCommunityIcons'
 import { systemWeights } from 'react-native-typography';
 import  { CommonActions } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
+import UserActionsContext from '../../contexts/userActions';
 
 
 export default function CustomDrawerContent(props) {
     const { signOut, user } = useContext(AuthContext);
+    const { disconnectSocket } = useContext(UserActionsContext);
     const navigation = props.navigation;
     
     function signOutHandler() {
@@ -23,6 +25,8 @@ export default function CustomDrawerContent(props) {
             })
         );
         // navigation.closeDrawer();
+
+        disconnectSocket();
         setTimeout(signOut, 1000);
         // signOut();
     }

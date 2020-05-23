@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, } from 'react';
-import { View, StyleSheet, FlatList, ActivityIndicator, ToastAndroid } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, ToastAndroid, Text } from 'react-native';
 import ActivityCard from './components/ActivityCard';
 import { useIsFocused } from '@react-navigation/native';
 import UserActionsContext from '../../contexts/userActions';
@@ -109,7 +109,11 @@ export default function Activities() {
                 onEndReached={loadMoreActivities}
                 onEndReachedThreshold={0.1}
             />
-
+            {
+            activities.length===0 &&
+            <Text style={styles.emptyInfoText}>Não há nada aqui 🙂</Text>
+            }
+                
         </View>
     );
 }
@@ -119,4 +123,11 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#3D6F95',
     },
+    emptyInfoText: {
+        color: 'white',
+        fontSize: 18,
+        position: 'absolute',
+        alignSelf: 'center',
+        top: 5
+    }
 });

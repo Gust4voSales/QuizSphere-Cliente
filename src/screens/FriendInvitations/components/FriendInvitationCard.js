@@ -7,6 +7,7 @@ import api from '../../../services/api';
 
 export default function FriendInvitation(props) {
     const [recipientName, setRecipientName] = useState('');    
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         async function loadUserData() {
@@ -23,6 +24,32 @@ export default function FriendInvitation(props) {
         loadUserData();
     }, []);
 
+    async function acceptFriendInvitationHandler() {
+        try {   
+            setLoading(true);
+            const { data } = await api.post(`/user/friend/acceptInvitation/${props.data.recipient}`);
+            // console.log(data.user);
+            props.userFeedbackAfterPressing(props.data.recipient, data.message, true);
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
+            props.userFeedbackAfterPressing(props.data.recipient, 'Não foi possível responder a solicitação', false);
+        }
+    }
+
+    async function declineFriendInvitationHandler() {
+        try {   
+            setLoading(true);
+            const { data } = await api.post(`/user/friend/declineInvitation/${props.data.recipient}`);
+            // console.log(data.user);
+            props.userFeedbackAfterPressing(props.data.recipient, data.message, true);
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
+            props.userFeedbackAfterPressing(props.data.recipient, 'Não foi possível responder a solicitação', false);
+        }
+    }
+
     return(
         <View style={styles.container}>
             <Text style={styles.textInfo}>
@@ -30,10 +57,20 @@ export default function FriendInvitation(props) {
             </Text>
             
             <View style={styles.optionsContainer}>
-                <Touchable onPress={() => props.acceptInvitation(props.data.recipient)} style={styles.btn} foreground={Touchable.SelectableBackground()}>
+                <Touchable 
+                    onPress={acceptFriendInvitationHandler} 
+                    style={styles.btn} 
+                    foreground={Touchable.SelectableBackground()}
+                    disabled={loading}
+                >
                     <Text style={styles.accept}>ACEITAR</Text>
                 </Touchable>
-                <Touchable onPress={() => props.declineInvitation(props.data.recipient)} style={styles.btn} foreground={Touchable.SelectableBackground()}>
+                <Touchable 
+                    onPress={declineFriendInvitationHandler} 
+                    style={styles.btn} 
+                    foreground={Touchable.SelectableBackground()}
+                    disabled={loading}
+                >
                     <Text style={styles.decline}>RECUSAR</Text>
                 </Touchable>
             </View>

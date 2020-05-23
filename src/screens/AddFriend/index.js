@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import Header from '../../components/Header';
 import Touchable from 'react-native-platform-touchable';
 import UserActionsContext from '../../contexts/userActions';
 import { useFocusEffect } from '@react-navigation/native';
@@ -41,7 +41,9 @@ export default function AddFriend({ navigation }) {
 
     return(
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <LinearGradient style={styles.container} colors={['#364F6B', '#3E81A7']} >
+
+        <View style={styles.container}>
+                <Header screenTitle="Adicionar amigos"/>
                 <TextInput 
                     style={styles.input}
                     maxLength={22}
@@ -53,12 +55,13 @@ export default function AddFriend({ navigation }) {
                     placeholder="Nome de usuário"
                     placeholderTextColor="#ddd"
                 />
-                <Text style={styles.errorMessage}>{errorMessage}</Text>
+                { errorMessage.length>0 &&
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
                 <Touchable style={styles.btn} onPress={addFriendHandler} background={Touchable.SelectableBackground()}>
                     <Text style={styles.textBtn}>Adicionar</Text>
                 </Touchable>
-         </LinearGradient>
+         </View>
         </TouchableWithoutFeedback>
     );
 }
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: '#3D6F95',
     },
     input: {
         width: '97%',
@@ -79,7 +83,12 @@ const styles = StyleSheet.create({
     errorMessage: {
         textAlign: 'center',
         fontSize: 16,
-        color: '#FF5454',
+        backgroundColor: '#FF5454',
+        color: 'white',
+        paddingHorizontal: 8, 
+        paddingVertical: 5,
+
+        borderRadius: 4,
     },
     btn: {
         backgroundColor: '#f9f9f9',
