@@ -57,7 +57,51 @@ export default function Option(props) {
     
     function runWrongSelectionAnimation() {
         wrongSound.play();        
-        setAnimation('jello');
+        setAnimation({
+            0: {
+              scale: 1,
+              skewX: '0deg',
+              skewY: '0deg',
+            },
+            0.111: {
+              skewX: '0deg',
+              skewY: '0deg',
+            },
+            0.222: {
+              scale: 1.2,
+              skewX: '-12.5deg',
+              skewY: '-12.5deg',
+            },
+            0.333: {
+              skewX: '6.25deg',
+              skewY: '6.25deg',
+            },
+            0.444: {
+              skewX: '-3.125deg',
+              skewY: '-3.125deg',
+            },
+            0.555: {
+              skewX: '1.5625deg',
+              skewY: '1.5625deg',
+            },
+            0.666: {
+              skewX: '-0.78125deg',
+              skewY: '-0.78125deg',
+            },
+            0.777: {
+              skewX: '0.390625deg',
+              skewY: '0.390625deg',
+            },
+            0.888: {
+              skewX: '-0.1953125deg',
+              skewY: '-0.1953125deg',
+            },
+            1: {
+              scale: 1,
+              skewX: '0deg',
+              skewY: '0deg',
+            },
+        });
     }
 
 

@@ -2,6 +2,7 @@ const data = {
     quiz: {
         quizTitle: "Quiz Novelas SBT",
         questionsLength: 11,
+        time: 10,
         questions: [
             {
                 questionTitle: "Qual a capital do Brasil?",
@@ -12,7 +13,7 @@ const data = {
                 _id: 1
             }, 
             {
-                questionTitle: "Qual a capital do Brasil?",
+                questionTitle: "AASOFKM odskmgsd asokmgas asokmfgasasokfm asokgmfas asogkm sk?",
                 correctOptionIndex: 1,
                 options: [
                     "AFOASKMF", "rrrrrrr", "KKKKKK", "OOOOO"
@@ -20,7 +21,7 @@ const data = {
                 _id: 2
             }, 
             {
-                questionTitle: "Qual a capital do Brasil?",
+                questionTitle: "AASOFKM odskmgsd asokmgas asokmfgasasokfm asokgmfas asogkm sk aslf,aspl aspgls sl  apsl,fasg lslsl aasfasgf  asgasg??",
                 correctOptionIndex: 0,
                 options: [
                     "AFOASKMF", "rrrrrrr", "KKKKKK", "OOOOO"

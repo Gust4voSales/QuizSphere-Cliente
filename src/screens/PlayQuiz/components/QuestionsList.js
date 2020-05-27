@@ -60,7 +60,7 @@ export default function QuestionList(props) {
 const styles = StyleSheet.create({
     questionList: {
         flexGrow: 0,
-        marginTop: 55
+        marginBottom: 15,
     },
     questionIndex: {
         fontSize: 24,

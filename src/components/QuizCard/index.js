@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableNativeFeedback, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableNativeFeedback, Alert, ToastAndroid } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import UserActionsContext from '../../contexts/userActions';
 import QuizOptions from '../QuizOptions';
-
+import api from '../../services/api';
 
 
 export default function QuizCard({ data, }) {
@@ -21,23 +21,35 @@ export default function QuizCard({ data, }) {
         setShowOptions(false);
     }
 
-    function onPlayQuiz() {
+    function onPlayQuizHandler() {
         Alert.alert(
             '',
             `Jogar "${data.quizTitle}"?`,
             [
                 { text: 'Não', onPress: () => null },
-                { text: 'Sim', onPress: () => navigation.navigate('PlayQuiz', { quizId: data._id }) },
+                { text: 'Sim', onPress: playQuiz },
             ],   
             { cancelable: true } 
         );
-        
+    }
+
+    async function playQuiz() {
+        try {
+            const response = await api.get(`/quiz/${data._id}`); 
+            const quiz = response.data.quiz;
+            quiz.time = 10; // remove later
+            
+            navigation.navigate('PlayQuiz', { quiz })
+        } catch (err) {
+            console.log(err);
+            ToastAndroid.show('Não foi possível carregar o Quiz', ToastAndroid.SHORT);
+        }
     }
 
     return(
         <Touchable
             foreground={TouchableNativeFeedback.SelectableBackground()}
-            onPress={onPlayQuiz} 
+            onPress={onPlayQuizHandler} 
             onLongPress={openOptionsHandler}
             style={{borderRadius: 20,}}
         > 

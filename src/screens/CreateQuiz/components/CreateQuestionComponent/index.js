@@ -4,7 +4,7 @@ import Touchable  from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FIcon from 'react-native-vector-icons/FontAwesome5';
 import Modal from 'react-native-modal';
-import Option from './utils/QuestionOption';
+import Option from './components/QuestionOption';
 import styles from './styles';
 
 

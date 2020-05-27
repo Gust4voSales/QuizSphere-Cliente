@@ -1,14 +1,13 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard } from 'react-native';
+import React, { useState, } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard, FlatList } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Header from '../../components/Header';
 import { systemWeights } from 'react-native-typography'
 import { CommonActions } from '@react-navigation/native';
-import CreateQuestionComponent from '../../components/CreateQuestionComponent';
-import Picker from './utils/StyledPicker';
-import TagInput from './utils/TagInput';
+import CreateQuestionComponent from './components/CreateQuestionComponent';
+import Picker from './components/StyledPicker';
+import TagInput from './components/TagInput';
 import showAlertError from '../../components/AlertError';
-
 import api from '../../services/api';
 
 
@@ -16,7 +15,6 @@ import api from '../../services/api';
 // question: questionTitle, options[string], correctOptionIndex
 
 export default function CreateQuiz({ navigation }) {
-    // const { userId } = useContext(AuthContext);
     const [quizTitle, setQuizTitle] = useState('');
     const [category, setCategory] = useState("educativo");
     const [isPrivate, setIsPrivate] = useState(false);
@@ -36,7 +34,13 @@ export default function CreateQuiz({ navigation }) {
         setTags(tempTags);
     }
 
-    function onPickerSelectionHandler(selection) {
+    function deleteTagHandler(key) {
+        let newTags = tags.filter(tag => tag.key != key);
+        
+        setTags(newTags);
+    }
+
+    function onCategorySelection(selection) {
         setCategory(selection);
     }
 
@@ -86,7 +90,7 @@ export default function CreateQuiz({ navigation }) {
     }
 
     return(
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        // <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
             <Header screenTitle="Criar Quiz"/>
 
@@ -102,10 +106,11 @@ export default function CreateQuiz({ navigation }) {
                     placeholderTextColor='#bbb'
                     underlineColorAndroid='#58AAFF'
                 />
+                
                 <TagInput onTagsChange={tags => onTagsChange(tags)}/>
 
                 <View style={styles.horizontalInfoContainer}>
-                    <Picker handler={onPickerSelectionHandler} selection={category}/>
+                    <Picker handler={onCategorySelection} selection={category} items={['educativo', 'entretenimento']}/>
 
                     <View style={{ width: '32%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}> 
                         <Text style={{ fontSize: 16, color: 'white' }}>Privado</Text>
@@ -114,14 +119,14 @@ export default function CreateQuiz({ navigation }) {
                             thumbColor={isPrivate ? "#fff" : "#eee"}
                             onValueChange={toggleSwitch}
                             value={isPrivate}
-                            disabled //remove later
                         />
                     </View>
                 </View>
             </View>
+            
             {/* Separator */}
             <View style={{width: '90%', borderWidth: StyleSheet.hairlineWidth, borderColor: '#F8F8F8'}} /> 
-            {/* Separator */}
+
             <View style={styles.questions}>
                 <Text style={styles.containerTitle}>Questões</Text>
                 
@@ -138,7 +143,7 @@ export default function CreateQuiz({ navigation }) {
             </Touchable>
 
         </View>
-        </TouchableWithoutFeedback>
+        // </TouchableWithoutFeedback>
     );
 }
 

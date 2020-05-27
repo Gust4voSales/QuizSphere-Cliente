@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function StyledPicker(props) {
     return(
-        <TouchableOpacity style={styles.picker} onPress={null} activeOpacity={0.9}>
+        <TouchableOpacity style={styles.btn} onPress={null} activeOpacity={0.8}>
             <Picker
-                style={{ color: 'white', backgroundColor: 'transparent', height: 40,}}
+                style={styles.picker}
                 mode="dropdown"
                 selectedValue={props.selection}
                 onValueChange={(itemValue, itemIndex) => {
-                    props.handler(itemValue)
+                    props.handler(itemValue);
                 }}
             >
-                <Picker.Item label="Educativo" value="educativo" />
-                <Picker.Item label="Entretenimento" value="entretenimento" />
+                { props.items.map((item, index) => 
+                    <Picker.Item label={item.charAt(0).toUpperCase() + item.slice(1)} value={item} key={item}/>) 
+                }
+
             </Picker>
             
             <Icon name='arrow-drop-down' size={30} color='white' style={styles.icon}/>
@@ -24,12 +26,17 @@ export default function StyledPicker(props) {
 }
 
 const styles = StyleSheet.create({
-    picker: {
+    btn: {
         width: '54%', 
-        backgroundColor: '#58AAFF',
+        backgroundColor: '#00A3FF', 
         borderRadius: 4,
-    },
 
+    },
+    picker: {
+        color: 'white', 
+        height: 40,
+        backgroundColor: 'transparent'
+    },
     icon: {
         position: 'absolute',
         marginTop: 6,   

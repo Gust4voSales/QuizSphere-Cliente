@@ -7,6 +7,7 @@ import api from '../../services/api';
 
 
 export default function FriendInvitations() {
+    let isMounted;
     const isTabFocused = useIsFocused();
     
     const { friendInvitations, setFriendInvitations, } = useContext(UserActionsContext);
@@ -14,9 +15,11 @@ export default function FriendInvitations() {
     const [invitations, setInvitations] = useState([]);
    
     useEffect(() => {
+        isMounted = true;
         if (!friendInvitations) // There are no new invitations just load the old ones
             loadInvitations();
-    }, []);
+        return () => { isMounted = false }
+    }, []); 
 
     useEffect(() => {
         // New invitation received then refresh the component state
@@ -47,12 +50,14 @@ export default function FriendInvitations() {
 
             const { data } = await api.get(`/user/friend/pendingInvitations`);
             
-            setInvitations([...data.invitations, ...invitations]);
-            setLoading(false);
+            if (isMounted) {
+                setInvitations([...data.invitations, ...invitations]);
+                setLoading(false);
+            }
         } catch (err) {
             console.log(err.response)
+            if (isMounted) setLoading(false);
             ToastAndroid.show('Não foi possível listar as solicitações de amizade.', ToastAndroid.SHORT);
-            setLoading(false);
         }
     }
 

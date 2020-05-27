@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback, ToastAndroid } from 'react-native';
 import Header from '../../components/Header';
 import Touchable from 'react-native-platform-touchable';
 import UserActionsContext from '../../contexts/userActions';
@@ -10,6 +10,7 @@ export default function AddFriend({ navigation }) {
     const input = useRef(null);
     const [username, setUsername] = useState('');
     const [errorMessage, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // When user leaves screen, clean up everything
     useFocusEffect(
@@ -28,15 +29,25 @@ export default function AddFriend({ navigation }) {
         Keyboard.dismiss();
         if (username.length<1) return;
         
-        const response = await sendFriendInvitation(username);
+        setLoading(true);
+        try {
+            const response = await sendFriendInvitation(username);
 
-        if (!response.success) {
-            setError(response.message);
-            return;
+            if (!response.success) {
+                setError(response.message);
+                setLoading(false);
+                return;
+            }
+            input.current.clear();
+            setError('');
+            setUsername('');
+            setLoading(false);
+        } catch (err) {
+            console.log(err);
+            setLoading(false);
+            ToastAndroid.show('Não foi possível enviar solicitação de amizade', ToastAndroid.SHORT);
         }
-        input.current.clear();
-        setError('');
-        setUsername('');
+        
     }
 
     return(
@@ -58,7 +69,7 @@ export default function AddFriend({ navigation }) {
                 { errorMessage.length>0 &&
                     <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
-                <Touchable style={styles.btn} onPress={addFriendHandler} background={Touchable.SelectableBackground()}>
+                <Touchable style={styles.btn} onPress={addFriendHandler} background={Touchable.SelectableBackground()} disabled={loading}>
                     <Text style={styles.textBtn}>Adicionar</Text>
                 </Touchable>
          </View>
@@ -86,6 +97,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF5454',
         color: 'white',
         paddingHorizontal: 8, 
+        maxWidth: '95%',
         paddingVertical: 5,
 
         borderRadius: 4,

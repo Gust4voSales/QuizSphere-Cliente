@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, ToastAndroid } from 'react-native';
 import QuizListByCategory from '../../components/QuizListByCategory';
 import AuthContext from '../../contexts/auth';
+import { useScrollToTop } from '@react-navigation/native';
 import api from '../../services/api';
 
 
 export default function FeedTrendingQuizzes({ navigation, route }) {
     const { user, setUser } = useContext(AuthContext);
+    const scrollRef = useRef(null);
+        useScrollToTop(scrollRef);
+
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [categories, setCategories] = useState({
@@ -92,6 +96,7 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
                 refreshing={refreshing}
                 onRefresh={refreshHandler}
                 keyExtractor={item => item}
+                ref={scrollRef}
                 renderItem={({item, index, separators}) => (
                     <View>
                         <Text style={styles.categoryText}>{item.charAt(0).toUpperCase() + item.slice(1)}</Text>

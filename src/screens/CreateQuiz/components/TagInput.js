@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect }  from 'react';
-import { View, Text, TextInput, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, FlatList, Keyboard, ToastAndroid, TouchableWithoutFeedback } from 'react-native';
 import TagComponent from '../../../components/TagComponent';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default function TitleInput(props) {
-    const scroll = useRef();
+    const scroll = useRef(null);
     const [tagText, setTagText] = useState('');
     const [tags, setTags] = useState([]);
     const [tagCounter, setTagCounter] = useState(0);
@@ -15,7 +16,8 @@ export default function TitleInput(props) {
 
     function createTag(){
         if (tags.length===5){
-            Alert.alert('', 'Máximo de tags excedido');
+            Keyboard.dismiss();
+            ToastAndroid.show('Máximo de tags excedido', ToastAndroid.SHORT);
             setTagText('');
             return;
         } else if (tagText===' ' || tagText===''){
@@ -39,6 +41,7 @@ export default function TitleInput(props) {
         let newTags = tags.filter(tag => tag.key != key);
         
         setTags(newTags);
+        if (newTags.length>0) scroll.current.scrollToIndex({ index: 0});
     }
 
     function keyPressHandler({ nativeEvent }){
@@ -68,7 +71,7 @@ export default function TitleInput(props) {
            
             <View style={styles.tagContainer}>
                 <FlatList
-                    style={{flexGrow: 0}}
+                    style={{ flexGrow: 0, width: '90%', marginBottom: 5}}
                     ref={scroll}
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -88,7 +91,6 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         // flexWrap: 'wrap'
-        marginBottom: 10,
     },
     input: {
         // flex: 2,
@@ -96,13 +98,15 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingBottom: 8,
         fontSize: 16,
-        // backgroundColor: '#ddd',
+
         // opacity: 0.3,
     },
     tagContainer: {
+        height: 40,
         width: '90%',
         flexDirection: 'row',
-        flexWrap: 'wrap',
+        // backgroundColor: '#ddd',
+        // flexWrap: 'wrap',
     },
 
 });

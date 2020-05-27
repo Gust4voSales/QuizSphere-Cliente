@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function TagComponent(props) {
     return(
-        <View style={styles.container}>
+        <View style={styles.container} >
             <Text style={styles.tag}>{props.tagName}</Text>
             {props.showDeleteBtn &&
                 <Touchable

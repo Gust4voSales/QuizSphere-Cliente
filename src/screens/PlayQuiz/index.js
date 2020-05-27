@@ -1,60 +1,47 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, View, Text, ImageBackground, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ImageBackground, Alert, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
+import ProgressBar from 'react-native-progress/Bar';
 import * as Animatable from 'react-native-animatable';
-import { systemWeights } from 'react-native-typography';
 import LinearGradient from 'react-native-linear-gradient';
-import QuestionsList from './utils/QuestionsList';
-import Option from './utils/Option';
+import QuestionsList from './components/QuestionsList';
+import Option from './components/Option';
 
-// import data from './utils/Mock';
-import api from '../../services/api';
+import data from './utils/Mock'; // Remove later
+import moment from 'moment';
+import styles from './styles';
 
 
-AnimatableLinear = Animatable.createAnimatableComponent(LinearGradient);
-
+const AnimatableLinear = Animatable.createAnimatableComponent(LinearGradient);
+const screenWidth = Math.round(Dimensions.get('window').width);
+let startGameTimer;
 export default function PlayQuiz({ route, navigation }) {
     const scroll = useRef(null);
-    const { quizId } = route.params;
     const [answeredQuestions, setAnsweredQuestions] = useState([]);
-    const [quiz, setQuiz] = useState({}); //Quiz with all the data
+
+    // const [quiz, setQuiz] = useState(route.params.quiz); //Quiz with all the data
+    const [quiz, setQuiz] = useState(data.quiz); //Quiz with all the data
+
     const [questionIndex, setQuestionIndex] = useState(0); // The question index from the actual question
     const [questionTitle, setQuestionTitle] = useState(''); // The actual question asked
     const [options, setOptions] = useState([]); // The actual available options
-    const [correctAnswers, setCorrectAnswers] = useState(0); // Array with the correct answers only
+    const [correctAnswers, setCorrectAnswers] = useState(0); // Counter with the correct answers 
     
-    const [loading, setLoading] = useState(true);
+    const [progress, setProgress] = useState(-1);
     const [animation, setAnimation] = useState(null);
     const [questionFontSize, setFontSize] = useState(22) // Fontsize configs
-
+   
     useEffect(() => {
-        async function loadQuizData() {
-            const { data } = await api.get(`/quiz/${quizId}`); // Should load the data before entering into this screen
-            
-            setQuiz(data.quiz);
-            setTimeout(() => {
-                setLoading(false);
-            }, 1000);
-            
-            // console.log(data.quiz);
-        }
-
-        loadQuizData();
-
-        // setTimeout(() => {
-             // let string = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient."
-             // setQuestionTitle(string);
-        // }, 2000);
+        startGameTimer = null;
+        showStartMessage()
     }, []);
 
     useEffect(() => {
-        if (quiz.questions===undefined) return;  // Verification necessary for the beginning when the data has not been fetched  
-
         const actualQuestion = quiz.questions[questionIndex];
         
         setQuestionTitle(actualQuestion.questionTitle);
         setOptions(actualQuestion.options);
-    }, [quiz, questionIndex]);
+    }, [questionIndex]);
 
     useEffect(() => {        
         if(questionTitle.length > 100) setFontSize(16);
@@ -62,8 +49,43 @@ export default function PlayQuiz({ route, navigation }) {
         else setFontSize(24);
     }, [questionTitle]);
 
-  
-    // useEffect(() => {}, []);
+    // QUIZ TIMER 
+    useEffect(() => {
+        if (!startGameTimer) return; // Game has not been started yet
+        let intervalTimer = null;
+
+        if (progress<1) {
+            intervalTimer = setInterval(() => {
+                const now = moment();
+                const quizTimerInSecs = quiz.time*60;
+
+                const secsSinceGameStarted = now.diff(startGameTimer, 'seconds');
+                
+                setProgress(secsSinceGameStarted/quizTimerInSecs); // Time passed percentual 
+            }, 1000);
+        } else {
+            clearInterval(intervalTimer);
+            finishQuiz(true); // Finishing game by timeout
+        }
+
+        return () => clearInterval(intervalTimer);
+    }, [startGameTimer, progress]);
+
+    // Create card messaage component later
+    function showStartMessage() {
+        Alert.alert(
+            'Iniciar o quiz',
+            `Você tem ${quiz.time} minutos para responder ${quiz.questions.length} questões!`,
+            [{ text: 'INICIAR', onPress: startGame }]    
+        );
+    }
+
+    function startGame() {
+        startGameTimer = moment();
+        setProgress(0);
+        console.log('Start Timer: ', startGameTimer.toLocaleString());
+    
+    }
 
     function updateQuestion() {
         if (questionIndex===quiz.questionsLength-1) {
@@ -86,24 +108,18 @@ export default function PlayQuiz({ route, navigation }) {
         }
     }
 
-    function finishQuiz() {
+    function finishQuiz(timeout = false) {
         console.log('acabou');
         Alert.alert(
             '',
-            `PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
+            `${timeout && 'Tempo acabou. \n'} 
+                PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
             [
                 { text: 'Retornar', onPress: () => navigation.goBack() },
             ]
         );
     }
 
-    if (loading) {
-        return(
-            <View style={{ flex: 1, justifyContent: 'center', alignItem: 'center' }}>
-                <ActivityIndicator size='large' />
-            </View>
-        );
-    }
 
     return(
         <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, setAnimation }}>
@@ -123,6 +139,17 @@ export default function PlayQuiz({ route, navigation }) {
                 </View>
 
                 <QuestionsList scrollRef={scroll} />
+
+                <ProgressBar 
+                    progress={progress} 
+                    width={screenWidth-80} 
+                    height={10} 
+                    color="#0078F4"
+                    borderWidth={StyleSheet.hairlineWidth}
+                    borderColor="white"
+                    borderRadius={2}
+                    style={styles.progressBar} 
+                />
 
                 <Text style={[styles.questionTitle, { fontSize: questionFontSize }]}>{questionTitle}</Text>
             </View>
@@ -147,65 +174,3 @@ export default function PlayQuiz({ route, navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    imgBackground: {
-        position: 'absolute',
-        top: '-15%',
-        left: '-5.3%',
-        width: '106%',
-        height: '80%',
-    },
-    quizBoxContainer: {
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        height: '35%',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        
-        // backgroundColor: 'gray'
-    },
-    headerContainer: {
-        position: 'absolute',
-        top: 10,
-        // backgroundColor: 'pink',
-        paddingBottom: 10,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: 'white',
-        width: '80%',
-    },
-    quizTitle: {
-        fontSize: 26,
-        color: 'white',
-        ...systemWeights.semibold,
-        textAlign: 'center',
-    },
-    
-
-    questionTitle: {
-        color: 'white',
-        fontSize: 22,
-        width: '60%',
-        // backgroundColor: 'pink',
-        textAlign: 'center',
-        alignSelf: 'center',
-    },
-
-    optionsContainer: {
-        paddingBottom: '30%',
-        width: '70%',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-
-
-
-    rankingContainer: {
-        // backgroundColor: 'red'
-    },
-});

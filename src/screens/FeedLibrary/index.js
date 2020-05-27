@@ -1,11 +1,15 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, RefreshControl, ActivityIndicator, ToastAndroid } from 'react-native';
 import QuizCard from '../../components/QuizCard';
+import { useScrollToTop } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
+
 import api from '../../services/api';
 
 export default function FeedLibary({ navigation }) {
     const { user, setUser } = useContext(AuthContext);
+    const scrollRef = useRef(null);
+        useScrollToTop(scrollRef);
 
     const [quizzes, setQuizzes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -51,6 +55,7 @@ export default function FeedLibary({ navigation }) {
     return(
         <ScrollView
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
+            ref={scrollRef}
         >
             <View style={styles.container}>
             <Text style={styles.categoryText}>Favoritos</Text>

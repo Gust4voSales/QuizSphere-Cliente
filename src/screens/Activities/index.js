@@ -7,6 +7,7 @@ import api from '../../services/api';
 
 
 export default function Activities() {
+    let isMounted;
     const isTabFocused = useIsFocused();
     const { newActivity, setNewActivity } = useContext(UserActionsContext);
 
@@ -16,8 +17,10 @@ export default function Activities() {
     const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
+        isMounted = true;
         if (!newActivity) // There are no new activities just load the old ones
             loadActivities();
+        return () => { isMounted = false } 
     }, []);
 
     useEffect(() => {
@@ -51,12 +54,14 @@ export default function Activities() {
             
             const { data } = await api.get(`/user/notifications?page=${page}`);
             
-            setActivities([...data.notifications.docs, ...activities]);
-            setTotalPages(data.notifications.totalPages);
-            setLoading(false);
+            if (isMounted) {
+                setActivities([...data.notifications.docs, ...activities]);
+                setTotalPages(data.notifications.totalPages);
+                setLoading(false);
+            }
         } catch (err) {
             console.log(err) 
-            setLoading(false);
+            if (isMounted) setLoading(false);
             ToastAndroid.show('Não foi possível carregar as atividades', ToastAndroid.SHORT);
         }
     }
@@ -96,6 +101,14 @@ export default function Activities() {
         return null;
     }
 
+    if (loading) {
+        return(
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="white"/>
+            </View>
+        );
+    }
+    
     return(
         <View style={styles.container}>
             <FlatList 
