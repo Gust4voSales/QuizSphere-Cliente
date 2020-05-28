@@ -57,7 +57,7 @@ export default function TitleInput(props) {
         <View style={styles.container}>
             <TextInput 
                 style={styles.input}
-                placeholder="Tags"
+                placeholder="Inserir tag"
                 placeholderTextColor="#bbb"
                 maxLength={20}
                 underlineColorAndroid='#58AAFF'
@@ -69,9 +69,9 @@ export default function TitleInput(props) {
                 value={tagText}
             />
            
-            <View style={styles.tagContainer}>
+            <View style={styles.tagContainer} onStartShouldSetResponder={() => true}>
                 <FlatList
-                    style={{ flexGrow: 0, width: '90%', marginBottom: 5}}
+                    style={{ flexGrow: 0, width: '90%', }}
                     ref={scroll}
                     horizontal
                     showsHorizontalScrollIndicator={false}
@@ -90,6 +90,11 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         alignItems: 'center',
+        // marginTop: 5,
+        marginBottom: 15,
+        borderWidth: 1, 
+        borderColor: '#ddd',
+        borderRadius: 4,
         // flexWrap: 'wrap'
     },
     input: {
@@ -98,13 +103,16 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingBottom: 8,
         fontSize: 16,
-
+        marginBottom: -5,
         // opacity: 0.3,
     },
     tagContainer: {
         height: 40,
         width: '90%',
         flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 5,
+
         // backgroundColor: '#ddd',
         // flexWrap: 'wrap',
     },

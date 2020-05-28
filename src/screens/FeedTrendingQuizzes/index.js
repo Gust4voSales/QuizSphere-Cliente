@@ -52,10 +52,12 @@ export default function FeedTrendingQuizzes({ navigation, route }) {
     async function loadAndSetQuizzesByCategory(category) {
         try{
             const { data } = await api.get(`/quiz/?category=${category}`);
+            console.log(data.quizzes.docs);
             const quizzesByCategory = data.quizzes.docs;
             
             let quizzes = categories.quizzes;
-            quizzes.push(quizzesByCategory);
+            
+            quizzes.push(quizzesByCategory); // ATTENTION: If there's only one element in the array will throw ERROR :(
             
             setCategories({ quizzes });
         } catch(err) {

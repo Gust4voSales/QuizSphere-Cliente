@@ -28,9 +28,11 @@ export default StyleSheet.create({
         borderRadius: 30,
     },
     footerText: {
-        marginLeft: '12%',
+        // marginLeft: '12%',
+        textAlign: 'center',
         marginTop: -2,
         color: 'white',
+        marginBottom: 40,
     },
   
     modalContainer: {

@@ -254,7 +254,7 @@ export default function CreateQuestionComponent(props) {
                     <Icon name='add' size={45} color='white'/>
                 </Touchable>
             </View>
-            {questions.length>0 && <Text style={styles.footerText}>Clique para ver a questão</Text>}
+            <Text style={styles.footerText}>{questions.length>0 && 'Clique para ver a questão'}</Text>
             
             {/* MODAL for the question */}
             <Modal 

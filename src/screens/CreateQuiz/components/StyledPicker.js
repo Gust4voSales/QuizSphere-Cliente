@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View } from 'react-native-animatable';
 
 export default function StyledPicker(props) {
     return(
@@ -27,15 +28,15 @@ export default function StyledPicker(props) {
 
 const styles = StyleSheet.create({
     btn: {
-        width: '54%', 
+        width: '100%', 
         backgroundColor: '#00A3FF', 
         borderRadius: 4,
-
+        marginBottom: 15,
     },
     picker: {
         color: 'white', 
         height: 40,
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
     },
     icon: {
         position: 'absolute',
