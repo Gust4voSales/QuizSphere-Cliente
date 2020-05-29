@@ -2,18 +2,29 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import { systemWeights } from 'react-native-typography';
 
 
 export default function Header({ screenTitle }) {
     const navigation = useNavigation();
+    
+    function goBackToMainPage() {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'HomePage' }
+                ],
+            })
+        );
+    }
 
     return(
         <View style={styles.container}>
             <Touchable 
                 background={Touchable.SelectableBackgroundBorderless()}
-                onPress={() => navigation.goBack()}
+                onPress={goBackToMainPage}
                 style={styles.goBackBtn}
                 hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}
             >

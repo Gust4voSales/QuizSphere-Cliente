@@ -11,27 +11,40 @@ export default function FeedLibary({ navigation }) {
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
 
-    const [quizzes, setQuizzes] = useState([]);
+    const [favoriteQuizzes, setFavoriteQuizzes] = useState([]);
+    const [createdQuizzes, setCreatedQuizzes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         loadFavoriteQuizzes();
+        loadCreatedQuizzes();
+        
     }, [user]);
     
     async function loadFavoriteQuizzes() {
         try {
             const { data } = await api.get('/user/savedQuizzes');
         
-            setQuizzes(data.quizzes.savedQuizzes);
+            setFavoriteQuizzes(data.quizzes.savedQuizzes);
             setLoading(false);
             setRefreshing(false);   
         } catch (err) {
-            ToastAndroid.show('Não foi possível buscar os quizzes', ToastAndroid.SHORT);
-            setLoading(false);
-            setRefreshing(false);
+            errorHandler();
         }
         
+    }
+
+    async function loadCreatedQuizzes() {
+        try {
+            const { data } = await api.get(`/user/quiz`);
+            
+            setCreatedQuizzes(data.quizzes);
+            setLoading(false);
+            setRefreshing(false);   
+        } catch (err) {
+            errorHandler();
+        }
     }
 
     function refreshHandler() {
@@ -42,6 +55,13 @@ export default function FeedLibary({ navigation }) {
             .then(({data}) => setUser(data.user)).catch(() => {})
 
         loadFavoriteQuizzes();
+        loadCreatedQuizzes();
+    }
+
+    function errorHandler() {
+        ToastAndroid.show('Não foi possível buscar os quizzes', ToastAndroid.SHORT);
+        setLoading(false);
+        setRefreshing(false);
     }
 
     if (loading) {
@@ -63,7 +83,7 @@ export default function FeedLibary({ navigation }) {
                 style={{paddingLeft: 10,}}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={quizzes}
+                data={favoriteQuizzes}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
                     <QuizCard data={item}/>
@@ -72,7 +92,16 @@ export default function FeedLibary({ navigation }) {
             <Text style={styles.categoryText}>Compartilhados comigo</Text>
             <View style={{height: 315}}/> 
             <Text style={styles.categoryText}>Criados</Text>
-            <View style={{height: 315}}/>
+            <FlatList 
+                style={{paddingLeft: 10,}}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={createdQuizzes}
+                keyExtractor={item => item._id}
+                renderItem={({item, index, separator}) => (
+                    <QuizCard data={item}/>
+                )}
+            />
         </View>
         </ScrollView>
 
