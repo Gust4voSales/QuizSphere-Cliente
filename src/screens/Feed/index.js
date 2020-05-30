@@ -5,7 +5,7 @@ import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LibraryIcon from './components/LibraryTabIcon';
 import Header from './components/Header';
-import FeedTrendingQuizzes from '../FeedTrendingQuizzes';
+import FeedTrending from '../FeedTrending';
 import FeedLibrary from '../FeedLibrary';
 import UserActionsContext from '../../contexts/userActions';
 
@@ -39,8 +39,8 @@ export default function Feed({ navigation }) {
                 tabBarOptions={tabBarStyling}
             >
                 <FeedTab.Screen 
-                    name="FeedTrendingQuizzes" 
-                    component={FeedTrendingQuizzes} 
+                    name="FeedTrending" 
+                    component={FeedTrending} 
                     unmountOnBlur
                     options={{
                         title: 'Em alta',

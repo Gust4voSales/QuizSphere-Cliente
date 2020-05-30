@@ -1,27 +1,20 @@
-import React, { useState, useCallback, useRef, useContext } from 'react';
-import { View, StyleSheet, ScrollView, Text, RefreshControl, } from 'react-native';
+import React, { useState, useRef, useContext } from 'react';
+import { View, StyleSheet, ScrollView, Text, RefreshControl } from 'react-native';
 import QuizList from '../../components/QuizList';
-import { useScrollToTop, useFocusEffect } from '@react-navigation/native';
+import { useScrollToTop } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
 
-export default function FeedLibrary() {
-    const { user, } = useContext(AuthContext);
-
+export default function FeedTrending() {
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
     const [refreshing, setRefreshing] = useState(false);
-
-    useFocusEffect(
-        useCallback(() => {
-            refreshHandler();
-        }, [user])
-    );
+    const categoriesString = ['entretenimento', 'educacionais', 'outros'];
 
     function refreshHandler() {
         setRefreshing(true);
-
+        
         setTimeout(() => {
             setRefreshing(false);
         }, 1000);
@@ -32,23 +25,20 @@ export default function FeedLibrary() {
         <ScrollView 
             style={{flex: 1}} 
             ref={scrollRef}
-            user={user}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
         >
             <View style={styles.container}>
-                <Text style={styles.categoryText}>Favoritos</Text>
-                <QuizList scrollRef={scrollRef} request={'/user/savedQuizzes'} refreshControl={refreshing}/>
+                <Text style={styles.categoryText}>{categoriesString[0].charAt(0).toUpperCase() + categoriesString[0].slice(1)}</Text>
+                <QuizList scrollRef={scrollRef} request={`/quiz?category=${categoriesString[0]}`} refreshControl={refreshing}/>
 
-                <Text style={styles.categoryText}>Compartilhados comigo</Text>
-                <QuizList request={`url/test/error`} refreshControl={refreshing}/>
+                <Text style={styles.categoryText}>{categoriesString[1].charAt(0).toUpperCase() + categoriesString[1].slice(1)}</Text>
+                <QuizList request={`/quiz?category=${categoriesString[1]}`} refreshControl={refreshing}/>
 
-                <Text style={styles.categoryText}>Criados</Text>
-                <QuizList request={'/user/quiz'} refreshControl={refreshing}/>
-                
+                <Text style={styles.categoryText}>{categoriesString[2].charAt(0).toUpperCase() + categoriesString[2].slice(1)}</Text>
+                <QuizList request={`/quiz?category=${categoriesString[2]}`} refreshControl={refreshing}/>
             </View>
         </ScrollView>
     );
-
 }
 
 const styles = StyleSheet.create({

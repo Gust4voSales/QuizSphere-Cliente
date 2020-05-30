@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Modal from 'react-native-modal';
@@ -10,21 +10,22 @@ import UserActionsContext from '../../contexts/userActions';
 export default function QuizOptions(props) {
     const { user, } = useContext(AuthContext);
     const { saveQuiz, removeQuizFromSavedQuizzes } = useContext(UserActionsContext);
+    const isMounted = useRef(null);
 
-    function checkRankingHandler() {
-        console.log('Ver ranking');
-        props.closeOptions();
-    }
+    useEffect(() => {
+        isMounted.current = true;
+        
+        return () => {isMounted.current = false}
+    } , [user]);
 
     function saveQuizHandler() {
         saveQuiz(props.quizId);
-        props.closeOptions();
+        // if (isMounted.current && !!props) props.closeOptions(); // This won't work
     }
 
     function removeQuizFromSavedQuizzesHandler() {
         removeQuizFromSavedQuizzes(props.quizId);
-        if (!!props)
-            props.closeOptions();
+        // if (isMounted.current && !!props) props.closeOptions();  // This won't work
     }
 
     function shareWithFriendHandler() {
@@ -48,12 +49,7 @@ export default function QuizOptions(props) {
             useNativeDriver
         >
             <View style={styles.container}>
-                {/* Check quiz ranking */}
-                <Touchable style={styles.optionBtn} background={Touchable.SelectableBackground()} onPress={checkRankingHandler}>
-                    <Text style={styles.optionText}>Ver ranking completo</Text>
-                </Touchable>
-
-
+              
                 {/* Save/Delete quiz from Saved Quizzes */}
                 <Touchable 
                     style={styles.optionBtn} 
@@ -72,6 +68,7 @@ export default function QuizOptions(props) {
 
             </View>
         </Modal>
+        
     );
 }
 
