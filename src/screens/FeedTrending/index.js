@@ -1,16 +1,18 @@
-import React, { useState, useRef, useContext } from 'react';
-import { View, StyleSheet, ScrollView, Text, RefreshControl } from 'react-native';
+import React, { useState, useRef, } from 'react';
+import { View, StyleSheet, ScrollView, Text, RefreshControl, } from 'react-native';
 import QuizList from '../../components/QuizList';
 import { useScrollToTop } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
+import LottieView from 'lottie-react-native';
 
 export default function FeedTrending() {
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
     const [refreshing, setRefreshing] = useState(false);
     const categoriesString = ['entretenimento', 'educacionais', 'outros'];
+
 
     function refreshHandler() {
         setRefreshing(true);
@@ -28,6 +30,8 @@ export default function FeedTrending() {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
         >
             <View style={styles.container}>
+                {/* <LottieView style={{height: 200, width: '100%'}}  resizeMode="contain" source={require('../../assets/explosion.json')} autoPlay loop /> */}
+                
                 <Text style={styles.categoryText}>{categoriesString[0].charAt(0).toUpperCase() + categoriesString[0].slice(1)}</Text>
                 <QuizList scrollRef={scrollRef} request={`/quiz?category=${categoriesString[0]}`} refreshControl={refreshing}/>
 

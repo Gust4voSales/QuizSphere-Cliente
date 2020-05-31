@@ -10,14 +10,7 @@ import UserActionsContext from '../../contexts/userActions';
 export default function QuizOptions(props) {
     const { user, } = useContext(AuthContext);
     const { saveQuiz, removeQuizFromSavedQuizzes } = useContext(UserActionsContext);
-    const isMounted = useRef(null);
-
-    useEffect(() => {
-        isMounted.current = true;
-        
-        return () => {isMounted.current = false}
-    } , [user]);
-
+   
     function saveQuizHandler() {
         saveQuiz(props.quizId);
         // if (isMounted.current && !!props) props.closeOptions(); // This won't work

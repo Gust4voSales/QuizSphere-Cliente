@@ -27,6 +27,7 @@ export default function QuizList({ request, refreshControl, }) {
             setLoading(true);
 
             const { data } = await api.get(request);
+            
             setQuizzes(data.quizzes.docs);
             setLoading(false);
         } catch (err) {
@@ -39,7 +40,7 @@ export default function QuizList({ request, refreshControl, }) {
 
     if (loading) {
         return(
-            <View style={{height: 315}}> 
+            <View style={{height: 170}}> 
                 <ActivityIndicator size="large" color="white" />
             </View>
         );
@@ -47,24 +48,31 @@ export default function QuizList({ request, refreshControl, }) {
 
     if (showError) {
         return(
-            <View style={{height: 315, alignItems: 'center',}}>
-                <Text style={{ color: 'black',}}>Não foi possível buscar os quizzes</Text>
+            <View style={{height: 170, alignItems: 'center',}}>
+                <Text style={{ color: 'black' }}>Não foi possível buscar os quizzes</Text>
             </View>
         );
     }
 
     return(
-        <FlatList 
-            ref={scrollRef}
-            style={{paddingLeft: 10,}}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={quizzes}
-            keyExtractor={item => item._id}
-            renderItem={({item, index, separator}) => (
-                <QuizCard data={item}/>
-            )}
-        />
+        <View style={{flex: 1}}>
+            <FlatList 
+                ref={scrollRef}
+                style={{marginLeft: 10,}}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={quizzes}
+                keyExtractor={item => item._id}
+                renderItem={({item, index, separator}) => (
+                    <QuizCard data={item} />
+                )}
+            />
+            { 
+            quizzes.length===0 &&
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, height: 170 }}>Não há nada aqui 😅</Text>
+            }
+        </View>
+
     );
 }
 

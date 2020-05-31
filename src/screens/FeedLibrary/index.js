@@ -1,21 +1,22 @@
 import React, { useState, useCallback, useRef, useContext } from 'react';
 import { View, StyleSheet, ScrollView, Text, RefreshControl, } from 'react-native';
 import QuizList from '../../components/QuizList';
-import { useScrollToTop, useFocusEffect } from '@react-navigation/native';
+import { useScrollToTop, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import api from '../../services/api';
 
 
 export default function FeedLibrary() {
     const { user, } = useContext(AuthContext);
-
+    const isTabFocused = useIsFocused();
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
     const [refreshing, setRefreshing] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
-            refreshHandler();
+            // if (!isTabFocused)
+                refreshHandler();
         }, [user])
     );
 
@@ -37,7 +38,7 @@ export default function FeedLibrary() {
         >
             <View style={styles.container}>
                 <Text style={styles.categoryText}>Favoritos</Text>
-                <QuizList scrollRef={scrollRef} request={'/user/savedQuizzes'} refreshControl={refreshing}/>
+                <QuizList scrollRef={scrollRef} request={'/user/savedQuizzes'} refreshControl={refreshing} />
 
                 <Text style={styles.categoryText}>Compartilhados comigo</Text>
                 <QuizList request={`url/test/error`} refreshControl={refreshing}/>

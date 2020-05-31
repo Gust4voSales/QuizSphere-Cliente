@@ -93,11 +93,12 @@ export function UserActionsProvider({ children }) {
         }
     }
 
-    async function saveQuiz(quizId) {
+    async function addFavoriteQuiz(quizId) {
         try {
             const { data } = await api.post(`/user/savedQuizzes/${quizId}`);
             setUser(data.user);
 
+            ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
             console.log(err);
             showAlertError('', err.response === undefined 
@@ -107,7 +108,7 @@ export function UserActionsProvider({ children }) {
         }
     }    
 
-    async function removeQuizFromSavedQuizzes(quizId) {
+    async function removeFavoriteQuiz(quizId) {
         try {
             const { data } = await api.delete(`/user/savedQuizzes/${quizId}`);
             setUser(data.user);
@@ -129,8 +130,8 @@ export function UserActionsProvider({ children }) {
             newActivity, 
             setNewActivity ,
             sendFriendInvitation, 
-            saveQuiz, 
-            removeQuizFromSavedQuizzes ,
+            addFavoriteQuiz, 
+            removeFavoriteQuiz ,
             disconnectSocket,
             }}
         >

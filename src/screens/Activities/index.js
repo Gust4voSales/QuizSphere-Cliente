@@ -124,7 +124,7 @@ export default function Activities() {
             />
             {
             activities.length===0 &&
-            <Text style={styles.emptyInfoText}>Não há nada aqui 🙂</Text>
+            <Text style={styles.emptyInfoText}>Não há nada aqui 😅</Text>
             }
                 
         </View>
