@@ -16,11 +16,6 @@ import UserActionsContext from '../../contexts/userActions';
 const NotificationsTab = createBottomTabNavigator();
 
 export default function Notifications({ navigation }) {
-    navigation.setOptions({
-        headerShown: false,
-    });
-
-    
 
     return(
         <View style={{flex: 1}}>

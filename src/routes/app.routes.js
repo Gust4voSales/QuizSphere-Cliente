@@ -10,8 +10,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomDrawer from './components/CustomDrawer';
 import Feed from '../screens/Feed';
-import CreateQuiz from '../screens/CreateQuiz';
+import FavoriteQuizzes from '../screens/FavoriteQuizzes';
+import SharedQuizzes from '../screens/SharedQuizzes';
+import CreatedQuizzes from '../screens/CreatedQuizzes';
+
 import PlayQuiz from '../screens/PlayQuiz';
+import CreateQuiz from '../screens/CreateQuiz';
 import AddFriend from '../screens/AddFriend';
 import Notifications from '../screens/Notifications';
 
@@ -22,9 +26,14 @@ const AppStack = createStackNavigator();
 
 function HomePage() {
     return (
-        <AppStack.Navigator>
+        <AppStack.Navigator
+            screenOptions={{ headerShown: false, }}    
+        > 
             <AppStack.Screen name="Feed" component={Feed} />
-            <AppStack.Screen name="PlayQuiz" component={PlayQuiz} options={{ headerShown: false }}/>
+            <AppStack.Screen name="FavoriteQuizzes" component={FavoriteQuizzes} />
+            <AppStack.Screen name="SharedQuizzes" component={SharedQuizzes} />
+            <AppStack.Screen name="CreatedQuizzes" component={CreatedQuizzes} />
+            <AppStack.Screen name="PlayQuiz" component={PlayQuiz}/>
             <AppStack.Screen name="Notifications" component={Notifications}/>
         </AppStack.Navigator>
     );

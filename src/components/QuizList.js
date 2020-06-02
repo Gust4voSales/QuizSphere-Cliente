@@ -1,22 +1,37 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, View, ActivityIndicator, Text } from 'react-native';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
+import { FlatList, View, ActivityIndicator, Text, StyleSheet, TouchableOpacity, } from 'react-native';
 import QuizCard from './QuizCard';
 import api from '../services/api';
 import { useScrollToTop } from '@react-navigation/native';
 
 
-export default function QuizList({ request, refreshControl, }) {
+export default function QuizList({ request=false, refreshControl, quizList, horizontal=true }) {
+    const isMounted = useRef();    
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
     const [quizzes, setQuizzes] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [showError, setShowError] = useState(false);
+    
+    // This vertical refresh is used at the instances of this component from the FeedLibrary screen where this component is rendered vertically
+    // which means that unlike the FeedTrending page, the refresh action should be handled by this component itself
+    const [verticalRefresh, setVerticalRefresh] = useState(false);
+
 
     useEffect(() => {
-        loadQuizzes();
-    }, []);
+        isMounted.current = true;
+        if (request) {
+            loadQuizzes();
+        } else {
+            setQuizzes(quizList);
+        }
+
+        return () => { isMounted.current = false }
+    }, [quizList]);
 
     // This useEffect runs when the user is trying to refresh the page, so when that happens we call loadQuizzes again.
+    // This happens at the FeedTrending screen page where the QuizLists are horizontal, so the refresh action is fired by the ScrollView
+    // in Trending, which passes this action to this lits via refreshControll
     useEffect(() => {
         if (refreshControl) loadQuizzes();
     }, [refreshControl]);
@@ -25,15 +40,25 @@ export default function QuizList({ request, refreshControl, }) {
         try {
             setShowError(false);
             setLoading(true);
+            setVerticalRefresh(true);
 
             const { data } = await api.get(request);
+    
+            if (isMounted.current) {
+                setQuizzes(data.quizzes.docs);
+                setLoading(false);
+                setVerticalRefresh(false);
+            }
             
-            setQuizzes(data.quizzes.docs);
-            setLoading(false);
+            
         } catch (err) {
-            // console.log(err);
-            setShowError(true);
-            setLoading(false);
+            console.log(err);
+            if (isMounted.current) {
+                setShowError(true);
+                setLoading(false);
+                setVerticalRefresh(false); 
+            }
+            
         }
     }
 
@@ -47,21 +72,28 @@ export default function QuizList({ request, refreshControl, }) {
     }
 
     if (showError) {
+        // onClick should refresh
         return(
             <View style={{height: 170, alignItems: 'center',}}>
-                <Text style={{ color: 'black' }}>Não foi possível buscar os quizzes</Text>
+                <TouchableOpacity onPress={loadQuizzes}>
+                    <Text style={{ color: 'black' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
+                </TouchableOpacity>
             </View>
         );
     }
 
     return(
-        <View style={{flex: 1}}>
+        <View style={ horizontal ? { flex: 1 } : { flex: 1, width: '100%' }}>
             <FlatList 
                 ref={scrollRef}
-                style={{marginLeft: 10,}}
-                horizontal
+                onRefresh={loadQuizzes}
+                refreshing={verticalRefresh}
+                style={horizontal ? { paddingLeft: 10 } : { paddingTop: 10 }}
+                horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
+                // showsVerticalScrollIndicator={false}
                 data={quizzes}
+                contentContainerStyle={{ alignItems: 'center' }}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
                     <QuizCard data={item} />
@@ -76,4 +108,14 @@ export default function QuizList({ request, refreshControl, }) {
     );
 }
 
+
+const styles = StyleSheet.create({
+    horizontalList: {
+        paddingLeft: 10,
+    },
+
+    verticalList: {
+        width: '100%',
+    }
+})
 

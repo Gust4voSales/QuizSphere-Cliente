@@ -13,10 +13,6 @@ import UserActionsContext from '../../contexts/userActions';
 const FeedTab = createBottomTabNavigator();
 
 export default function Feed({ navigation }) {
-    navigation.setOptions({
-        headerShown: false,
-    });
-
 
     function openDrawerHandler() {
         navigation.openDrawer();

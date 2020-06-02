@@ -31,26 +31,26 @@ export default function CreateQuiz({ navigation }) {
 
     const [loading, setLoading] = useState(false);
     
-    // Handle back button
-    useEffect(
-        useCallback(() => {
-            const onBackPress = () => {
-                navigation.dispatch(
-                    CommonActions.reset({
-                        index: 0,
-                        routes: [
-                            { name: 'HomePage' }
-                        ],
-                    })
-                );
-                return true;
-            };
+    // // Handle back button
+    // useEffect(
+    //     useCallback(() => {
+    //         const onBackPress = () => {
+    //             navigation.dispatch(
+    //                 CommonActions.reset({
+    //                     index: 0,
+    //                     routes: [
+    //                         { name: 'HomePage' }
+    //                     ],
+    //                 })
+    //             );
+    //             return true;
+    //         };
       
-            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    //         BackHandler.addEventListener('hardwareBackPress', onBackPress);
       
-            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [])
-    );
+    //         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    //     }, [])
+    // );
 
     function toggleSwitch(){
         setIsPrivate(previousState => !previousState);

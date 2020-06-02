@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableNativeFeedback, Alert, ToastAndroid, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, View, Text, TouchableNativeFeedback, Alert, ToastAndroid, TouchableOpacity } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -11,7 +11,7 @@ import api from '../../services/api';
 import { systemWeights } from 'react-native-typography';
 
 
-export default function QuizCard({ data, }) {
+export default function QuizCard({ data, removeFromList=null }) {
     const navigation =  useNavigation();
     const { user } = useContext(AuthContext);
     const { addFavoriteQuiz, removeFavoriteQuiz } = useContext(UserActionsContext);
@@ -23,6 +23,7 @@ export default function QuizCard({ data, }) {
 
     function removeFavoriteHandler() {
         removeFavoriteQuiz(data._id);
+        if (removeFromList) removeFromList(data._id);
     }
 
     function onPlayQuizHandler() {
@@ -89,13 +90,14 @@ export default function QuizCard({ data, }) {
                 <View> 
                     <Icon name="heart-outline" color="white" size={28}/> 
                 </View>
-                <TouchableWithoutFeedback 
+                <TouchableOpacity 
                     onPress={
                         isQuizOnFavorites() ? removeFavoriteHandler : addFavoriteHandler
                     }
+                    activeOpacity={.75}
                 > 
                     <Icon name={isQuizOnFavorites() ? "star" : "star-outline"} color={isQuizOnFavorites() ? "#00A3FF" : "white"} size={28}/>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 <View> 
                     <Icon name="share" color="white" size={28}/>
                 </View>

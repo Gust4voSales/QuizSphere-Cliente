@@ -10,14 +10,15 @@ export default function Header({ screenTitle }) {
     const navigation = useNavigation();
     
     function goBackToMainPage() {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [
-                    { name: 'HomePage' }
-                ],
-            })
-        );
+        // navigation.dispatch(
+        //     CommonActions.reset({
+        //         index: 0,
+        //         routes: [
+        //             { name: 'HomePage' }
+        //         ],
+        //     })
+        // );
+        navigation.goBack();
     }
 
     return(

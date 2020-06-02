@@ -11,7 +11,7 @@ export default function ActivityCard({ item }) {
                 name={
                     item.activityType==='newFriend'
                     ? 'account-check'
-                    : 'comment-acount'
+                    : 'comment-account'
                 }
                 color="white"
                 size={25}
