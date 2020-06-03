@@ -93,6 +93,28 @@ export function UserActionsProvider({ children }) {
         }
     }
 
+    async function likeQuiz(quizId) {
+        try {
+            await api.post(`/quiz/${quizId}/like`);
+
+            return true;
+        } catch (err) {
+            ToastAndroid.show('Não foi possível dar like no quiz', ToastAndroid.SHORT);
+            return false;            
+        }
+    }
+    
+    async function deslikeQuiz(quizId) {
+        try {
+            await api.delete(`/quiz/${quizId}/deslike`);
+
+            return true;
+        } catch (err) {
+            ToastAndroid.show('Não foi possível dar deslike no quiz', ToastAndroid.SHORT);
+            return false;            
+        }
+    }
+
     async function addFavoriteQuiz(quizId) {
         try {
             const { data } = await api.post(`/user/savedQuizzes/${quizId}`);
@@ -130,6 +152,8 @@ export function UserActionsProvider({ children }) {
             newActivity, 
             setNewActivity ,
             sendFriendInvitation, 
+            likeQuiz,
+            deslikeQuiz,
             addFavoriteQuiz, 
             removeFavoriteQuiz ,
             disconnectSocket,

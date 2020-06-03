@@ -25,7 +25,7 @@ export default function FeedTrending() {
 
     return(
         <ScrollView 
-            style={{flex: 1}} 
+            style={{flex: 1, backgroundColor: '#3D6F95'}} 
             ref={scrollRef}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshHandler} />}
         >

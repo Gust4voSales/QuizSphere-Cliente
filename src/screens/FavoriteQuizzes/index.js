@@ -29,8 +29,6 @@ export default function FavoriteQuizzes() {
             const { data } = await api.get('/user/savedQuizzes');
 
             if (isMounted.current) {
-                console.log(isMounted);
-                console.log(data.quizzes.docs);                       
                 setQuizzes(data.quizzes.docs);
                 setLoading(false);
             }

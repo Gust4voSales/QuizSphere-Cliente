@@ -57,7 +57,7 @@ export default function TitleInput(props) {
         <View style={styles.container}>
             <TextInput 
                 style={styles.input}
-                placeholder="Inserir tag"
+                placeholder="Inserir tag opcional"
                 placeholderTextColor="#bbb"
                 maxLength={20}
                 underlineColorAndroid='#58AAFF'

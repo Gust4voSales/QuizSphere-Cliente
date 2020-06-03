@@ -49,8 +49,6 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
                 setLoading(false);
                 setVerticalRefresh(false);
             }
-            
-            
         } catch (err) {
             console.log(err);
             if (isMounted.current) {
@@ -84,6 +82,10 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
 
     return(
         <View style={ horizontal ? { flex: 1 } : { flex: 1, width: '100%' }}>
+            { 
+            quizzes.length===0 &&
+            <Text style={[{ color: 'white', textAlign: 'center', fontSize: 18 }, horizontal && { height: 170 }]}>Não há nada aqui 😅</Text>
+            }
             <FlatList 
                 ref={scrollRef}
                 onRefresh={loadQuizzes}
@@ -99,10 +101,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
                     <QuizCard data={item} />
                 )}
             />
-            { 
-            quizzes.length===0 &&
-            <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, height: 170 }}>Não há nada aqui 😅</Text>
-            }
+            
         </View>
 
     );
