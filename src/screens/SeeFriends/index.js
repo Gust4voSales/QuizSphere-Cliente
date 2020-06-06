@@ -12,6 +12,7 @@ export default function SeeFriends() {
     const [totalPages, setTotalPages] = useState(0);
     const [refreshing, setRefreshing] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [showError, setShowError] = useState(false);
     
     // Load friends each time the user focus this screen
     useFocusEffect(
@@ -22,6 +23,8 @@ export default function SeeFriends() {
     
     async function loadFriends(page=1) {
         try {
+            setShowError(false);
+
             if (page===1) // Initial loading indicator
                 setRefreshing(true);
             else  // Loading next page
@@ -40,7 +43,8 @@ export default function SeeFriends() {
             setLoadingMore(false);            
         } catch (err) {
             setRefreshing(false);
-            setLoadingMore(false);            
+            setLoadingMore(false);  
+            setShowError(true);
         }
     }
 
@@ -74,6 +78,16 @@ export default function SeeFriends() {
                 <Header screenTitle="Ver amigos" />
 
                 <ActivityIndicator color="white" size="large" />
+            </View>
+        );
+    }
+
+    if (showError) {
+        return(
+            <View style={styles.container}>
+                <TouchableOpacity onPress={() => loadFriends()}>
+                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
+                </TouchableOpacity>
             </View>
         );
     }

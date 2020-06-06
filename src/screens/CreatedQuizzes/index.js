@@ -8,7 +8,7 @@ export default function CreatedQuizzes() {
     return(
         <View style={styles.container}>
         <Header screenTitle="Criados"/>
-            <QuizList request="/user/quiz" horizontal={false}/>
+            <QuizList request="/quiz?author=true" horizontal={false}/>
         </View>
     );
 }

@@ -5,7 +5,7 @@ import QuizCard from '../../components/QuizCard';
 import api from '../../services/api';
 
 // Unlike SharedQuizzes and CreatedQuizzes, this component needs the quiz list to be in its posession (one of its states) because 
-// whenever a quiz is removed from the favorites, this component needs to re-render. If this screen were built as the othe two
+// whenever a quiz is removed from the favorites, this component needs to re-render. If this screen were built as the other two,
 // whenever a quiz were removed from favorite it wouldn't be possible to remove it from the list.
 export default function FavoriteQuizzes() {
     const isMounted = useRef();
@@ -27,9 +27,11 @@ export default function FavoriteQuizzes() {
             setLoading(true);
 
             const { data } = await api.get('/user/savedQuizzes');
+            console.log(data.quizzes.docs[0].savedQuizzes);
+            
 
             if (isMounted.current) {
-                setQuizzes(data.quizzes.docs);
+                setQuizzes(data.quizzes.docs[0].savedQuizzes);
                 setLoading(false);
             }
         } catch (err) {

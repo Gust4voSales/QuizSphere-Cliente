@@ -11,6 +11,9 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
         useScrollToTop(scrollRef);
     const [quizzes, setQuizzes] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [showError, setShowError] = useState(false);
     
     // This vertical refresh is used at the instances of this component from the FeedLibrary screen where this component is rendered vertically
@@ -36,30 +39,58 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
         if (refreshControl) loadQuizzes();
     }, [refreshControl]);
 
-    async function loadQuizzes() {
+    async function loadQuizzes(page=1) {
         try {
             setShowError(false);
-            setLoading(true);
-            setVerticalRefresh(true);
 
-            const { data } = await api.get(request);
+            if (page===1) {     // Initial loading indicator
+                setLoading(true);
+                setVerticalRefresh(true);
+            }
+            else  // Loading next page
+                setLoadingMore(true);  
+
+            const { data } = await api.get(request+`&page=${page}`);
     
             if (isMounted.current) {
-                setQuizzes(data.quizzes.docs);
+                if (page===1) // refreshing
+                    setQuizzes(data.quizzes.docs);
+                else // Loading more friends, so just add to the arrray
+                    setQuizzes([...data.quizzes.docs, ...quizzes]);
+
+                setTotalPages(data.quizzes.totalPages);
+                setPage(page);
                 setLoading(false);
                 setVerticalRefresh(false);
+                setLoadingMore(false);  
             }
         } catch (err) {
             console.log(err);
             if (isMounted.current) {
-                setShowError(true);
                 setLoading(false);
                 setVerticalRefresh(false); 
+                setLoadingMore(false);  
+                setShowError(true);
             }
-            
         }
     }
 
+    function loadMore() {
+        if (page===totalPages) return;
+        
+        loadQuizzes(page+1);
+    }
+
+    function renderFooter() {
+        if (loadingMore) {
+            return(
+                <View style={{width : 100, height: 100, alignItems: 'center', justifyContent: 'center'}}>
+                    <ActivityIndicator color="white" size="large"/>
+                </View>
+            )
+        } 
+        return null;
+    }
 
     if (loading) {
         return(
@@ -93,13 +124,16 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
                 style={horizontal ? { paddingLeft: 10 } : { paddingTop: 10, }}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
-                // showsVerticalScrollIndicator={false}
                 data={quizzes}
                 contentContainerStyle={{ alignItems: 'center' }}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
                     <QuizCard data={item} />
                 )}
+                ListFooterComponent={renderFooter}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.1}
+                ListFooterComponentStyle={{marginBottom: 10, marginRight: 10}}
             />
             
         </View>
