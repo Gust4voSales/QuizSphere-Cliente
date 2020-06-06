@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, ToastAndroid } from 'react-native';
 import Header from '../../components/Header';
 import FriendCard from './components/FriendCard';
 import { useFocusEffect } from '@react-navigation/native';
@@ -44,6 +44,12 @@ export default function SeeFriends() {
         }
     }
 
+    function userFeedbackAfterPressing (relationId, feedbackMessage, success) {
+        ToastAndroid.show(feedbackMessage, ToastAndroid.SHORT);
+        if (success) 
+            setFriends(friends.filter(relation => relation._id!=relationId));
+    }
+
     function loadMore() {
         if (page===totalPages) return;
         
@@ -85,7 +91,11 @@ export default function SeeFriends() {
                 refreshing={refreshing}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
-                    <FriendCard friend={item.recipient.userName} relationId={item._id} index={index+1}/>
+                    <FriendCard 
+                        friend={item.recipient.userName} 
+                        relationId={item._id} 
+                        userFeedbackAfterPressing={userFeedbackAfterPressing}
+                    />
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}

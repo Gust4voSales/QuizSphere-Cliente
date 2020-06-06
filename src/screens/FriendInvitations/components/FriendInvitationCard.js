@@ -65,14 +65,12 @@ export default function FriendInvitation({ user, userFeedbackAfterPressing }) {
 
 const styles = StyleSheet.create({
     container: {
-        // height: 90,
-        height: 150,
+        height: 90,
         width: '100%',
-        backgroundColor: '#ddd',
+        // backgroundColor: '#ddd',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        // marginBottom: 5,
-        marginBottom: 100,
+        marginBottom: 5,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#fff',
     },
