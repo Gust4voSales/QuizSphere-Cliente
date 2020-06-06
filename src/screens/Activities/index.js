@@ -139,7 +139,7 @@ export default function Activities() {
                 data={activities}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
-                    <ActivityCard item={item} index={index}/>
+                    <ActivityCard item={item} />
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}

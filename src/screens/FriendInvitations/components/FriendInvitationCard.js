@@ -5,55 +5,40 @@ import { systemWeights } from 'react-native-typography';
 import api from '../../../services/api';
 
 
-export default function FriendInvitation(props) {
-    const [recipientName, setRecipientName] = useState('');    
+export default function FriendInvitation({ user, userFeedbackAfterPressing }) {
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        async function loadUserData() {
-            try {
-                const { data } = await api.get(`/user/${props.data.recipient}`);
-                setRecipientName(data.user.userName);
-            } catch(err) {
-                console.log(err);
-                ToastAndroid.show('Não foi possível receber informações do usuário', ToastAndroid.SHORT);
-                // Message: couldn't load
-            }
-        }
-
-        loadUserData();
-    }, []);
 
     async function acceptFriendInvitationHandler() {
         try {   
             setLoading(true);
-            const { data } = await api.post(`/user/friend/acceptInvitation/${props.data.recipient}`);
-            // console.log(data.user);
-            props.userFeedbackAfterPressing(props.data.recipient, data.message, true);
+            const { data } = await api.post(`/user/friend/acceptInvitation/${user.recipient._id}`);
+
+            userFeedbackAfterPressing(user.recipient._id, data.message, true);
         } catch (err) {
             console.log(err);
             setLoading(false);
-            props.userFeedbackAfterPressing(props.data.recipient, 'Não foi possível responder a solicitação', false);
+            userFeedbackAfterPressing(user.recipient._id, 'Não foi possível responder a solicitação', false);
         }
     }
 
     async function declineFriendInvitationHandler() {
         try {   
             setLoading(true);
-            const { data } = await api.post(`/user/friend/declineInvitation/${props.data.recipient}`);
+            const { data } = await api.post(`/user/friend/declineInvitation/${user.recipient._id}`);
             // console.log(data.user);
-            props.userFeedbackAfterPressing(props.data.recipient, data.message, true);
+            userFeedbackAfterPressing(user.recipient._id, data.message, true);
         } catch (err) {
             console.log(err);
             setLoading(false);
-            props.userFeedbackAfterPressing(props.data.recipient, 'Não foi possível responder a solicitação', false);
+            userFeedbackAfterPressing(user.recipient._id, 'Não foi possível responder a solicitação', false);
         }
     }
 
     return(
         <View style={styles.container}>
             <Text style={styles.textInfo}>
-                <Text style={styles.username}>{recipientName}</Text> enviou uma solicitação de amizade.
+                <Text style={styles.username}>{user.recipient.userName}</Text> enviou uma solicitação de amizade.
             </Text>
             
             <View style={styles.optionsContainer}>
@@ -80,12 +65,14 @@ export default function FriendInvitation(props) {
 
 const styles = StyleSheet.create({
     container: {
-        height: 90,
+        // height: 90,
+        height: 150,
         width: '100%',
-        // backgroundColor: '#ddd',
+        backgroundColor: '#ddd',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        marginBottom: 5,
+        // marginBottom: 5,
+        marginBottom: 100,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#fff',
     },

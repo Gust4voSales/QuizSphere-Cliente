@@ -1,101 +1,141 @@
-import React, { useContext, useState, useEffect, } from 'react';
-import { View, FlatList, StyleSheet, ToastAndroid, ActivityIndicator, Text } from 'react-native';
+import React, { useContext, useState, useEffect, useRef, } from 'react';
+import { View, StyleSheet, FlatList, ActivityIndicator, Text, TouchableOpacity, ToastAndroid } from 'react-native';
 import FriendInvitationCard from './components/FriendInvitationCard';
-import UserActionsContext from '../../contexts/userActions';
 import { useIsFocused } from '@react-navigation/native';
+import UserActionsContext from '../../contexts/userActions';
 import api from '../../services/api';
 
 
-export default function FriendInvitations() {
-    let isMounted;
+export default function Activities() {
+    const isMounted = useRef();
     const isTabFocused = useIsFocused();
-    
     const { friendInvitations, setFriendInvitations, } = useContext(UserActionsContext);
-    const [loading, setLoading] = useState(true);
-    const [invitations, setInvitations] = useState([]);
-   
-    useEffect(() => {
-        isMounted = true;
-        if (!friendInvitations) // There are no new invitations just load the old ones
-            loadInvitations();
-        return () => { isMounted = false }
-    }, []); 
-
-    useEffect(() => {
-        // New invitation received then refresh the component state
-        if (friendInvitations) {
-            setInvitations([]);
-            setLoading(false);
-            // setPage(1);
-            // setTotalPages(0);
-        }
-    }, [friendInvitations]);
     
+    const [invitations, setInvitations] = useState([]);
+    const [refreshing, setRefreshing] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
     useEffect(() => {
-        // Load invitations after refreshing (refreshing happens when friendInvitations variable from context is set to true)
-        if (friendInvitations && invitations.length===0)
+        isMounted.current = true;
+
+        loadInvitations();
+
+        return () => { isMounted.current = false }
+    }, []);
+
+
+    useEffect(() => {
+        // New invitations received, should update
+        if (friendInvitations) 
             loadInvitations();
-
-    }, [invitations]);
-
-    // Check if the tab is focused, if so setNewActivity will be equals false because the user is seeing his invitations
-    useEffect(() => { 
-        if (isTabFocused) setFriendInvitations(false);
-    }, [isTabFocused, invitations]);
+    }, [friendInvitations]);
 
 
-    async function loadInvitations() {
+    async function loadInvitations(page=1) {
         try {
-            setLoading(true);
+            setShowError(false);
+            if (page===1)  // Initial loading indicator
+                setRefreshing(true);
+            else  // Loading next page
+                setLoadingMore(true); 
 
-            const { data } = await api.get(`/user/friend/pendingInvitations`);
-            
-            if (isMounted) {
-                setInvitations([...data.invitations, ...invitations]);
-                setLoading(false);
+            const { data } = await api.get(`/user/friend/pendingInvitations?page=${page}`);
+
+            if (isMounted.current) {
+                if (page===1) // refreshing
+                    setInvitations(data.invitations.docs);
+                else // Loading more invitations, so just add to the arrray
+                    setInvitations([...invitations, ...data.invitations.docs]);
+
+                if (isTabFocused)
+                    setFriendInvitations(false);
+
+                setTotalPages(data.invitations.totalPages);
+                setPage(page);
+                setRefreshing(false);
+                setLoadingMore(false);    
             }
+            
         } catch (err) {
-            console.log(err.response)
-            if (isMounted) setLoading(false);
-            ToastAndroid.show('Não foi possível listar as solicitações de amizade.', ToastAndroid.SHORT);
+            console.log(err);
+            if (isMounted.current) {
+                setRefreshing(false);
+                setLoadingMore(false);    
+                setShowError(true);
+            }
         }
     }
 
-    
+    function loadMore() {
+        if (page===totalPages) return;
+        
+        loadInvitations(page+1);
+    }
+
     function userFeedbackAfterPressing(recipientId, feedbackMessage, success) {
         ToastAndroid.show(feedbackMessage, ToastAndroid.SHORT);
-        if (success) setInvitations(invitations.filter(invitation => invitation.recipient!=recipientId));
+        if (success) 
+            setInvitations(invitations.filter(invitation => invitation.recipient._id!=recipientId));
     }
 
-    if (loading) {
+    function renderFooter() {
+        if (loadingMore) {
+            return(
+                <View>
+                    <ActivityIndicator color="white" size="small"/>
+                </View>
+            )
+        } 
+        return null;
+    }
+
+
+    // Render returns
+    if (refreshing) {
         return(
             <View style={styles.container}>
                 <ActivityIndicator size="large" color="white"/>
             </View>
         );
     }
+    
+    if (showError) {
+        return(
+            <View style={styles.container}>
+                <TouchableOpacity onPress={() => loadInvitations()}>
+                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 
     return(
         <View style={styles.container}>
-            <FlatList 
-                style={{flex: 1}}
-                data={invitations}
-                keyExtractor={item => item._id}
-                renderItem={({item, index, separator}) => (
-                    <FriendInvitationCard 
-                        data={item} 
-                        userFeedbackAfterPressing={userFeedbackAfterPressing}
-                    />
-                )}
-            />
             {
             invitations.length===0 &&
             <Text style={styles.emptyInfoText}>Não há nada aqui 😅</Text>
             }
+            <FlatList 
+                style={{flex: 1}}
+                onRefresh={loadInvitations}
+                refreshing={refreshing}
+                data={invitations}
+                keyExtractor={item => item._id}
+                renderItem={({item, index, separator}) => (
+                    <FriendInvitationCard user={item} userFeedbackAfterPressing={userFeedbackAfterPressing}/>
+                )}
+                ListFooterComponent={renderFooter}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.1}
+            />
+
         </View>
     );
+    
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -108,5 +148,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         top: 5
-    }
+    },
+   
 });
