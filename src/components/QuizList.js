@@ -31,7 +31,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
 
     // This useEffect runs when the user is trying to refresh the page, so when that happens we call loadQuizzes again.
     // This happens at the FeedTrending screen page where the QuizLists are horizontal, so the refresh action is fired by the ScrollView
-    // in Trending, which passes this action to this lits via refreshControll
+    // in FeedTrending screen, which passes this action to this lit via refreshControll
     useEffect(() => {
         if (refreshControl) loadQuizzes();
     }, [refreshControl]);
@@ -90,7 +90,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
                 ref={scrollRef}
                 onRefresh={loadQuizzes}
                 refreshing={verticalRefresh}
-                style={horizontal ? { paddingLeft: 10 } : { paddingTop: 10 }}
+                style={horizontal ? { paddingLeft: 10 } : { paddingTop: 10, }}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
                 // showsVerticalScrollIndicator={false}

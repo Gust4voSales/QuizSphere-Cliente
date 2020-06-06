@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, FlatList, Text, RefreshControl, ActivityIndicator, } from 'react-native';
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, ActivityIndicator, } from 'react-native';
 import Header from '../../components/Header';
 import QuizCard from '../../components/QuizCard';
-import { useFocusEffect, useIsFocused, useScrollToTop } from '@react-navigation/native';
 import api from '../../services/api';
 
-
+// Unlike SharedQuizzes and CreatedQuizzes, this component needs the quiz list to be in its posession (one of its states) because 
+// whenever a quiz is removed from the favorites, this component needs to re-render. If this screen were built as the othe two
+// whenever a quiz were removed from favorite it wouldn't be possible to remove it from the list.
 export default function FavoriteQuizzes() {
     const isMounted = useRef();
     const [quizzes, setQuizzes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showError, setShowError] = useState(false);
 
-    // Change to useEffect?
     useEffect(() => {
         isMounted.current = true;
 
@@ -71,14 +71,15 @@ export default function FavoriteQuizzes() {
         <Header screenTitle="Favoritos"/>
             { 
             quizzes.length===0 &&
-            <Text style={{ color: 'white', textAlign: 'center', fontSize: 18, height: 170 }}>Não há nada aqui 😅</Text>
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 18 }}>Não há nada aqui 😅</Text>
             }      
             <FlatList 
                 data={quizzes}
                 onRefresh={loadQuizzes}
                 refreshing={loading}
-                style={{flex: 1, paddingTop: 5}}
+                style={{ width: '100%',paddingTop: 5, }}
                 keyExtractor={item => item._id}
+                contentContainerStyle={{ alignItems: 'center', }}
                 renderItem={({item, index, separator}) => (
                     <QuizCard data={item} removeFromList={id => removeFavoriteFromList(id)} />
                 )}
@@ -92,6 +93,7 @@ export default function FavoriteQuizzes() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        width: '100%',
         backgroundColor: '#3D6F95',
         alignItems: 'center',
     }

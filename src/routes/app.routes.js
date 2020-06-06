@@ -6,17 +6,16 @@ import UserActionsContext, { UserActionsProvider } from '../contexts/userActions
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, } from '@react-navigation/drawer';
 
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import IconM from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomDrawer from './components/CustomDrawer';
 import Feed from '../screens/Feed';
 import FavoriteQuizzes from '../screens/FavoriteQuizzes';
 import SharedQuizzes from '../screens/SharedQuizzes';
 import CreatedQuizzes from '../screens/CreatedQuizzes';
-
 import PlayQuiz from '../screens/PlayQuiz';
 import CreateQuiz from '../screens/CreateQuiz';
 import AddFriend from '../screens/AddFriend';
+import SeeFriends from '../screens/SeeFriends';
 import Notifications from '../screens/Notifications';
 
 
@@ -65,11 +64,19 @@ export default function AppRoutes(){
                     }} 
                 />
                 <AppDrawer.Screen 
+                    name="SeeFriends" 
+                    component={SeeFriends}
+                    options={{ 
+                        drawerLabel: "Ver amigos",
+                        drawerIcon: ({color, size}) => <Icon name="account-multiple" color={color} size={size} style={iconStyle}/>,
+                    }} 
+                />
+                <AppDrawer.Screen 
                     name="AddFriend" 
                     component={AddFriend}
                     options={{ 
                         drawerLabel: "Adicionar amigos",
-                        drawerIcon: ({color, size}) => <Icon name="person-add" color={color} size={size} style={iconStyle}/>,
+                        drawerIcon: ({color, size}) => <Icon name="account-plus" color={color} size={size} style={iconStyle}/>,
                     }} 
                 />
                 <AppDrawer.Screen 
@@ -77,7 +84,7 @@ export default function AppRoutes(){
                     component={CreateQuiz}
                     options={{ 
                         drawerLabel: "Criar quiz",
-                        drawerIcon: ({color, size}) => <IconM name="comment-plus" color={color} size={size} style={ {transform: [{rotateY: '180deg'}, { translateX: -10 }]}}/>
+                        drawerIcon: ({color, size}) => <Icon name="comment-plus" color={color} size={size} style={ {transform: [{rotateY: '180deg'}, { translateX: -10 }]}}/>
                     }} 
                 />
 
