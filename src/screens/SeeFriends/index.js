@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator, ToastAndroid } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import FriendCard from './components/FriendCard';
 import { useFocusEffect } from '@react-navigation/native';
@@ -85,6 +85,7 @@ export default function SeeFriends() {
     if (showError) {
         return(
             <View style={styles.container}>
+                <Header screenTitle="Ver amigos" />
                 <TouchableOpacity onPress={() => loadFriends()}>
                     <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
                 </TouchableOpacity>

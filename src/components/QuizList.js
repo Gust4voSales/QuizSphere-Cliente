@@ -23,9 +23,9 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
 
     useEffect(() => {
         isMounted.current = true;
-        if (request) {
+        if (request) { // If a resquest link is passed this component will be resposible for fetching the data and handling it
             loadQuizzes();
-        } else {
+        } else { // If a list with the quizzes has been passed, that means the parent component is handling the list and this component should only render it
             setQuizzes(quizList);
         }
 
@@ -43,7 +43,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
         try {
             setShowError(false);
 
-            if (page===1) {     // Initial loading indicator
+            if (page===1) {  // Initial loading indicator
                 setLoading(true);
                 setVerticalRefresh(true);
             }
@@ -56,7 +56,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
                 if (page===1) // refreshing
                     setQuizzes(data.quizzes.docs);
                 else // Loading more friends, so just add to the arrray
-                    setQuizzes([...data.quizzes.docs, ...quizzes]);
+                    setQuizzes([...quizzes, ...data.quizzes.docs,]);
 
                 setTotalPages(data.quizzes.totalPages);
                 setPage(page);
@@ -104,7 +104,7 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
         // onClick should refresh
         return(
             <View style={{height: 170, alignItems: 'center',}}>
-                <TouchableOpacity onPress={loadQuizzes}>
+                <TouchableOpacity onPress={() => loadQuizzes()}>
                     <Text style={{ color: 'black' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
                 </TouchableOpacity>
             </View>

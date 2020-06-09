@@ -120,7 +120,7 @@ export default function Activities() {
         return(
             <View style={styles.container}>
                 <TouchableOpacity onPress={() => loadActivities()}>
-                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
+                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar as atividades. Tente novamente.</Text>
                 </TouchableOpacity>
             </View>
         );

@@ -11,6 +11,9 @@ export default function FavoriteQuizzes() {
     const isMounted = useRef();
     const [quizzes, setQuizzes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const [showError, setShowError] = useState(false);
 
     useEffect(() => {
@@ -21,23 +24,33 @@ export default function FavoriteQuizzes() {
     }, []);
 
 
-    async function loadQuizzes() {
+    async function loadQuizzes(page=1) {
         try {
             setShowError(false);
-            setLoading(true);
 
-            const { data } = await api.get('/user/savedQuizzes');
-            console.log(data.quizzes.docs[0].savedQuizzes);
-            
+            if (page===1) 
+                setLoading(true);
+            else 
+                setLoadingMore(true);  
+
+            const { data } = await api.get(`/user/savedQuizzes?page=${page}`);
 
             if (isMounted.current) {
-                setQuizzes(data.quizzes.docs[0].savedQuizzes);
-                setLoading(false);
+                if (page===1) // refreshing
+                    setQuizzes(data.quizzes.docs);
+                else // Loading more friends, so just add to the arrray
+                    setQuizzes([...quizzes, ...data.quizzes.docs]);
+                
+                setTotalPages(data.quizzes.totalPages);
+                setPage(page);
+                setLoading(false); 
+                setLoadingMore(false);
             }
         } catch (err) {
             console.log(err);
             if (isMounted.current) {
                 setLoading(false);
+                setLoadingMore(false);
                 setShowError(true);
             }
         }
@@ -46,6 +59,24 @@ export default function FavoriteQuizzes() {
 
     function removeFavoriteFromList(quizId) {
         setQuizzes(quizzes.filter(quiz => quiz._id!=quizId));
+    }
+
+    function loadMore() {
+        if (page===totalPages) return;
+        
+        loadQuizzes(page+1);
+    }
+    
+    function renderFooter() {
+        if (loadingMore) {
+            console.log('alo');
+            return(
+                <View style={{width : 100, height: 100, alignItems: 'center', justifyContent: 'center'}}>
+                    <ActivityIndicator color="white" size="large"/>
+                </View>
+            )
+        } 
+        return null;
     }
 
     if (loading) {
@@ -61,7 +92,7 @@ export default function FavoriteQuizzes() {
         return(
             <View style={styles.container}>
                 <Header screenTitle="Favoritos"/>
-                <TouchableOpacity onPress={loadQuizzes}>
+                <TouchableOpacity onPress={() => loadQuizzes()}>
                     <Text style={{ color: 'black' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
                 </TouchableOpacity>
             </View>
@@ -79,12 +110,20 @@ export default function FavoriteQuizzes() {
                 data={quizzes}
                 onRefresh={loadQuizzes}
                 refreshing={loading}
-                style={{ width: '100%',paddingTop: 5, }}
+                style={{ width: '100%', paddingTop: 5, }}
+                getItemLayout={(data, index) => (
+                    {length: 160, offset: 160 * index, index}
+                )}
+                initialNumToRender={8}
                 keyExtractor={item => item._id}
                 contentContainerStyle={{ alignItems: 'center', }}
                 renderItem={({item, index, separator}) => (
                     <QuizCard data={item} removeFromList={id => removeFavoriteFromList(id)} />
                 )}
+                ListFooterComponent={renderFooter}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.2}
+                ListFooterComponentStyle={{marginBottom: 10}}
             />
             
         

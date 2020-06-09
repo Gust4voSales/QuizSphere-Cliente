@@ -156,8 +156,8 @@ export default function QuizCard({ data, removeFromList=null }) {
 
 const styles = StyleSheet.create({
     container: {
-        // height: 160,
-        height: 260,
+        height: 160,
+        // height: 260,
         width: 270,
         
         borderRadius: 20,
