@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ImageBackground, Alert, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, Alert, StatusBar, Dimensions, StyleSheet } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
 import ProgressBar from 'react-native-progress/Bar';
 import * as Animatable from 'react-native-animatable';
@@ -123,8 +123,9 @@ export default function PlayQuiz({ route, navigation }) {
 
     return(
         <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, setAnimation }}>
+        <StatusBar backgroundColor="#37506C" barStyle='light-content' />
         <AnimatableLinear 
-            colors={['#364F6B', '#3E81A7']} 
+            colors={['#38506B', '#3E81A7']} 
             style={styles.container} 
             animation={animation} 
             duration={1500} 

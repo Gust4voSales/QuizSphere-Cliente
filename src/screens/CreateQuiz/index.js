@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard, BackHandler, ToastAndroid, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard, BackHandler, ToastAndroid, ActivityIndicator } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Header from '../../components/Header';
-import { systemWeights } from 'react-native-typography'
 import { CommonActions } from '@react-navigation/native';
 import CreateQuestionComponent from './components/CreateQuestionComponent';
 import Picker from './components/StyledPicker';
@@ -10,6 +9,7 @@ import TagInput from './components/TagInput';
 import showAlertError from '../../components/AlertError';
 import api from '../../services/api';
 
+import styles from './styles';
 
 // Title, category, tags([string]), numQuestions, quentions([question]), private(bool), timer
 // question: questionTitle, options[string], correctOptionIndex
@@ -185,65 +185,3 @@ export default function CreateQuiz({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: '5%',
-        alignItems: 'center',
-        backgroundColor: '#3D6F95',
-    },
-   
-    informations: {
-        flex: 1, 
-        width: '80%',
-        // height: '40%',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-    },
-
-    horizontalInfoContainer: { 
-        width: '100%', 
-        flexDirection: 'row', 
-        alignItems: 'flex-start', 
-        justifyContent: 'space-between', 
-        // backgroundColor: '#f9f9',
-    },
-    
-    input: {
-        width: '100%',
-        color: 'white',
-        paddingBottom: 8,
-        marginBottom: 15,
-        fontSize: 16,
-    },
-    
-    questions: {
-        width: '80%',
-        // height: '40%',
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        // backgroundColor: '#ddd',
-    },
-    questionsTitle: {
-        alignSelf: 'flex-start',
-        marginBottom: 15,
-        color: 'white',
-        fontSize: 24,
-    },
-    createBtn: {
-        width: '100%',
-        height: 50,
-        // marginBottom: 10,
-        backgroundColor: '#37506D',
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    createBtnText: {
-        fontSize: 22, 
-        color: 'white', 
-        ...systemWeights.semibold, 
-        letterSpacing: 1.5,
-    },
-});

@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, } from 'react';
+import { StatusBar } from 'react-native';
 import showAlertError from '../components/AlertError';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -68,6 +69,7 @@ export function AuthProvider({ children }) {
 
     return(
         <AuthContext.Provider value={{ signed: !!user, user, setUser, signIn, signOut, loading }}>
+            <StatusBar backgroundColor="#314C6A" barStyle='light-content' />
             {children}
         </AuthContext.Provider>
     );
