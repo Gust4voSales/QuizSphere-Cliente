@@ -8,7 +8,7 @@ export default function SharedQuizzes() {
     return(
         <View style={styles.container}>
         <Header screenTitle="Compartilhados comigo"/>
-            <QuizList request="/user/sharedQuizzes" horizontal={false}/>
+            <QuizList request="/user/shareQuiz" horizontal={false}/>
         </View>
     );
 }

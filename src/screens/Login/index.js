@@ -3,9 +3,9 @@ import { View, TextInput, StyleSheet, Text, Image, TouchableWithoutFeedback, Key
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RectButton } from 'react-native-gesture-handler';
-import { systemWeights } from 'react-native-typography';
 import { useFocusEffect } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
+import styles from './styles';
 
 
 export default function Login({ navigation }) {
@@ -15,7 +15,8 @@ export default function Login({ navigation }) {
 
     const passwdRef = useRef();
     const [seePassword, setSeePassword] = useState(false);
-    const [logoImgSize, setLogoImgSize] = useState(220);
+    const [logoImgHeight, setLogoImgHeight] = useState(230);
+    const [logoImgWidth, setLogoImgWidth] = useState(230);
     const [logoImgMargin, setLogoImgMargin] = useState('-40%');
     const [backgroundSize, setBackgroundSize] = useState('74%');
     
@@ -43,16 +44,15 @@ export default function Login({ navigation }) {
     function keyboardOpenedHandler() {
         setBackgroundSize('90%');
         setLogoImgMargin('-17%');
-        setLogoImgSize(100);
-        // setBackgroundSize('84%');
-        // setLogoImgMargin(-100);
-        // setLogoImgSize(140);
+        setLogoImgHeight(110);
+        setLogoImgWidth(120);
     }
     
     function keyboardClosedHandler() {
         setBackgroundSize('74%');
         setLogoImgMargin('-40%');
-        setLogoImgSize(220);
+        setLogoImgHeight(230);
+        setLogoImgWidth(230);
     }
 
     return(
@@ -62,7 +62,7 @@ export default function Login({ navigation }) {
             <LinearGradient colors={["#364F6B", "#3E81A7"]} style={[styles.container, { height: backgroundSize }]}>
                 <Image 
                     source={require('../../assets/logo.png')} 
-                    style={[styles.logo, { height: logoImgSize+10, width: logoImgSize, marginTop: logoImgMargin }]} 
+                    style={{ height: logoImgHeight+10, width: logoImgWidth-10, marginTop: logoImgMargin, }} 
                 />
                 <Text style={styles.loginTxt}>LOGIN</Text>
 
@@ -100,7 +100,7 @@ export default function Login({ navigation }) {
 
                 <RectButton 
                     onPress={handleSignIn} 
-                    style={[styles.btn, { backgroundColor: '#06A3FF', marginTop: 30, opacity: userName&&password ? 1 : .7 }]}
+                    style={[styles.btn, { backgroundColor: '#06A3FF', marginTop: 15, opacity: userName&&password ? 1 : .7 }]}
                     enabled={!!(userName&&password)}
                 >
                     <Text style={styles.txtBtn}>Login</Text>
@@ -118,45 +118,3 @@ export default function Login({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        // justifyContent: 'center',
-    },
-    logo: {
-        height: 230,
-        width: 220,
-        // backgroundColor: '#ddd',
-    },
-    loginTxt: {
-        color: 'white',
-        ...systemWeights.bold,
-        fontSize: 24,
-        letterSpacing: 2,
-        marginTop: 10,
-        marginBottom: 15,
-    },
-    input: {
-        width: '80%',
-        fontSize: 16,
-        color: 'white',
-        paddingLeft: 34,
-    },
-    btn: {
-        width: '78%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        elevation: 2,
-        marginBottom: 20,
-    },
-    txtBtn: {
-        ...systemWeights.semibold,
-        fontSize: 20, 
-        paddingVertical: 15,
-        color: 'white',
-        letterSpacing: .7,
-    },
-});

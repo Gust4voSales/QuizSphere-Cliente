@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
             }
 
         } catch (err) {
-            showAlertError('Erro ao fazer login', err.response === undefined 
+            showAlertError('Não foi possível realizar login', err.response === undefined 
                 ? 'Erro ao tentar conectar com o servidor. Tente novamente'
                 : err.response.data.error 
             );

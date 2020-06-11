@@ -6,7 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import UserActionsContext from '../../contexts/userActions';
-import QuizOptions from '../QuizOptions';
+import ShareQuizModal from './components/ShareQuiz';
 import api from '../../services/api';
 import { systemWeights } from 'react-native-typography';
 
@@ -15,6 +15,7 @@ export default function QuizCard({ data, removeFromList=null }) {
     const navigation =  useNavigation();
     const { user } = useContext(AuthContext);
     const { likeQuiz, deslikeQuiz, addFavoriteQuiz, removeFavoriteQuiz } = useContext(UserActionsContext);
+    const [visibleShareModal, setVisibleShareModal] = useState(false);
     const [liked, setLiked] = useState(data.liked);
     const [likeCounter, setLikeCounter] = useState(data.likeCounter);
     
@@ -41,7 +42,15 @@ export default function QuizCard({ data, removeFromList=null }) {
 
     function removeFavoriteHandler() {
         removeFavoriteQuiz(data._id);
-        if (removeFromList) removeFromList(data._id);
+
+        // If this quiz component is in the FavoriteQuizzes Screen then when removing from favorite it should call a function to remove it from the parents list
+        if (removeFromList) 
+            removeFromList(data._id);
+    }
+
+    // Opens/closes the ShareQuiz modal
+    function toggleShareModal() {
+        setVisibleShareModal(!visibleShareModal);
     }
 
     function onPlayQuizHandler() {
@@ -132,22 +141,20 @@ export default function QuizCard({ data, removeFromList=null }) {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    onPress={
-                        isQuizOnFavorites() ? removeFavoriteHandler : addFavoriteHandler
-                    }
-                    activeOpacity={.75}
-                > 
+                <TouchableOpacity onPress={isQuizOnFavorites() ? removeFavoriteHandler : addFavoriteHandler} activeOpacity={.75} > 
                     <Icon name={isQuizOnFavorites() ? "star" : "star-outline"} color={isQuizOnFavorites() ? "#00A3FF" : "white"} size={28}/>
                 </TouchableOpacity>
 
-                <View> 
+                <TouchableOpacity onPress={toggleShareModal} activeOpacity={.75} > 
                     <Icon name="share" color="white" size={28}/>
-                </View>
+                </TouchableOpacity>
                 <View> 
                     <Icon name="tag" color="white" size={28} style={{transform: [{ rotateY: '180deg' }]}}/>
                 </View>
             </View>
+
+            {/* SHARE QUIZ MODAL */}
+            <ShareQuizModal quizId={data._id} toggleModal={toggleShareModal} visible={visibleShareModal}/>
         </LinearGradient>
         </Touchable>
     );
@@ -198,42 +205,3 @@ const styles = StyleSheet.create({
     },
 
 });
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         height: 315,
-//         width: 250,
-//         marginHorizontal: 5,
-//         marginBottom: 10,
-//         borderRadius: 20,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         elevation: 6,
-//         // backgroundColor : "#0000" // invisible color
-//     },
-//     title: {
-//         position: 'absolute',
-//         top: 10,
-//         width: '85%',
-//         fontSize: 24,
-//         textAlign: 'center',
-//         color: 'white',
-//         paddingBottom: 5,
-//         // borderBottomWidth: StyleSheet.hairlineWidth,
-//         // borderColor: 'white',
-//     },
-//     moreIcon: {
-//         position: 'absolute',
-//         top: 14,
-//         right: 10,
-//     },
-//     questions: {
-//         color: 'white',
-//         fontSize: 18,
-//     },
-//     author: {
-//         color: 'white',
-//         fontSize: 18,
-//     }
-// });

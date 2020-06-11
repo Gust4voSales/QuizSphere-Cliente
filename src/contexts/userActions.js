@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext, useMemo } from 'react';
+import React, { createContext, useState, useEffect, useContext, useMemo, useRef } from 'react';
 import { ToastAndroid } from 'react-native';
 import showAlertError from '../components/AlertError';
 import AuthProvider from '../contexts/auth';
@@ -10,7 +10,7 @@ const UserActionsContext = createContext({ friendInvitations: false, newActivity
 // const UserActionsContext = createContext({ friendInvitations: [], mentions: [], invitationsCounter: 0, mentionsCounter: 0 }); //value types 
 
 export function UserActionsProvider({ children }) {
-    let _isMounted = true;
+    const isMounted = useRef();
 
     const { user, setUser } = useContext(AuthProvider);
 
@@ -25,6 +25,10 @@ export function UserActionsProvider({ children }) {
         'reconnectionAttempts': Infinity,
     }), [userId]);    
 
+    useEffect(() => {
+        isMounted.current = true;
+        return () => { isMounted.current = false }
+    }, []);
 
     useEffect(() => {
         socket.on('connect', () => {
@@ -32,14 +36,14 @@ export function UserActionsProvider({ children }) {
         })
         socket.on('friend_invitation', () => {
             console.log('new invitations');
-            
-            setFriendInvitations(true);
+            if (isMounted.current)
+                setFriendInvitations(true);
         });
 
         socket.on('new_activity', () => {
             console.log('new activity');
-
-            setNewActivity(true);
+            if (isMounted.current)
+                setNewActivity(true);
         });
 
         socket.on('reconnect', () => {
@@ -58,10 +62,15 @@ export function UserActionsProvider({ children }) {
         try {
             const { data } = await api.get(`/user/${user._id}`);
             
-            setUser(data.user);
+            if (isMounted.current) {
+                setUser(data.user);
             
-            if (data.newActivities) setNewActivity(true);
-            if (data.pendingInvitations) setFriendInvitations(true);
+                if (data.newActivities) 
+                    setNewActivity(true);
+                if (data.pendingInvitations) 
+                    setFriendInvitations(true);
+            }
+            
 
         } catch (err) {
             if (err.response.data.user) setUser(err.response.data.user);
@@ -118,7 +127,8 @@ export function UserActionsProvider({ children }) {
     async function addFavoriteQuiz(quizId) {
         try {
             const { data } = await api.post(`/user/savedQuizzes/${quizId}`);
-            setUser(data.user);
+            if (isMounted.current)
+                setUser(data.user);
 
             ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
@@ -133,7 +143,8 @@ export function UserActionsProvider({ children }) {
     async function removeFavoriteQuiz(quizId) {
         try {
             const { data } = await api.delete(`/user/savedQuizzes/${quizId}`);
-            setUser(data.user);
+            if (isMounted.current)
+                setUser(data.user);
 
             ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
@@ -145,6 +156,16 @@ export function UserActionsProvider({ children }) {
         }
     }   
 
+    async function shareQuiz(quizId, friendsIds) {
+        try {
+            await api.post(`/user/shareQuiz/${quizId}`, {friendsIds, userName: user.userName});
+        } catch (err) {
+            console.log(err);
+            ToastAndroid.show('Ocorreu um erro ao compartilhar o quiz', ToastAndroid.SHORT);
+        }
+        
+    }
+
     return(
         <UserActionsContext.Provider value={{ 
             friendInvitations, 
@@ -155,7 +176,8 @@ export function UserActionsProvider({ children }) {
             likeQuiz,
             deslikeQuiz,
             addFavoriteQuiz, 
-            removeFavoriteQuiz ,
+            removeFavoriteQuiz,
+            shareQuiz,
             disconnectSocket,
             }}
         >

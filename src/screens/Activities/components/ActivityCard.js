@@ -1,11 +1,23 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Touchable from 'react-native-platform-touchable';
 import { systemWeights } from 'react-native-typography';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function ActivityCard({ item }) {
+    const navigation = useNavigation();
+
+    function navigateToPage() {
+        if (item.activityType==='newFriend')
+            navigation.navigate('SeeFriends');
+        else // sharedQuiz
+            navigation.navigate('SharedQuizzes');
+    }
+
     return(
+        <Touchable onPress={navigateToPage}>
         <View style={styles.container}>
             <Icon 
                 name={
@@ -27,6 +39,8 @@ export default function ActivityCard({ item }) {
                 }
             </Text>
         </View>
+        </Touchable>
+
     );
     
 }
