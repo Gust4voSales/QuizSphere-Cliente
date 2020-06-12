@@ -87,7 +87,7 @@ export default function SeeFriends() {
             <View style={styles.container}>
                 <Header screenTitle="Ver amigos" />
                 <TouchableOpacity onPress={() => loadFriends()}>
-                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os quizzes. Tente novamente.</Text>
+                    <Text style={{ color: 'black', textAlign: 'center' }}>Não foi possível buscar os amigos. Tente novamente.</Text>
                 </TouchableOpacity>
             </View>
         );

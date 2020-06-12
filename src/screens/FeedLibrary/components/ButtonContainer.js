@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 export default function ButtonContainer({ name, iconName }) {
     return(
         <View style={styles.container}>
-            <Icon name={iconName} color="#00A3FF" size={40} style={styles.icon}/>
+            <Icon name={iconName} color="#00A3FF" size={30} style={styles.icon}/>
             <Text style={styles.title}>{name}</Text>
         </View>
     );  

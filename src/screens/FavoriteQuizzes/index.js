@@ -4,9 +4,6 @@ import Header from '../../components/Header';
 import QuizCard from '../../components/QuizCard';
 import api from '../../services/api';
 
-// Unlike SharedQuizzes and CreatedQuizzes, this component needs the quiz list to be in its posession (one of its states) because 
-// whenever a quiz is removed from the favorites, this component needs to re-render. If this screen were built as the other two,
-// whenever a quiz were removed from favorite it wouldn't be possible to remove it from the list.
 export default function FavoriteQuizzes() {
     const isMounted = useRef();
     const [quizzes, setQuizzes] = useState([]);

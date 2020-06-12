@@ -158,7 +158,7 @@ export function UserActionsProvider({ children }) {
 
     async function shareQuiz(quizId, friendsIds) {
         try {
-            await api.post(`/user/shareQuiz/${quizId}`, {friendsIds, userName: user.userName});
+            await api.post(`/shareQuiz/${quizId}`, {friendsIds, userName: user.userName});
         } catch (err) {
             console.log(err);
             ToastAndroid.show('Ocorreu um erro ao compartilhar o quiz', ToastAndroid.SHORT);
