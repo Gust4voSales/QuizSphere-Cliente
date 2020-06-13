@@ -103,13 +103,14 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
                 style={{flex: 1, width: '100%'}}
                 keyExtractor={item => item._id}
                 renderItem={({item, index, separator}) => (
-                    <TouchableOpacity onPress={() => toggleFriendSelection(item.recipient._id)}>
+                    <TouchableOpacity onPress={() => toggleFriendSelection(item.recipient._id)} >
                         <Text 
                             style={[styles.friendCard, 
                                 { backgroundColor: friendsToShare.includes(item.recipient._id) ? '#38506F': 'transparent' }]}
                         >
                             {item.recipient.userName}
                         </Text>
+                        {friendsToShare.includes(item.recipient._id) && <Icon name="check" color="white" size={20} style={styles.checkFriendIcon}/> }
                     </TouchableOpacity>
                 )}
                 ListFooterComponent={renderFooter}
@@ -196,4 +197,9 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         marginBottom: 2
     },
+    checkFriendIcon: {
+        position: 'absolute',
+        right: 10,
+        top: 15
+    }
 });

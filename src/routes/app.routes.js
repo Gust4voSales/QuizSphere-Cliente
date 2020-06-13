@@ -16,6 +16,7 @@ import PlayQuiz from '../screens/PlayQuiz';
 import CreateQuiz from '../screens/CreateQuiz';
 import AddFriend from '../screens/AddFriend';
 import SeeFriends from '../screens/SeeFriends';
+import Search from '../screens/Search';
 import Notifications from '../screens/Notifications';
 
 
@@ -33,6 +34,7 @@ function HomePage() {
             <AppStack.Screen name="SharedQuizzes" component={SharedQuizzes} />
             <AppStack.Screen name="CreatedQuizzes" component={CreatedQuizzes} />
             <AppStack.Screen name="PlayQuiz" component={PlayQuiz}/>
+            <AppStack.Screen name="Search" component={Search}/>
             <AppStack.Screen name="Notifications" component={Notifications}/>
         </AppStack.Navigator>
     );

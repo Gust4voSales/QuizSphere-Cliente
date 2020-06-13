@@ -135,7 +135,7 @@ export default function SharedQuizzes() {
                 contentContainerStyle={{ alignItems: 'center', }}
                 renderItem={({item, index, separator}) => (
                     <View> 
-                        <Text style={styles.userWhoShared}>{item.user.userName}</Text>
+                        <Text style={styles.userWhoShared}>{'Enviado por ' + item.user.userName}</Text>
                         <QuizCard data={item.quiz}/>
                     </View>
                 )}
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     },
     userWhoShared: {
         color: 'white',
-        // marginBottom: -8,
+        // marginLeft: 20,
         textAlign: 'center',
     },
 });

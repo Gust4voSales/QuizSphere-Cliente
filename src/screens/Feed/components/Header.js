@@ -3,11 +3,25 @@ import { View, Text, StyleSheet } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { systemWeights } from 'react-native-typography';
+import { useNavigation } from '@react-navigation/native';
 import UserActionsContext from '../../../contexts/userActions';
 
 
-export default function Header(props) {
+export default function Header() {
     const { friendInvitations, newActivity } = useContext(UserActionsContext);
+    const navigation = useNavigation();
+
+    function openDrawerHandler() {
+        navigation.openDrawer();
+    }
+
+    function openSearchHandler() {
+        navigation.navigate('Search');
+    }
+    
+    function openNotificationsHandler() {
+        navigation.navigate('Notifications');
+    }
 
     function displayNotificationIndicator() {
         if (friendInvitations || newActivity) {
@@ -17,7 +31,7 @@ export default function Header(props) {
     
     return(
         <View style={styles.header}>
-            <Touchable background={Touchable.SelectableBackground()} onPress={props.openDrawer} hitSlop={{
+            <Touchable background={Touchable.SelectableBackground()} onPress={openDrawerHandler} hitSlop={{
                 top: 10, bottom: 10, left: 10, right: 10
             }}>
                 <View style={styles.userLeftContainer}>
@@ -30,13 +44,14 @@ export default function Header(props) {
                     background={Touchable.SelectableBackgroundBorderless()} 
                     hitSlop={{ top: 20, left: 4, right: 4, bottom: 20 }}
                     style={{marginRight: 10}}
+                    onPress={openSearchHandler}
                 >
                     <Icon name="search" size={30} color="white" />
                 </Touchable>
                 <Touchable 
                     background={Touchable.SelectableBackgroundBorderless()} 
                     hitSlop={{ top: 20, left: 4, right: 4, bottom: 20 }}
-                    onPress={props.openNotificationScreen}
+                    onPress={openNotificationsHandler}
                 >   
                     <View>
                         <Icon name="notifications" size={30} color="white"/>

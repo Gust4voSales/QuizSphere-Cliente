@@ -76,6 +76,8 @@ export default function Login({ navigation }) {
                         returnKeyType="next"
                         onSubmitEditing={() => {passwdRef.current.focus()}}
                         blurOnSubmit={false}
+                        autoCompleteType="username"
+                        autoCapitalize="none"
                         underlineColorAndroid="#06A3FF"
                     />
                 </View>
@@ -91,6 +93,8 @@ export default function Login({ navigation }) {
                         returnKeyType="done"
                         ref={passwdRef}
                         onSubmitEditing={handleSignIn}
+                        autoCompleteType="password"
+                        autoCapitalize="none"
                         underlineColorAndroid="#06A3FF"
                     />  
                     <TouchableWithoutFeedback onPress={toggleSeePassword}>

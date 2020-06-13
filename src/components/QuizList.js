@@ -5,7 +5,7 @@ import api from '../services/api';
 import { useScrollToTop } from '@react-navigation/native';
 
 
-export default function QuizList({ request=false, refreshControl, quizList, horizontal=true }) {
+export default function QuizList({ request, refreshControl, horizontal=true }) {
     const isMounted = useRef();    
     const scrollRef = useRef(null);
         useScrollToTop(scrollRef);
@@ -23,14 +23,10 @@ export default function QuizList({ request=false, refreshControl, quizList, hori
 
     useEffect(() => {
         isMounted.current = true;
-        if (request) { // If a resquest link is passed this component will be resposible for fetching the data and handling it
-            loadQuizzes();
-        } else { // If a list with the quizzes has been passed, that means the parent component is handling the list and this component should only render it
-            setQuizzes(quizList);
-        }
+        loadQuizzes();
 
         return () => { isMounted.current = false }
-    }, [quizList]);
+    }, [request]);
 
     // This useEffect runs when the user is trying to refresh the page, so when that happens we call loadQuizzes again.
     // This happens at the FeedTrending screen page where the QuizLists are horizontal, so the refresh action is fired by the ScrollView

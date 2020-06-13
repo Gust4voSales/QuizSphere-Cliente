@@ -14,22 +14,15 @@ const FeedTab = createBottomTabNavigator();
 
 export default function Feed({ navigation }) {
 
-    function openDrawerHandler() {
-        navigation.openDrawer();
-    }
-
     function createQuizHandler() {
         navigation.jumpTo('CreateQuiz');
-    }
-
-    function openNotificationsHandler() {
-        navigation.navigate('Notifications');
     }
 
     return(
         <View style={{flex: 1, backgroundColor: '#fff'}}>
             <View style={styles.elevationContainer}></View>
-            <Header openDrawer={openDrawerHandler} openNotificationScreen={openNotificationsHandler}/>
+            {/* HEADER THAT STAYS ON TOP OF THE FEED */}
+            <Header />
             
             <FeedTab.Navigator
                 tabBarOptions={tabBarStyling}
