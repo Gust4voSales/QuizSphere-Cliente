@@ -18,11 +18,12 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [friendsToShare, setFriendsToShare] = useState([]);
+
 
     useEffect(() => {
         isMounted.current = true;
-        
         loadFriends();
 
         return () => { isMounted.current = false }
@@ -31,6 +32,7 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
     async function loadFriends(page=1) {
         try {
             setFriendsToShare([]);
+            setShowError(false);
             
             if (page!=1) 
                 setLoadingMore(true);
@@ -53,8 +55,8 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
             if (isMounted.current) {
                 setLoading(false);
                 setLoadingMore(false);  
+                setShowError(true);
             }
-            ToastAndroid.show('Não foi possível carregar os seus amigos.', ToastAndroid.SHORT);
         }
     }
 
@@ -144,6 +146,10 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
                     loading 
                     ? <View style={{flex: 1}}><ActivityIndicator color="white" size="large" /></View>
                     : renderFriendList()
+                }
+                {
+                    showError &&
+                    <Text style={{ color: 'black' }}>Não foi possível carregar os seus amigos.</Text>
                 }
                 
             </View>

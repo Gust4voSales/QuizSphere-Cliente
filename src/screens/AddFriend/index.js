@@ -63,6 +63,7 @@ export default function AddFriend({ navigation }) {
                         setUsername(text.trim().toLowerCase())
                     }}
                     underlineColorAndroid="#58AAFF"
+                    autoCorrect={false}
                     placeholder="Nome de usuário"
                     placeholderTextColor="#ddd"
                 />

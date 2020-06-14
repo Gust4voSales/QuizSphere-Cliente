@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard, BackHandler, ToastAndroid, ActivityIndicator } from 'react-native';
+import React, { useState, } from 'react';
+import { View, Text, TextInput, TouchableWithoutFeedback, Switch, Alert, Keyboard, ToastAndroid, ActivityIndicator } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Header from '../../components/Header';
 import { CommonActions } from '@react-navigation/native';
@@ -11,8 +11,6 @@ import api from '../../services/api';
 
 import styles from './styles';
 
-// Title, category, tags([string]), numQuestions, quentions([question]), private(bool), timer
-// question: questionTitle, options[string], correctOptionIndex
 
 const categories = ['educativo', 'entretenimento', ];
 const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min'];
@@ -111,7 +109,7 @@ export default function CreateQuiz({ navigation }) {
                 '',
                 `Quiz "${quizTitle}" criado com sucesso!`,
                 [
-                    { text: 'OK', onPress: navigation.goBack },
+                    { text: 'OK', onPress: resetAndReturnAfterCreating },
                     // { text: 'deixa', onPress: () => null }, // remove
                 ],    
             );
@@ -125,6 +123,16 @@ export default function CreateQuiz({ navigation }) {
         }
     }
 
+    function resetAndReturnAfterCreating() {
+        navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name: 'HomePage' }
+                ],
+            })
+        );
+    }
 
     return(
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -138,6 +146,7 @@ export default function CreateQuiz({ navigation }) {
                     onChangeText={text => {
                         setQuizTitle(text)
                     }}
+                    autoCorrect={false}
                     maxLength={40}
                     placeholderTextColor='#ddd'
                     underlineColorAndroid='#58AAFF'

@@ -1,13 +1,12 @@
 import React, { createContext, useState, useEffect, useContext, useMemo, useRef } from 'react';
 import { ToastAndroid } from 'react-native';
+import FlashMessage, { showMessage } from "react-native-flash-message";
 import showAlertError from '../components/AlertError';
 import AuthProvider from '../contexts/auth';
 import socketio from 'socket.io-client';
 import api from '../services/api';
-import { set } from 'react-native-reanimated';
 
 const UserActionsContext = createContext({ friendInvitations: false, newActivity: false }); //value types 
-// const UserActionsContext = createContext({ friendInvitations: [], mentions: [], invitationsCounter: 0, mentionsCounter: 0 }); //value types 
 
 export function UserActionsProvider({ children }) {
     const isMounted = useRef();
@@ -36,14 +35,30 @@ export function UserActionsProvider({ children }) {
         })
         socket.on('friend_invitation', () => {
             console.log('new invitations');
-            if (isMounted.current)
+            if (isMounted.current) {
                 setFriendInvitations(true);
+                showMessage({
+                    message: "Você recebeu uma solicitação de amizade",
+                    // description: "My message description",
+                    type: "info",
+                    backgroundColor: "#314C6A", // background color
+                    color: "#fff",
+                });
+            }   
         });
 
-        socket.on('new_activity', () => {
-            console.log('new activity');
-            if (isMounted.current)
+        socket.on('new_activity', (info) => {
+            console.log(info); // type: solicitation or shared
+            if (isMounted.current) {
                 setNewActivity(true);
+                showMessage({
+                    message: "Um amigo compartilhou um quiz com você",
+                    description: "My message description",
+                    type: "default",
+                    backgroundColor: "#314C6A", // background color
+                    color: "#fff", // text color
+                });
+            }
         });
 
         socket.on('reconnect', () => {
@@ -78,6 +93,17 @@ export function UserActionsProvider({ children }) {
         }
     }
 
+    function showNotification(message) {
+        showMessage({
+            message,
+            description: "My message description",
+            type: "default",
+            backgroundColor: "#314C6A", // background color
+            color: "#fff", // text color
+        });
+    }
+
+// --------------------------------ACTIONS------------------------------------
 
     async function sendFriendInvitation(userName) {
         const response = {};
@@ -187,6 +213,7 @@ export function UserActionsProvider({ children }) {
             }}
         >
             {children}
+            <FlashMessage duration={2500} icon="auto"/>
         </UserActionsContext.Provider>
     );
 }
