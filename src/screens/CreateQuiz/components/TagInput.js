@@ -66,6 +66,8 @@ export default function TitleInput(props) {
                 onChangeText={text => {
                     setTagText(text);
                 }}
+                autoCompleteType="off"
+                autoCorrect={false}
                 value={tagText}
             />
            

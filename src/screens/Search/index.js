@@ -21,6 +21,10 @@ export default function Screen({ navigation }) {
         }, 1000);
     }
 
+    function onFilterSelection(filter) {
+        setFilter(filter);
+        setInputFilter('');
+    }
         
     return(
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -51,14 +55,14 @@ export default function Screen({ navigation }) {
             <View style={styles.filterChoices}>
                 <TouchableOpacity 
                     style={[{ backgroundColor: filter==='title' ? '#06A3FF' : 'transparent' }, styles.btnFilter ]}
-                    onPress={() => setFilter('title')}
+                    onPress={() => onFilterSelection('title')}
                     activeOpacity={.7}
                 >
                     <Text style={{ color: 'white' }}>título</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[{ backgroundColor: filter==='tag' ? '#06A3FF' : 'transparent' }, styles.btnFilter ]}
-                    onPress={() => setFilter('tag')}
+                    onPress={() => onFilterSelection('tag')}
                     activeOpacity={.7}                >
                     <Text style={{ color: 'white' }}>tag</Text>
                 </TouchableOpacity>

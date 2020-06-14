@@ -107,15 +107,15 @@ export default function CreateQuiz({ navigation }) {
 
             await api.post('quiz', data);
             
-            setLoading(false);
             Alert.alert(
                 '',
                 `Quiz "${quizTitle}" criado com sucesso!`,
                 [
-                    { text: 'OK', onPress: () => goBack() },
+                    { text: 'OK', onPress: navigation.goBack },
                     // { text: 'deixa', onPress: () => null }, // remove
                 ],    
             );
+            setLoading(false);
         } catch (err) {
             setLoading(false);
             showAlertError('', err.response === undefined 

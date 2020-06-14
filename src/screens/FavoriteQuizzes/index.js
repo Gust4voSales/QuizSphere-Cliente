@@ -66,7 +66,6 @@ export default function FavoriteQuizzes() {
     
     function renderFooter() {
         if (loadingMore) {
-            console.log('alo');
             return(
                 <View style={{width : 100, height: 100, alignItems: 'center', justifyContent: 'center'}}>
                     <ActivityIndicator color="white" size="large"/>

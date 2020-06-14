@@ -162,7 +162,11 @@ export function UserActionsProvider({ children }) {
             ToastAndroid.show('Quiz compartilhado', ToastAndroid.SHORT);
         } catch (err) {
             console.log(err);
-            ToastAndroid.show('Ocorreu um erro ao compartilhar o quiz', ToastAndroid.SHORT);
+            if (err.response === undefined) {
+                ToastAndroid.show('Ocorreu um erro ao compartilhar o quiz', ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show(err.response.data.error, ToastAndroid.SHORT);
+            }
         }
         
     }
