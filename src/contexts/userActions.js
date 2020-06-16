@@ -37,13 +37,7 @@ export function UserActionsProvider({ children }) {
             console.log('new invitations');
             if (isMounted.current) {
                 setFriendInvitations(true);
-                showMessage({
-                    message: "Você recebeu uma solicitação de amizade",
-                    // description: "My message description",
-                    type: "info",
-                    backgroundColor: "#314C6A", // background color
-                    color: "#fff",
-                });
+                showNotification("Você recebeu uma solicitação de amizade");
             }   
         });
 
@@ -51,13 +45,11 @@ export function UserActionsProvider({ children }) {
             console.log(info); // type: solicitation or shared
             if (isMounted.current) {
                 setNewActivity(true);
-                showMessage({
-                    message: "Um amigo compartilhou um quiz com você",
-                    description: "My message description",
-                    type: "default",
-                    backgroundColor: "#314C6A", // background color
-                    color: "#fff", // text color
-                });
+                showNotification(
+                    info.type==='solicitation'
+                    ? 'Sua solicitação de amizade foi aceita'
+                    : 'Um amigo compartilhou um quiz com você'
+                );
             }
         });
 
@@ -80,15 +72,18 @@ export function UserActionsProvider({ children }) {
             if (isMounted.current) {
                 setUser(data.user);
             
-                if (data.newActivities) 
+                if (data.newActivities) {
                     setNewActivity(true);
-                if (data.pendingInvitations) 
+                    showNotification('Você tem notificações não vistas');
+                }
+                if (data.pendingInvitations) {
                     setFriendInvitations(true);
+                    showNotification('Você tem solicitações de amizade pendente');
+                }
             }
             
 
         } catch (err) {
-            if (err.response.data.user) setUser(err.response.data.user);
             ToastAndroid.show('Não foi possível atualizar informações do usuário', ToastAndroid.SHORT);
         }
     }
@@ -96,8 +91,7 @@ export function UserActionsProvider({ children }) {
     function showNotification(message) {
         showMessage({
             message,
-            description: "My message description",
-            type: "default",
+            type: "info",
             backgroundColor: "#314C6A", // background color
             color: "#fff", // text color
         });
@@ -159,10 +153,7 @@ export function UserActionsProvider({ children }) {
             ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
             console.log(err);
-            showAlertError('', err.response === undefined 
-                ? 'Erro ao tentar conectar com o servidor. Tente novamente'
-                : err.response.data.error 
-            );
+            ToastAndroid.show('Não foi possível salvar o quiz', ToastAndroid.SHORT);
         }
     }    
 
@@ -175,10 +166,8 @@ export function UserActionsProvider({ children }) {
             ToastAndroid.show(data.message, ToastAndroid.SHORT);
         } catch(err) {
             console.log(err);
-            showAlertError('', err.response === undefined 
-                ? 'Erro ao tentar conectar com o servidor. Tente novamente'
-                : err.response.data.error 
-            );
+            ToastAndroid.show('Não foi possível remover o quiz dos favoritos', ToastAndroid.SHORT);
+
         }
     }   
 

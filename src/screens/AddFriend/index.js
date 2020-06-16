@@ -60,7 +60,7 @@ export default function AddFriend({ navigation }) {
                     maxLength={22}
                     ref={input}
                     onChangeText={text => {
-                        setUsername(text.trim().toLowerCase())
+                        setUsername(text.trim())
                     }}
                     underlineColorAndroid="#58AAFF"
                     autoCorrect={false}

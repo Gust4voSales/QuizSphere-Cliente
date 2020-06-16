@@ -12,7 +12,7 @@ import api from '../../services/api';
 import styles from './styles';
 
 
-const categories = ['educativo', 'entretenimento', ];
+const categories = ['entretenimento', 'educacionais', 'outros'];
 const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min'];
 
 export default function CreateQuiz({ navigation }) {
@@ -28,27 +28,6 @@ export default function CreateQuiz({ navigation }) {
     const [time, setTime] = useState(timers[0]);
 
     const [loading, setLoading] = useState(false);
-    
-    // // Handle back button
-    // useEffect(
-    //     useCallback(() => {
-    //         const onBackPress = () => {
-    //             navigation.dispatch(
-    //                 CommonActions.reset({
-    //                     index: 0,
-    //                     routes: [
-    //                         { name: 'HomePage' }
-    //                     ],
-    //                 })
-    //             );
-    //             return true;
-    //         };
-      
-    //         BackHandler.addEventListener('hardwareBackPress', onBackPress);
-      
-    //         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    //     }, [])
-    // );
 
     function toggleSwitch(){
         setIsPrivate(previousState => !previousState);
@@ -72,8 +51,8 @@ export default function CreateQuiz({ navigation }) {
     }
 
     function checkDataBeforeCreating() {
-        if (quizTitle.trim().length===0){
-            ToastAndroid.show('Título do Quiz em branco!', ToastAndroid.SHORT);
+        if (quizTitle.trim().length<5){
+            ToastAndroid.show('Título do Quiz precisa ter pelo menos 4 caracteres.', ToastAndroid.SHORT);
             return true;
         } 
         if (questions.length<3){

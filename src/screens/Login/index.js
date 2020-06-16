@@ -77,7 +77,7 @@ export default function Login({ navigation }) {
                         onSubmitEditing={() => {passwdRef.current.focus()}}
                         blurOnSubmit={false}
                         autoCompleteType="username"
-                        autoCapitalize="none"
+                        // autoCapitalize="none"
                         underlineColorAndroid="#06A3FF"
                     />
                 </View>

@@ -1,8 +1,7 @@
-import React, { createContext, useState, useEffect, } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'react-native';
 import showAlertError from '../components/AlertError';
 import AsyncStorage from '@react-native-community/async-storage';
-
 
 import api from '../services/api';
 
@@ -10,12 +9,13 @@ import api from '../services/api';
 const AuthContext = createContext({ signed: false, user: {}, loading: true }); //value types 
 
 export function AuthProvider({ children }) {
-    let _isMounted = true;
+    // const isMounted = useRef();
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // isMounted.current = true;
         async function loadStorageData() {
             const storagedUser = await AsyncStorage.getItem('@QuizApp_user');
             const storagedToken = await AsyncStorage.getItem('@QuizApp_userToken');
@@ -29,10 +29,11 @@ export function AuthProvider({ children }) {
                 setLoading(false);
             }
         }
+        setInterceptorResponseOnApi();
 
         loadStorageData();
 
-        return() => { _isMounted = false }
+        // return() => { isMounted.current = false }
     }, []);
 
     async function signIn(userName, password) {
@@ -64,6 +65,24 @@ export function AuthProvider({ children }) {
     function signOut() {
         AsyncStorage.clear().then(() => {
             setUser(null);
+        });
+    }
+
+    // This function set a response interceptor at the api, so on each request if the response === 401 (token not valid, probably expired)
+    // the user is logged out, this behavior could be replaced by a refresh token system...
+    function setInterceptorResponseOnApi() {
+        api.interceptors.response.use(res => res, err => {
+            if (!err.response) {
+                return new Promise((resolve, reject) => {
+                    reject(err);
+                });
+            } else if (err.response.status !== 401) {
+                return new Promise((resolve, reject) => {
+                  reject(err);
+                });
+            } else if (err.response.status === 401) { // TOKEN EXPIRED OR TOKEN NOT ALLOWED. EITHER ONE OF THE OPTIONS, USER SHOULD BE LOGGED OUT
+                signOut();
+            }
         });
     }
 
