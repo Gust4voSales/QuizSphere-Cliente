@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, ToastAndroid, ActivityIndicator, TouchableOpacity, TouchableOpacityBase } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ToastAndroid, ActivityIndicator, TouchableOpacity, } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -31,8 +31,10 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
 
     async function loadFriends(page=1) {
         try {
-            setFriendsToShare([]);
             setShowError(false);
+            setLoading(true);
+            setFriends([]);
+            setFriendsToShare([]);
             
             if (page!=1) 
                 setLoadingMore(true);
@@ -95,9 +97,17 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
     }
 
     function renderFriendList() {
+        if (showError) {
+            return(
+                <TouchableOpacity onPress={() => loadFriends()}>
+                    <Text style={{ color: 'black' }}>Não foi possível carregar os seus amigos.</Text>
+                </TouchableOpacity>
+            );
+        } 
         if (friends.length===0) {
             return <Text style={{ color: 'white', textAlign: 'center', fontSize: 18 }}>Nenhum amigo 😢</Text>
         }
+
         return(
             <> 
             <FlatList 
@@ -146,12 +156,7 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
                     loading 
                     ? <View style={{flex: 1}}><ActivityIndicator color="white" size="large" /></View>
                     : renderFriendList()
-                }
-                {
-                    showError &&
-                    <Text style={{ color: 'black' }}>Não foi possível carregar os seus amigos.</Text>
-                }
-                
+                }   
             </View>
         </Modal>
     );

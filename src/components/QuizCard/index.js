@@ -7,8 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
 import UserActionsContext from '../../contexts/userActions';
 import ShareQuizModal from './components/ShareQuiz';
-import api from '../../services/api';
+import QuizTagsModal from './components/QuizTags';
 import { systemWeights } from 'react-native-typography';
+import api from '../../services/api';
 
 
 export default function QuizCard({ data, removeFromList=null }) {
@@ -16,6 +17,7 @@ export default function QuizCard({ data, removeFromList=null }) {
     const { user } = useContext(AuthContext);
     const { likeQuiz, deslikeQuiz, addFavoriteQuiz, removeFavoriteQuiz } = useContext(UserActionsContext);
     const [visibleShareModal, setVisibleShareModal] = useState(false);
+    const [visibleTagsModal, setVisibleTagsModal] = useState(false);
     const [liked, setLiked] = useState(data.liked);
     const [likeCounter, setLikeCounter] = useState(data.likeCounter);
     
@@ -51,6 +53,10 @@ export default function QuizCard({ data, removeFromList=null }) {
     // Opens/closes the ShareQuiz modal
     function toggleShareModal() {
         setVisibleShareModal(!visibleShareModal);
+    }
+    // Opens/closes the QuizTags modal
+    function toggleTagsModal() {
+        setVisibleTagsModal(!visibleTagsModal);
     }
 
     function onPlayQuizHandler() {
@@ -148,13 +154,25 @@ export default function QuizCard({ data, removeFromList=null }) {
                 <TouchableOpacity onPress={toggleShareModal} activeOpacity={.75} > 
                     <Icon name="share" color="white" size={28}/>
                 </TouchableOpacity>
-                <View> 
+                <TouchableOpacity onPress={toggleTagsModal} activeOpacity={.75} > 
                     <Icon name="tag" color="white" size={28} style={{transform: [{ rotateY: '180deg' }]}}/>
-                </View>
+                </TouchableOpacity>
+                
             </View>
+            
+            {
+                data.private &&
+                <TouchableOpacity onPress={() => ToastAndroid.show('Quiz privado', ToastAndroid.SHORT)} 
+                    style={styles.privateIcon} activeOpacity={.75}
+                >
+                    <Icon name="shield-check" color="white" size={25} />
+                </TouchableOpacity>
+            }
 
             {/* SHARE QUIZ MODAL */}
             <ShareQuizModal quizId={data._id} toggleModal={toggleShareModal} visible={visibleShareModal}/>
+            {/* TAGS MODAL */}
+            <QuizTagsModal tags={data.tags} toggleModal={toggleTagsModal} visible={visibleTagsModal}/>
         </LinearGradient>
         </Touchable>
     );
@@ -203,5 +221,9 @@ const styles = StyleSheet.create({
         color: '#FFFEFE',
         fontSize: 14,
     },
-
+    privateIcon: {
+        position: 'absolute',
+        top: 8, 
+        right: 18,
+    }
 });

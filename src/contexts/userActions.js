@@ -57,7 +57,7 @@ export function UserActionsProvider({ children }) {
             console.log('sending id after reconnecting');
             
             socket.emit('reconnected', { userId });
-        })
+        });
 
     }, [friendInvitations, newActivity, socket]);
 

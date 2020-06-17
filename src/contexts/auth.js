@@ -68,7 +68,7 @@ export function AuthProvider({ children }) {
         });
     }
 
-    // This function set a response interceptor at the api, so on each request if the response === 401 (token not valid, probably expired)
+    // This function sets a response interceptor at the api, so on each request if the response === 401 (token not valid, probably expired)
     // the user is logged out, this behavior could be replaced by a refresh token system...
     function setInterceptorResponseOnApi() {
         api.interceptors.response.use(res => res, err => {
