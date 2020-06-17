@@ -9,6 +9,7 @@ import UserActionsContext from '../../contexts/userActions';
 import ShareQuizModal from './components/ShareQuiz';
 import QuizTagsModal from './components/QuizTags';
 import { systemWeights } from 'react-native-typography';
+import parseTime from '../../utils/parseQuizTimer';
 import api from '../../services/api';
 
 
@@ -85,15 +86,7 @@ export default function QuizCard({ data, removeFromList=null }) {
 
     // HELPER FUNCTIONS
 
-    function parseTime(time) {
-        let strTime = time.toString();       
-        
-        if (strTime.includes('.5')) {
-            return `${strTime[0]}:30`;
-        } else {
-            return strTime;
-        }
-    }
+    
 
     // I admit that i've basically copy pasted this code from stackoverflow :)
     function parseLikes(likesNumber) {

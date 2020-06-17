@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, ImageBackground, Alert, StatusBar, Dimensions, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { View, Text, ImageBackground, Alert, StatusBar, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
 import ProgressBar from 'react-native-progress/Bar';
 import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import QuestionsList from './components/QuestionsList';
 import Option from './components/Option';
-
-import data from './utils/Mock'; // Remove later
+import { useFocusEffect } from '@react-navigation/native';
+// import data from './utils/Mock'; // Remove later
+import parseQuizTimer from '../../utils/parseQuizTimer';
 import moment from 'moment';
 import styles from './styles';
 
@@ -19,8 +20,8 @@ export default function PlayQuiz({ route, navigation }) {
     const scroll = useRef(null);
     const [answeredQuestions, setAnsweredQuestions] = useState([]);
 
-    // const [quiz, setQuiz] = useState(route.params.quiz); //Quiz with all the data
-    const [quiz, setQuiz] = useState(data.quiz); //Quiz with all the data
+    const [quiz, setQuiz] = useState(route.params.quiz); //Quiz with all the data
+    // const [quiz, setQuiz] = useState(data.quiz); // Fake quiz from mock
 
     const [questionIndex, setQuestionIndex] = useState(0); // The question index from the actual question
     const [questionTitle, setQuestionTitle] = useState(''); // The actual question asked
@@ -31,6 +32,29 @@ export default function PlayQuiz({ route, navigation }) {
     const [animation, setAnimation] = useState(null);
     const [questionFontSize, setFontSize] = useState(22) // Fontsize configs
    
+    // Custom BackButton behavior
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                Alert.alert(
+                    'Tem certeza que deseja sair?',
+                    'Irá perder todo o progresso.',
+                    [
+                        { text: 'Cancelar', onPress: () => null },
+                        { text: 'Tenho certeza', onPress: () => navigation.goBack() },
+                    ],
+                    { cancelable: true }
+                );
+                return true;
+            };
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          return () =>
+            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [])
+    );
+
     useEffect(() => {
         startGameTimer = null;
         showStartMessage()
@@ -74,8 +98,8 @@ export default function PlayQuiz({ route, navigation }) {
     // Create card messaage component later
     function showStartMessage() {
         Alert.alert(
-            'Iniciar o quiz',
-            `Você tem ${quiz.time} minutos para responder ${quiz.questions.length} questões!`,
+            '',
+            `Você tem ${parseQuizTimer(quiz.time)} minutos para responder ${quiz.questions.length} questões! Preparado? 😛`,
             [{ text: 'INICIAR', onPress: startGame }]    
         );
     }
@@ -83,8 +107,7 @@ export default function PlayQuiz({ route, navigation }) {
     function startGame() {
         startGameTimer = moment();
         setProgress(0);
-        console.log('Start Timer: ', startGameTimer.toLocaleString());
-    
+        // console.log('Start Timer: ', startGameTimer.toLocaleString());
     }
 
     function updateQuestion() {
@@ -109,20 +132,23 @@ export default function PlayQuiz({ route, navigation }) {
     }
 
     function finishQuiz(timeout = false) {
-        console.log('acabou');
-        Alert.alert(
-            '',
-            `${timeout && 'Tempo acabou. \n'} 
-                PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
-            [
-                { text: 'Retornar', onPress: () => navigation.goBack() },
-            ]
-        );
+        // console.log('acabou');
+        // Alert.alert(
+        //     '',
+        //     `${timeout && 'Tempo acabou. \n'} 
+        //         PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
+        //     [
+        //         { text: 'Retornar', onPress: () => navigation.goBack() },
+        //     ]
+        // );
+        navigation.navigate('EndQuizGame', { quiz, timeout, correctAnswers, answeredQuestions })
     }
 
 
     return(
-        <PlayQuizContext.Provider value={{ quiz, questionIndex, setQuestionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, setAnimation }}>
+        <PlayQuizContext.Provider 
+            value={{ quiz, questionIndex, setQuestionIndex, options, answeredQuestions, setAnsweredQuestions, setCorrectAnswers, animation, setAnimation }}
+        >
         <StatusBar backgroundColor="#37506C" barStyle='light-content' />
         <AnimatableLinear 
             colors={['#38506B', '#3E81A7']} 
@@ -165,10 +191,6 @@ export default function PlayQuiz({ route, navigation }) {
                         /> 
                     ))
                 }
-            </View>
-
-            <View style={styles.rankingContainer}>
-                <Text>Ranking 🏆</Text>
             </View>
         </AnimatableLinear>
         </PlayQuizContext.Provider >

@@ -6,7 +6,7 @@ import PlayQuizContext from '../../../contexts/playQuiz';
 
 
 export default function QuestionList(props) {
-    const { quiz, answeredQuestions, questionIndex, setQuestionIndex } = useContext(PlayQuizContext);
+    const { quiz, answeredQuestions, questionIndex, setQuestionIndex, animation } = useContext(PlayQuizContext);
 
 
     function setQuestionAppearence(index) {
@@ -47,7 +47,7 @@ export default function QuestionList(props) {
                     <TouchableOpacity 
                         onPress={() => setQuestionIndex(index)} 
                         style={{ opacity: index>answeredQuestions.length && 0.4 }} // Next questions have low opacity
-                        disabled={index>answeredQuestions.length} // Next questions are disabled
+                        disabled={index>answeredQuestions.length || !!animation} // Next questions are disabled
                     > 
                         {setQuestionAppearence(index)}
                     </TouchableOpacity>
