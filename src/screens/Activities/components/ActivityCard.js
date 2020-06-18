@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Touchable from 'react-native-platform-touchable';
 import { systemWeights } from 'react-native-typography';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 
 export default function ActivityCard({ item }) {
     const navigation = useNavigation();
-
+  
     function navigateToPage() {
         if (item.activityType==='newFriend')
             navigation.navigate('SeeFriends');
@@ -38,6 +40,8 @@ export default function ActivityCard({ item }) {
                     : ' compartilhou um quiz com você'
                 }
             </Text>
+
+            {!item.seen && <MaterialIcon name="new-releases" color="#00A3FF" size={25} style={styles.unseenIndicator}/>}
         </View>
         </Touchable>
 
@@ -66,5 +70,11 @@ const styles = StyleSheet.create({
         color: '#ddd',
         flexWrap: 'wrap-reverse',
 
+    },
+    unseenIndicator: {
+        position: 'absolute',
+        top: 5, 
+        right: 5,
+         
     },
 });
