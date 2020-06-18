@@ -4,6 +4,7 @@ import Header from '../../components/Header';
 import Touchable from 'react-native-platform-touchable';
 import UserActionsContext from '../../contexts/userActions';
 import { useFocusEffect } from '@react-navigation/native';
+import { systemWeights } from 'react-native-typography';
 
 export default function AddFriend({ navigation }) {
     const { sendFriendInvitation } = useContext(UserActionsContext);
@@ -71,7 +72,7 @@ export default function AddFriend({ navigation }) {
                     <Text style={styles.errorMessage}>{errorMessage}</Text>}
 
                 <Touchable style={styles.btn} onPress={addFriendHandler} background={Touchable.SelectableBackground()} disabled={loading}>
-                    <Text style={styles.textBtn}>Adicionar</Text>
+                    <Text style={styles.textBtn}>Enviar solicitação</Text>
                 </Touchable>
          </View>
         </TouchableWithoutFeedback>
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
     btn: {
-        backgroundColor: '#f9f9f9',
+        backgroundColor: '#06A3FF',
         marginTop: '30%',
         paddingVertical: 15,
         width: '95%',
@@ -113,7 +114,8 @@ const styles = StyleSheet.create({
     textBtn: {
         textAlign: 'center',
         textAlignVertical: 'center',
-        color: '#06A3FF',
+        ...systemWeights.semibold,
+        color: '#fff',
         fontSize: 16,
     },
 });

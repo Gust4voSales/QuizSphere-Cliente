@@ -58,7 +58,7 @@ export default function TitleInput(props) {
             <TextInput 
                 style={styles.input}
                 placeholder="Inserir tag opcional"
-                placeholderTextColor="#bbb"
+                placeholderTextColor="#ddd"
                 maxLength={20}
                 underlineColorAndroid='#58AAFF'
                 onSubmitEditing={createTag}

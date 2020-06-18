@@ -13,7 +13,7 @@ import styles from './styles';
 
 
 const categories = ['entretenimento', 'educacionais', 'outros'];
-const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min'];
+const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min',];
 
 export default function CreateQuiz({ navigation }) {
     navigation.setOptions({
@@ -51,7 +51,7 @@ export default function CreateQuiz({ navigation }) {
     }
 
     function checkDataBeforeCreating() {
-        if (quizTitle.trim().length<5){
+        if (quizTitle.trim().length<4){
             ToastAndroid.show('Título do Quiz precisa ter pelo menos 4 caracteres.', ToastAndroid.SHORT);
             return true;
         } 
@@ -131,6 +131,9 @@ export default function CreateQuiz({ navigation }) {
                     underlineColorAndroid='#58AAFF'
                 />
                 
+                <Text style={{color: '#ddd', fontSize: 15, alignSelf: 'flex-start', marginLeft: 1,}}>Tags</Text>
+                <TagInput onTagsChange={tags => onTagsChange(tags)}/>
+                
                 <View style={styles.horizontalInfoContainer}>
                     <View style={{flex: 1.5}}>
                         <Text style={{color: '#ddd', marginLeft: 1, fontSize: 15,}}>Tempo do quiz</Text>
@@ -152,10 +155,6 @@ export default function CreateQuiz({ navigation }) {
             
                 <Text style={{color: '#ddd', fontSize: 15, alignSelf: 'flex-start', marginLeft: 1,}}>Categoria</Text>
                 <Picker handler={onCategorySelection} selection={category} items={categories}/>
-                
-                <Text style={{color: '#ddd', fontSize: 15, alignSelf: 'flex-start', marginLeft: 1,}}>Tags</Text>
-                <TagInput onTagsChange={tags => onTagsChange(tags)}/>
-
 
                 <Text style={styles.questionsTitle}>Questões</Text>
                 <CreateQuestionComponent questionsHandler={questions => setQuestions(questions)}/>
@@ -163,7 +162,7 @@ export default function CreateQuiz({ navigation }) {
                 <Touchable onPress={onSubmit} style={styles.createBtn} background={Touchable.SelectableBackground()} disabled={loading}>
                     {
                         loading
-                        ? <ActivityIndicator size="large" color="#00A3FF" />
+                        ? <ActivityIndicator size="large" color="white" />
                         : <Text style={styles.createBtnText}>Criar</Text>
                     }
                 </Touchable>

@@ -284,6 +284,7 @@ export default function CreateQuestionComponent(props) {
                         onChangeText={text => {
                             setActualTitle(text);
                         }}
+                        underlineColorAndroid='#58AAFF'
                         value={actualTitle}
                     />
                     <Option option='1' setQuestionOption={txt => setActualOp1(txt)} value={actualOp1} correctOption={1===actualCorrectOp} correctOptionHandler={index => correctOptionHandler(index)}/>
