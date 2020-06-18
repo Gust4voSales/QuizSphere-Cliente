@@ -141,15 +141,6 @@ export default function PlayQuiz({ route, navigation }) {
     }
 
     function finishQuiz(timeout = false) {
-        // console.log('acabou');
-        // Alert.alert(
-        //     '',
-        //     `${timeout && 'Tempo acabou. \n'} 
-        //         PONTUAÇÂO: ${correctAnswers}/${quiz.questionsLength}`,
-        //     [
-        //         { text: 'Retornar', onPress: () => navigation.goBack() },
-        //     ]
-        // );
         navigation.navigate('EndQuizGame', { quiz, timeout, correctAnswers, answeredQuestions })
     }
 

@@ -48,6 +48,7 @@ export default function QuestionList(props) {
                         onPress={() => setQuestionIndex(index)} 
                         style={{ opacity: index>answeredQuestions.length && 0.4 }} // Next questions have low opacity
                         disabled={index>answeredQuestions.length || !!animation} // Next questions are disabled
+                        activeOpacity={.6}
                     > 
                         {setQuestionAppearence(index)}
                     </TouchableOpacity>
