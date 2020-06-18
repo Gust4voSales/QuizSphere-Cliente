@@ -25,7 +25,7 @@ export default StyleSheet.create({
     },
     btn: {
         width: '78%',
-        height: 50,
+        height: 55,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,

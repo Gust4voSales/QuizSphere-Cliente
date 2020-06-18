@@ -59,7 +59,7 @@ export function UserActionsProvider({ children }) {
             socket.emit('reconnected', { userId });
         });
 
-    }, [friendInvitations, newActivity, socket]);
+    }, [socket]);
 
     function disconnectSocket() {
         socket.disconnect();

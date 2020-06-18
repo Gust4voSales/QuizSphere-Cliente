@@ -16,19 +16,9 @@ export default function CustomDrawerContent(props) {
     const navigation = props.navigation;
     
     function signOutHandler() {
-        navigation.dispatch(
-            CommonActions.reset({
-                index: 0,
-                routes: [
-                    { name: 'HomePage' }
-                ],
-            })
-        );
-        // navigation.closeDrawer();
-
+        navigation.closeDrawer();
         disconnectSocket();
-        setTimeout(signOut, 1000);
-        // signOut();
+        setTimeout(signOut, 500);
     }
 
     return (

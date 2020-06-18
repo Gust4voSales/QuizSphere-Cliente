@@ -41,7 +41,7 @@ export default function ActivityCard({ item }) {
                 }
             </Text>
 
-            {!item.seen && <MaterialIcon name="new-releases" color="#00A3FF" size={25} style={styles.unseenIndicator}/>}
+            {!item.seen && <MaterialIcon name="new-releases" color="#00A3FF" size={20} style={styles.unseenIndicator}/>}
         </View>
         </Touchable>
 
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     },
     unseenIndicator: {
         position: 'absolute',
-        top: 5, 
-        right: 5,
+        top: 4, 
+        right: 4,
          
     },
 });
