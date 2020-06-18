@@ -34,8 +34,8 @@ function HomePage() {
             <AppStack.Screen name="FavoriteQuizzes" component={FavoriteQuizzes} />
             <AppStack.Screen name="SharedQuizzes" component={SharedQuizzes} />
             <AppStack.Screen name="CreatedQuizzes" component={CreatedQuizzes} />
-            <AppStack.Screen name="PlayQuiz" component={PlayQuiz}/>
-            <AppStack.Screen name="EndQuizGame" component={EndQuizGame}/>
+            <AppDrawer.Screen name="PlayQuiz" component={PlayQuiz} options={{gestureEnabled: false, unmountOnBlur: true}}/>
+            <AppDrawer.Screen name="EndQuizGame" component={EndQuizGame} options={{gestureEnabled: false, unmountOnBlur: true}}/>
             <AppStack.Screen name="Search" component={Search}/>
             <AppStack.Screen name="Notifications" component={Notifications}/>
         </AppStack.Navigator>
@@ -91,8 +91,7 @@ export default function AppRoutes(){
                         drawerIcon: ({color, size}) => <Icon name="comment-plus" color={color} size={size} style={ {transform: [{rotateY: '180deg'}, { translateX: -10 }]}}/>
                     }} 
                 />
-
-
+    
             </AppDrawer.Navigator>
         </UserActionsProvider>
     );

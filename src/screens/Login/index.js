@@ -5,6 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { RectButton } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
+import logo from '../../assets/logo.png'
 import styles from './styles';
 
 
@@ -61,7 +62,7 @@ export default function Login({ navigation }) {
             <StatusBar backgroundColor="#E9E9E9" barStyle='dark-content' />
             <LinearGradient colors={["#364F6B", "#3E81A7"]} style={[styles.container, { height: backgroundSize }]}>
                 <Image 
-                    source={require('../../assets/logo.png')} 
+                    source={logo} 
                     style={{ height: logoImgHeight+10, width: logoImgWidth-10, marginTop: logoImgMargin, }} 
                 />
                 <Text style={styles.loginTxt}>LOGIN</Text>

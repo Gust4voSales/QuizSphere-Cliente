@@ -6,7 +6,8 @@ import * as Animatable from 'react-native-animatable';
 import LinearGradient from 'react-native-linear-gradient';
 import QuestionsList from './components/QuestionsList';
 import Option from './components/Option';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, } from '@react-navigation/native';
+import { useIsDrawerOpen } from '@react-navigation/drawer';
 // import data from './utils/Mock'; // Remove later
 import parseQuizTimer from '../../utils/parseQuizTimer';
 import moment from 'moment';
@@ -18,6 +19,7 @@ const screenWidth = Math.round(Dimensions.get('window').width);
 let startGameTimer;
 export default function PlayQuiz({ route, navigation }) {
     const scroll = useRef(null);
+    const isDrawerOpen = useIsDrawerOpen();
     const [answeredQuestions, setAnsweredQuestions] = useState([]);
 
     const [quiz, setQuiz] = useState(route.params.quiz); //Quiz with all the data
@@ -48,12 +50,19 @@ export default function PlayQuiz({ route, navigation }) {
                 return true;
             };
     
-          BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    
-          return () =>
-            BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            
+            return () => { 
+                BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+            }
         }, [])
     );
+
+    // Close Drawer when it opens (unfortunately, I'm not being able to disable the drawer from opening since setting gestuneEnabled to false is not working)
+    useEffect(() => {
+        if (isDrawerOpen)
+            navigation.closeDrawer();
+    }, [isDrawerOpen]);
 
     useEffect(() => {
         startGameTimer = null;
