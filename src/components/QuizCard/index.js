@@ -77,7 +77,7 @@ export default function QuizCard({ data, removeFromList=null }) {
             const response = await api.get(`/quiz/${data._id}`); 
             const quiz = response.data.quiz;
         
-            navigation.navigate('PlayQuiz', { quiz })
+            navigation.navigate('PlayQuiz', { quiz });
         } catch (err) {
             console.log(err);
             ToastAndroid.show('Não foi possível carregar o Quiz', ToastAndroid.SHORT);
@@ -85,8 +85,6 @@ export default function QuizCard({ data, removeFromList=null }) {
     }
 
     // HELPER FUNCTIONS
-
-    
 
     // I admit that i've basically copy pasted this code from stackoverflow :)
     function parseLikes(likesNumber) {

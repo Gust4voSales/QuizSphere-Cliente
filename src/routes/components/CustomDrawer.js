@@ -14,7 +14,7 @@ export default function CustomDrawerContent(props) {
     const { signOut, user } = useContext(AuthContext);
     const { disconnectSocket } = useContext(UserActionsContext);
     const navigation = props.navigation;
-    
+
     function signOutHandler() {
         navigation.closeDrawer();
         disconnectSocket();
@@ -25,7 +25,7 @@ export default function CustomDrawerContent(props) {
         <View style={{flex: 1}}>
             <DrawerContentScrollView {...props} >
                 <View style={styles.header}>
-                    <Touchable background={Touchable.SelectableBackground()} onPress={props.navigation.closeDrawer} style={{width: '100%'}}>
+                    <Touchable background={Touchable.SelectableBackground()} onPress={navigation.closeDrawer} style={{width: '100%'}}>
                         <View style={styles.userLeftContainer}>
                             <Text style={styles.userName}>{user.userName}</Text>
                             <Icon name="arrow-drop-down" size={25} color="white" style={{alignSelf: 'center', paddingTop: 3, transform: [{ rotate: '-90deg'}], }}/>

@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
-import AuthContext from '../contexts/auth'; 
-import UserActionsContext, { UserActionsProvider } from '../contexts/userActions'; //Remove later
+import { UserActionsProvider } from '../contexts/userActions'; //Remove later
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, } from '@react-navigation/drawer';
@@ -15,8 +14,9 @@ import CreatedQuizzes from '../screens/CreatedQuizzes';
 import PlayQuiz from '../screens/PlayQuiz';
 import EndQuizGame from '../screens/EndQuizGame';
 import CreateQuiz from '../screens/CreateQuiz';
-import AddFriend from '../screens/AddFriend';
 import SeeFriends from '../screens/SeeFriends';
+import AddFriend from '../screens/AddFriend';
+import About from '../screens/About';
 import Search from '../screens/Search';
 import Notifications from '../screens/Notifications';
 
@@ -28,14 +28,16 @@ const AppStack = createStackNavigator();
 function HomePage() {
     return (
         <AppStack.Navigator
-            screenOptions={{ headerShown: false, }}    
+            screenOptions={{
+                headerShown: false, 
+            }}
         > 
             <AppStack.Screen name="Feed" component={Feed} />
             <AppStack.Screen name="FavoriteQuizzes" component={FavoriteQuizzes} />
             <AppStack.Screen name="SharedQuizzes" component={SharedQuizzes} />
             <AppStack.Screen name="CreatedQuizzes" component={CreatedQuizzes} />
-            <AppDrawer.Screen name="PlayQuiz" component={PlayQuiz} options={{gestureEnabled: false, unmountOnBlur: true}}/>
-            <AppDrawer.Screen name="EndQuizGame" component={EndQuizGame} options={{gestureEnabled: false, unmountOnBlur: true}}/>
+            <AppDrawer.Screen name="PlayQuiz" component={PlayQuiz} options={{gestureEnabled: false, unmountOnBlur: true}}/>  
+            <AppDrawer.Screen name="EndQuizGame" component={EndQuizGame} options={{gestureEnabled: false, unmountOnBlur: true}}/> 
             <AppStack.Screen name="Search" component={Search}/>
             <AppStack.Screen name="Notifications" component={Notifications}/>
         </AppStack.Navigator>
@@ -62,7 +64,7 @@ export default function AppRoutes(){
                 <AppDrawer.Screen 
                     name="HomePage" 
                     component={HomePage} 
-                    options={{ 
+                    options={{
                         drawerLabel: "Início",
                         drawerIcon: ({color, size}) => <Icon name="home" color={color} size={size} style={iconStyle}/>
                     }} 
@@ -92,20 +94,19 @@ export default function AppRoutes(){
                         drawerIcon: ({color, size}) => <Icon name="account-plus" color={color} size={size} style={iconStyle}/>,
                     }} 
                 />
+                <AppDrawer.Screen 
+                    name="About" 
+                    component={About}
+                    options={{ 
+                        drawerLabel: "Sobre",
+                        drawerIcon: ({color, size}) => <Icon name="information" color={color} size={size} style={iconStyle}/>,
+                    }} 
+                />
                    
             </AppDrawer.Navigator>
         </UserActionsProvider>
     );
 }
-
-const drawerContentStyles = {
-    activeTintColor: '#06A3FF',
-    activeBackgroundColor: '#486381',
-    inactiveTintColor: 'white'
-}
-
-// const lastItem = {borderBottomWidth: StyleSheet.hairlineWidth,
-//     borderColor: '#486390'}
 
 const iconStyle = { 
     paddingLeft: 10,

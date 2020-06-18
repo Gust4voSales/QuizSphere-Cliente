@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     input: {
-        width: '100%',
+        width: '80%',
         paddingLeft: 10,
         color: 'white',
         fontSize: 16,

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Touchable from 'react-native-platform-touchable';
@@ -13,7 +13,6 @@ import UserActionsContext from '../../contexts/userActions';
 const FeedTab = createBottomTabNavigator();
 
 export default function Feed({ navigation }) {
-
     function createQuizHandler() {
         navigation.jumpTo('CreateQuiz');
     }

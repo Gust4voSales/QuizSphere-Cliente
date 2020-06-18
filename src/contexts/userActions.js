@@ -6,7 +6,7 @@ import AuthProvider from '../contexts/auth';
 import socketio from 'socket.io-client';
 import api from '../services/api';
 
-const UserActionsContext = createContext({ friendInvitations: false, newActivity: false }); //value types 
+const UserActionsContext = createContext({ inGame: false, friendInvitations: false, newActivity: false }); //value types 
 
 export function UserActionsProvider({ children }) {
     const isMounted = useRef();
@@ -14,6 +14,7 @@ export function UserActionsProvider({ children }) {
     const { user, setUser } = useContext(AuthProvider);
 
     const [userId, setUserId] = useState(user._id);
+    const [inGame, setInGame] = useState(false);
     const [friendInvitations, setFriendInvitations] = useState(false);
     const [newActivity, setNewActivity] = useState(false);
 
@@ -33,6 +34,7 @@ export function UserActionsProvider({ children }) {
         socket.on('connect', () => {
             loadUserInfo();
         })
+
         socket.on('friend_invitation', () => {
             console.log('new invitations');
             if (isMounted.current) {
@@ -188,6 +190,8 @@ export function UserActionsProvider({ children }) {
 
     return(
         <UserActionsContext.Provider value={{ 
+            inGame, 
+            setInGame,
             friendInvitations, 
             setFriendInvitations,
             newActivity, 
