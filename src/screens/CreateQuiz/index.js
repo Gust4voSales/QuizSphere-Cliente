@@ -16,10 +16,6 @@ const categories = ['entretenimento', 'educacionais', 'outros'];
 const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min',];
 
 export default function CreateQuiz({ navigation }) {
-    navigation.setOptions({
-        gestureEnabled: false,
-    });
-
     const [quizTitle, setQuizTitle] = useState('');
     const [category, setCategory] = useState(categories[0]);
     const [isPrivate, setIsPrivate] = useState(false);

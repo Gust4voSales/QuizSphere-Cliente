@@ -68,6 +68,15 @@ export default function AppRoutes(){
                     }} 
                 />
                 <AppDrawer.Screen 
+                    name="CreateQuiz" 
+                    component={CreateQuiz}
+                    options={{ 
+                        drawerLabel: "Criar quiz",
+                        drawerIcon: ({color, size}) => <Icon name="comment-plus" color={color} size={size} 
+                            style={{paddingLeft: 10, transform: [{rotateY: '180deg'}, { translateX: -10 }]}}/>
+                    }} 
+                />
+                <AppDrawer.Screen 
                     name="SeeFriends" 
                     component={SeeFriends}
                     options={{ 
@@ -83,15 +92,7 @@ export default function AppRoutes(){
                         drawerIcon: ({color, size}) => <Icon name="account-plus" color={color} size={size} style={iconStyle}/>,
                     }} 
                 />
-                <AppDrawer.Screen 
-                    name="CreateQuiz" 
-                    component={CreateQuiz}
-                    options={{ 
-                        drawerLabel: "Criar quiz",
-                        drawerIcon: ({color, size}) => <Icon name="comment-plus" color={color} size={size} style={ {transform: [{rotateY: '180deg'}, { translateX: -10 }]}}/>
-                    }} 
-                />
-    
+                   
             </AppDrawer.Navigator>
         </UserActionsProvider>
     );

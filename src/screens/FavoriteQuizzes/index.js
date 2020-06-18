@@ -118,7 +118,7 @@ export default function FavoriteQuizzes() {
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}
-                onEndReachedThreshold={0.2}
+                onEndReachedThreshold={0.15}
                 ListFooterComponentStyle={{marginBottom: 10}}
             />
             

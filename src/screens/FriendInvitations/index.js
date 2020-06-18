@@ -129,7 +129,7 @@ export default function Activities() {
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}
-                onEndReachedThreshold={0.1}
+                onEndReachedThreshold={0.15}
             />
 
         </View>

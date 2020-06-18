@@ -55,10 +55,10 @@ export function AuthProvider({ children }) {
             }
 
         } catch (err) {
-            showAlertError('Não foi possível realizar login', err.response === undefined 
-                ? 'Erro ao tentar conectar com o servidor. Tente novamente'
-                : err.response.data.error 
-            );
+            if (err.response===undefined) 
+                showAlertError('Não foi possível realizar login', 'Erro ao tentar conectar com o servidor. Tente novamente');
+            else
+                return err.response.data.error;
         }
     }
 
@@ -66,6 +66,31 @@ export function AuthProvider({ children }) {
         AsyncStorage.clear().then(() => {
             setUser(null);
         });
+    }
+
+    async function register(userName, password) {
+        try {
+            const { data } = await api.post('/auth/register', { userName, password });
+
+            setUser(data.user);
+            api.defaults.headers.authorization = `Bearer ${data.token}`;
+
+            //Save data on AsyncStorage
+            try {
+                await AsyncStorage.multiSet([
+                    ["@QuizApp_user", JSON.stringify(data.user)],
+                    ["@QuizApp_userToken", data.token],
+                ]);
+            } catch (err) {
+                console.log(err);
+                console.log('Error trying to storage user data');
+            }
+        } catch (err) {
+            if (err.response===undefined) 
+                showAlertError('Não foi possível realizar o cadastro', 'Erro ao tentar conectar com o servidor. Tente novamente');
+            else
+                return err.response.data.error;
+        }
     }
 
     // This function sets a response interceptor at the api, so on each request if the response === 401 (token not valid, probably expired)
@@ -87,7 +112,7 @@ export function AuthProvider({ children }) {
     }
 
     return(
-        <AuthContext.Provider value={{ signed: !!user, user, setUser, signIn, signOut, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, setUser, signIn, signOut, register, loading }}>
             <StatusBar backgroundColor="#314C6A" barStyle='light-content' />
             {children}
         </AuthContext.Provider>

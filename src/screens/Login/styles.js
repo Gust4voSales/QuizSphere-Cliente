@@ -25,6 +25,7 @@ export default StyleSheet.create({
     },
     btn: {
         width: '78%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 5,
@@ -34,8 +35,19 @@ export default StyleSheet.create({
     txtBtn: {
         ...systemWeights.semibold,
         fontSize: 20, 
-        paddingVertical: 15,
+        // paddingVertical: 15,
         color: 'white',
         letterSpacing: .7,
+    },
+    errorMessage: {
+        textAlign: 'center',
+        fontSize: 14,
+        backgroundColor: '#FF5454',
+        color: 'white',
+        paddingHorizontal: 8, 
+        maxWidth: '78%',
+        paddingVertical: 5,
+
+        borderRadius: 4,
     },
 });

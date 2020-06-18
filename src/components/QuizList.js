@@ -128,7 +128,7 @@ export default function QuizList({ request, refreshControl, horizontal=true }) {
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}
-                onEndReachedThreshold={0.1}
+                onEndReachedThreshold={0.15}
                 ListFooterComponentStyle={{marginBottom: 10, marginRight: 10}}
             />
             

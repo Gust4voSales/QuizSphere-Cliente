@@ -118,7 +118,7 @@ export default function SharedQuizzes() {
                 )}
                 ListFooterComponent={renderFooter}
                 onEndReached={loadMore}
-                onEndReachedThreshold={0.05}
+                onEndReachedThreshold={0.15}
                 ListFooterComponentStyle={{marginBottom: 10}}
             />
             

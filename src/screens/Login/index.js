@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
-import { View, TextInput, StyleSheet, Text, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native';
+import { View, TextInput, Text, Image, TouchableWithoutFeedback, Keyboard, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RectButton } from 'react-native-gesture-handler';
@@ -10,11 +10,15 @@ import styles from './styles';
 
 
 export default function Login({ navigation }) {
-    const { signIn } = useContext(AuthContext);
+    const isMounted = useRef();
+    const passwdRef = useRef();
+    const { signIn, register } = useContext(AuthContext);
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [loadingLogin, setLoadingLogin] = useState(false);
+    const [loadingRegister, setLoadingRegister] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
-    const passwdRef = useRef();
     const [seePassword, setSeePassword] = useState(false);
     const [logoImgHeight, setLogoImgHeight] = useState(230);
     const [logoImgWidth, setLogoImgWidth] = useState(230);
@@ -33,9 +37,32 @@ export default function Login({ navigation }) {
             };
         }, [])
     );
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => { isMounted.current = false }
+    }, []);
     
-    function handleSignIn() {
-        signIn(userName, password);
+    async function handleSignIn() {
+        setErrorMsg('');
+        setLoadingLogin(true);
+        const error = await signIn(userName, password);
+
+        if (isMounted.current) {
+            setLoadingLogin(false);
+            setErrorMsg(error);
+        }
+    }
+    
+    async function handleRegistration() {
+        setErrorMsg('');
+        setLoadingRegister(true);
+        const error = await register(userName, password);
+
+        if (isMounted.current) {
+            setLoadingRegister(false);
+            setErrorMsg(error);
+        }
     }
     
     function toggleSeePassword() {
@@ -78,7 +105,6 @@ export default function Login({ navigation }) {
                         onSubmitEditing={() => {passwdRef.current.focus()}}
                         blurOnSubmit={false}
                         autoCompleteType="username"
-                        // autoCapitalize="none"
                         underlineColorAndroid="#06A3FF"
                     />
                 </View>
@@ -103,19 +129,31 @@ export default function Login({ navigation }) {
                     </TouchableWithoutFeedback>
                 </View>
 
+                { !!errorMsg &&
+                    <Text style={styles.errorMessage}>{errorMsg}</Text>
+                }
+
                 <RectButton 
                     onPress={handleSignIn} 
                     style={[styles.btn, { backgroundColor: '#06A3FF', marginTop: 15, opacity: userName&&password ? 1 : .7 }]}
-                    enabled={!!(userName&&password)}
+                    enabled={!!(userName&&password) && !(loadingLogin||loadingRegister)}
                 >
-                    <Text style={styles.txtBtn}>Login</Text>
+                    {
+                        loadingLogin 
+                        ? <ActivityIndicator size="large" color="white" /> 
+                        : <Text style={styles.txtBtn}>Login</Text>
+                    }
                 </RectButton>
                 <RectButton 
-                    onPress={() => {}} 
+                    onPress={handleRegistration} 
                     style={[styles.btn, { backgroundColor: 'white', opacity: userName&&password ? 1 : .7 }]}
-                    enabled={!!(userName&&password)}
+                    enabled={!!(userName&&password) && !(loadingLogin||loadingRegister)}
                 >
-                    <Text style={[styles.txtBtn, { color: '#06A3FF' }]}>Registrar</Text>
+                    {
+                        loadingRegister 
+                        ? <ActivityIndicator size="large" color="#06A3FF" /> 
+                        : <Text style={[styles.txtBtn, { color: '#06A3FF' }]}>Registrar</Text>
+                    }
                 </RectButton >
             </LinearGradient>
             </View>
