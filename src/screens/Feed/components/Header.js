@@ -39,6 +39,8 @@ export default function Header() {
                 </View>
             </Touchable>
             
+            <Text style={{color: 'white', fontSize: 24, ...systemWeights.semibold, marginLeft: 30}}>QuizSphere</Text>
+
             <View style={styles.iconsRightContainer}>
                 <Touchable 
                     background={Touchable.SelectableBackgroundBorderless()} 

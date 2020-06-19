@@ -56,6 +56,7 @@ target 'mobile' do
 
   pod 'ReactNativeAudioToolkit', :path => '../node_modules/@react-native-community/audio-toolkit'
 
+
   target 'mobileTests' do
     inherit! :complete
     # Pods for testing

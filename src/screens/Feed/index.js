@@ -7,7 +7,6 @@ import LibraryIcon from './components/LibraryTabIcon';
 import Header from './components/Header';
 import FeedTrending from '../FeedTrending';
 import FeedLibrary from '../FeedLibrary';
-import UserActionsContext from '../../contexts/userActions';
 
 
 const FeedTab = createBottomTabNavigator();

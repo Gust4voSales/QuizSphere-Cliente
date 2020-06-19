@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
+import logo from '../../assets/logo.png'
 import { View, TextInput, Text, Image, TouchableWithoutFeedback, Keyboard, StatusBar, ActivityIndicator } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RectButton } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
 import AuthContext from '../../contexts/auth';
-import logo from '../../assets/logo.png'
 import styles from './styles';
 
 
