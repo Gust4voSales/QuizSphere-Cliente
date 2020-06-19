@@ -1,0 +1,1 @@
+export default ['arte e literatura', 'ciências e natureza', 'diversos', 'entretenimento', 'esportes', 'história', 'mundo',];

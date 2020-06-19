@@ -7,12 +7,12 @@ import CreateQuestionComponent from './components/CreateQuestionComponent';
 import Picker from './components/StyledPicker';
 import TagInput from './components/TagInput';
 import showAlertError from '../../components/AlertError';
+import categories from '../../utils/categories';
 import api from '../../services/api';
 
 import styles from './styles';
 
 
-const categories = ['entretenimento', 'educacionais', 'outros'];
 const timers = ['1 min', '1:30 min', '2 min', '2:30 min', '5 min', '10 min', '15 min', '30 min',];
 
 export default function CreateQuiz({ navigation }) {
@@ -73,7 +73,7 @@ export default function CreateQuiz({ navigation }) {
     async function onSubmit(){
         const error = checkDataBeforeCreating();
         if (error) return;
-
+        
         const data = { quizTitle, category, tags, private: isPrivate, questions, time };
         try {
             setLoading(true);

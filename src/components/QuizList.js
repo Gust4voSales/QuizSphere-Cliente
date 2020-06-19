@@ -111,7 +111,9 @@ export default function QuizList({ request, refreshControl, horizontal=true }) {
         <View style={ horizontal ? { flex: 1 } : { flex: 1, width: '100%' }}>
             { 
             quizzes.length===0 &&
-            <Text style={[{ color: 'white', textAlign: 'center', fontSize: 18 }, horizontal && { height: 170 }]}>Não há nada aqui 😅</Text>
+            <Text style={[{ color: '#ddd', alignSelf: 'center', textAlign: 'center', fontSize: 14, width: '80%' }, horizontal && { height: 160 }]}>
+                Nenhum quiz encontrado. Por que você nao cria o primeiro? 😅
+            </Text>
             }
             <FlatList 
                 ref={scrollRef}
