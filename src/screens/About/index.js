@@ -35,8 +35,8 @@ export default function About() {
             <Text style={styles.text}>
                 {'\t\t'}O aplicativo <Text style={{...systemWeights.semibold}}>QuizSphere</Text> foi desenvolvido
                 com a intenção de adquirir experiência e conhecimento. Foi criado utilizando apenas recursos gratuitos, 
-                inclusive, na hospedagem do servidor e do banco de dados, logo, é importante apontar que há certo limite
-                na velocidade e memória do aplicativo. 
+                inclusive, na hospedagem do servidor e do banco de dados. Logo, é importante apontar que há certo limite
+                na velocidade e memória no servidor do aplicativo. 
             </Text>
             <LottieView 
                 source={infoAnimation}
