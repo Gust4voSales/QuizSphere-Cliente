@@ -60,7 +60,7 @@ export default function About() {
             </View>
 
             <Text style={[styles.text, { marginTop: 10, }]}>
-                {'\t\t'}Contato, críticas ou sujestões? 
+                {'\t\t'}Contato, críticas ou sugestões? 
             </Text>
             <TouchableOpacity activeOpacity={.4} onPress={() => navigateTo('manoel0gustavo@gmail.com')} >
                 <Text style={styles.link}>manoel0gustavo@gmail.com</Text>

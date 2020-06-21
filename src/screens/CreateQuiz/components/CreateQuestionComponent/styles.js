@@ -36,11 +36,13 @@ export default StyleSheet.create({
     },
   
     modalContainer: {
-        height: 350,
+        height: 400,
+        // flex: 1,
+        // alignSelf: 'flex-start',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         backgroundColor: '#3D6F95',
-        marginTop: StatusBar.currentHeight + 5,
+        marginTop: StatusBar.currentHeight,
     },
     modalExitBtn: {
         position: 'absolute',
@@ -48,15 +50,14 @@ export default StyleSheet.create({
         top: 0,
     },
     modelQuestionInput: {
-        marginTop: -5,
-        paddingTop: 0,
+        paddingTop: 5,
         paddingBottom: 10,
         color: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '70%',
+        width: '85%',
         fontSize: 18,
-        marginBottom: 10,
+        marginBottom: 2,
     },
    
     questionBtn: {

@@ -184,8 +184,6 @@ const styles = StyleSheet.create({
         paddingTop: 2,
     },
     animation: {
-        position: 'absolute',
-        top: 150,
         height: 100, 
         width: 100,
         // backgroundColor: '#ddd'

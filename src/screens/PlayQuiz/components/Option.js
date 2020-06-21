@@ -119,12 +119,13 @@ export default function Option(props) {
 
 const styles = StyleSheet.create({
     container: {
-        height: 50,
+        height: 55,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 20,
+        borderRadius: 25,
         marginBottom: 15,
+        paddingHorizontal: 3,
         elevation: 8,
     },
     text: {

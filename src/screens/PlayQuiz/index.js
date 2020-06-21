@@ -32,7 +32,7 @@ export default function PlayQuiz({ route, navigation, }) {
     
     const [progress, setProgress] = useState(-1);
     const [animation, setAnimation] = useState(null);
-    const [questionFontSize, setFontSize] = useState(22) // Fontsize configs
+    const [questionFontSize, setFontSize] = useState(20) // Fontsize configs
    
     // Custom BackButton behavior
     useFocusEffect(
@@ -79,7 +79,7 @@ export default function PlayQuiz({ route, navigation, }) {
     useEffect(() => {        
         if(questionTitle.length > 100) setFontSize(16);
         else if(questionTitle.length > 60) setFontSize(18);
-        else setFontSize(24);
+        else setFontSize(20);
     }, [questionTitle]);
 
     // QUIZ TIMER 
@@ -158,8 +158,7 @@ export default function PlayQuiz({ route, navigation, }) {
             easing='ease-out-expo' 
             onAnimationEnd={endState => onFinishAnimation(endState)}
         >
-            <ImageBackground source={require('../../assets/quizBox.png')} style={styles.imgBackground} resizeMode="stretch" />
-        
+
             <View style={styles.quizBoxContainer}>
                 <View style={styles.headerContainer} >
                     <Text style={styles.quizTitle}>{quiz.quizTitle}</Text>
@@ -169,7 +168,7 @@ export default function PlayQuiz({ route, navigation, }) {
 
                 <ProgressBar 
                     progress={progress} 
-                    width={screenWidth-80} 
+                    width={screenWidth-60} 
                     height={10} 
                     color="#0078F4"
                     borderWidth={StyleSheet.hairlineWidth}

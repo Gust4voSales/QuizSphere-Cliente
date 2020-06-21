@@ -261,6 +261,7 @@ export default function CreateQuestionComponent(props) {
                 isVisible={questionModalVisible} 
                 useNativeDriver
                 avoidKeyboard={false}
+                style={{height: '100%'}}
             >   
                 <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
                 <View style={styles.modalContainer} >
@@ -277,7 +278,6 @@ export default function CreateQuestionComponent(props) {
                     <TextInput 
                         placeholder={'Questão ' + actualQuestionIndex}
                         style={styles.modelQuestionInput}
-                        multiline
                         autoCorrect={false}
                         maxLength={160}
                         blurOnSubmit
