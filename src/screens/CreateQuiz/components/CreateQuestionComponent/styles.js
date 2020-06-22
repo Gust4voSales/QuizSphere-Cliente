@@ -42,7 +42,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-evenly',
         backgroundColor: '#3D6F95',
-        marginTop: StatusBar.currentHeight,
+        marginTop: StatusBar.currentHeight + 20,
     },
     modalExitBtn: {
         position: 'absolute',
@@ -55,7 +55,7 @@ export default StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '85%',
+        width: '80%',
         fontSize: 18,
         marginBottom: 2,
     },
