@@ -1,4 +1,4 @@
-<p align="right">English README: </p>
+[English README](https://github.com/Gust4voSales/QuizSphere-Cliente/blob/master/README-ENGLISH.md)
 <h1 align="center">
 <img src="https://i.imgur.com/HMr0tyZ.png" alt="icon" height="100">
 <br>
@@ -38,6 +38,7 @@ O que o aplicativo faz/permite:
 ## 🛠Instalação
 1. Clone o repositório rodando no seu terminal/cmd ````git clone https://github.com/Gust4voSales/QuizSphere-Cliente.git ```` 
 2. Entre na pasta do projeto e rode ```yarn``` para instalar todas as dependências
+3. (Opcional). Caso esteja rodando sua própria instância do servidor altere o link de conexão no arquivo: src/services/api.js
 3. Por fim,  ```react-native run-android``` para iniciar no seu dispositivo e/ou emulador Android
 
 <hr />
