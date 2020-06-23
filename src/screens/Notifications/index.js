@@ -10,7 +10,6 @@ import InvitationsTabIcon from './components/InvitationsTabIcon';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useFocusEffect } from '@react-navigation/native';
 import UserActionsContext from '../../contexts/userActions';
-;
 
 
 const NotificationsTab = createBottomTabNavigator();

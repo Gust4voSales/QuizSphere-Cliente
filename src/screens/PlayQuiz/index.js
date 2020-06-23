@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback, } from 'react';
-import { View, Text, ImageBackground, Alert, StatusBar, Dimensions, StyleSheet, BackHandler } from 'react-native';
+import { View, Text, Alert, StatusBar, Dimensions, StyleSheet, BackHandler } from 'react-native';
 import PlayQuizContext from '../../contexts/playQuiz';
 import ProgressBar from 'react-native-progress/Bar';
 import * as Animatable from 'react-native-animatable';
@@ -17,6 +17,7 @@ import styles from './styles';
 const AnimatableLinear = Animatable.createAnimatableComponent(LinearGradient);
 const screenWidth = Math.round(Dimensions.get('window').width);
 let startGameTimer;
+
 export default function PlayQuiz({ route, navigation, }) {
     const scroll = useRef(null);
     const isDrawerOpen = useIsDrawerOpen();

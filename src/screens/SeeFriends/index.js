@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, ToastAndroid, TouchableOpacity } from 'react-native';
 import Header from '../../components/Header';
 import FriendCard from './components/FriendCard';

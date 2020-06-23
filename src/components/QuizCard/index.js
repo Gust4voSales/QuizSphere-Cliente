@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableNativeFeedback, Alert, ToastAndroid, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableNativeFeedback, Alert, ToastAndroid, TouchableOpacity } from 'react-native';
 import Touchable from 'react-native-platform-touchable';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,9 +8,9 @@ import AuthContext from '../../contexts/auth';
 import UserActionsContext from '../../contexts/userActions';
 import ShareQuizModal from './components/ShareQuiz';
 import QuizTagsModal from './components/QuizTags';
-import { systemWeights } from 'react-native-typography';
 import parseTime from '../../utils/parseQuizTimer';
 import api from '../../services/api';
+import styles from './styles';
 
 
 export default function QuizCard({ data, removeFromList=null }) {
@@ -169,52 +169,3 @@ export default function QuizCard({ data, removeFromList=null }) {
     );
 }
 
-
-const styles = StyleSheet.create({
-    container: {
-        height: 160,
-        // height: 260,
-        width: 270,
-        
-        borderRadius: 20,
-        elevation: 4,
-        paddingHorizontal: 20,
-        paddingVertical: 8,
-        justifyContent: 'space-between'
-    },
-    author: {
-        color: '#CBCBCB',
-        ...systemWeights.bold,
-        fontSize: 14,
-    },
-    quizTitle: {
-        color: 'white',
-        ...systemWeights.semibold,
-        fontSize: 20,
-        // backgroundColor: '#ddd'
-    },
-    infoContainer: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    infoText: {
-        color: 'white',
-        fontSize: 15,
-    },
-    actionIcons: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-
-    },
-    likeCounter: {
-        color: '#FFFEFE',
-        fontSize: 14,
-    },
-    privateIcon: {
-        position: 'absolute',
-        top: 8, 
-        right: 18,
-    }
-});
