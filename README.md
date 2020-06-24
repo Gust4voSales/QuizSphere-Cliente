@@ -32,8 +32,8 @@ O que o aplicativo faz/permite:
 
 ## ⚙Ferramentas
 [//]: # (Add the features of your project here:)
-- ⚛️ **React Native** — Uma lib que provê uma maneira de criar apps nativos IOS e Android utilizando React
-- 🕒 **SocketIO** — Socket.IO possibilita comunicação em tempo real, biderecional e baseada em eventos.
+- **React Native** — Uma lib que provê uma maneira de criar apps nativos IOS e Android utilizando React
+- **SocketIO** — Socket.IO possibilita comunicação em tempo real, biderecional e baseada em eventos.
 
 ## 🛠Instalação
 1. Clone o repositório rodando no seu terminal/cmd ````git clone https://github.com/Gust4voSales/QuizSphere-Cliente.git ```` 
