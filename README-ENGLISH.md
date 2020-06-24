@@ -32,8 +32,8 @@ has received the private quiz can play it);
 
 ## ⚙Tools
 [//]: # (Add the features of your project here:)
-- ⚛️ **React Native** — A framework that provides a way to create native IOS and Android apps using React.
-- 🕒 **SocketIO** — Socket.IO enables real-time, bidirectional and event-based communication.
+- **React Native** — A framework that provides a way to create native IOS and Android apps using React.
+- **SocketIO** — Socket.IO enables real-time, bidirectional and event-based communication.
 
 ## 🛠Installation
 1. Clone this repo running on your terminal ````git clone https://github.com/Gust4voSales/QuizSphere-Cliente.git ```` 
