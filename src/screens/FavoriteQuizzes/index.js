@@ -30,7 +30,7 @@ export default function FavoriteQuizzes() {
             else 
                 setLoadingMore(true);  
 
-            const { data } = await api.get(`/user/savedQuizzes?page=${page}`);
+            const { data } = await api.get(`/quiz/saved?page=${page}`);
 
             if (isMounted.current) {
                 if (page===1) // refreshing

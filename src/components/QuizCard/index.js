@@ -74,7 +74,7 @@ export default function QuizCard({ data, removeFromList=null }) {
 
     async function playQuiz() {
         try {
-            const response = await api.get(`/quiz/${data._id}`); 
+            const response = await api.get(`/quiz/show/${data._id}`); 
             const quiz = response.data.quiz;
         
             navigation.navigate('PlayQuiz', { quiz });

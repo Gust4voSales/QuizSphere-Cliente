@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
 
     async function signIn(userName, password) {
         try {
-            const { data } = await api.post('/auth/authenticate', { userName, password });
+            const { data } = await api.post('/auth/login', { userName, password });
 
             setUser(data.user);
             api.defaults.headers.authorization = `Bearer ${data.token}`;
@@ -70,7 +70,7 @@ export function AuthProvider({ children }) {
 
     async function register(userName, password) {
         try {
-            const { data } = await api.post('/auth/register', { userName, password });
+            const { data } = await api.post('/users/register', { userName, password });
 
             setUser(data.user);
             api.defaults.headers.authorization = `Bearer ${data.token}`;

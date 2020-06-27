@@ -39,7 +39,7 @@ export default function ShareQuizModal({ quizId, toggleModal, visible }) {
             if (page!=1) 
                 setLoadingMore(true);
 
-            const { data } = await api.get(`/user/friend?page=${page}`);
+            const { data } = await api.get(`/friends?page=${page}`);
 
             if (isMounted.current) {
                 if (page===1) 

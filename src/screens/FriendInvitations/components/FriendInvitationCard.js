@@ -12,7 +12,7 @@ export default function FriendInvitation({ user, userFeedbackAfterPressing }) {
     async function acceptFriendInvitationHandler() {
         try {   
             setLoading(true);
-            const { data } = await api.post(`/user/friend/acceptInvitation/${user.recipient._id}`);
+            const { data } = await api.post(`/friends/accept/${user.recipient._id}`);
 
             userFeedbackAfterPressing(user.recipient._id, data.message, true);
         } catch (err) {
@@ -25,7 +25,7 @@ export default function FriendInvitation({ user, userFeedbackAfterPressing }) {
     async function declineFriendInvitationHandler() {
         try {   
             setLoading(true);
-            const { data } = await api.post(`/user/friend/declineInvitation/${user.recipient._id}`);
+            const { data } = await api.post(`/friends/decline/:${user.recipient._id}`);
             // console.log(data.user);
             userFeedbackAfterPressing(user.recipient._id, data.message, true);
         } catch (err) {

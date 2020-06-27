@@ -78,7 +78,7 @@ export default function CreateQuiz({ navigation }) {
         try {
             setLoading(true);
 
-            await api.post('quiz', data);
+            await api.post('quiz/create', data);
             
             Alert.alert(
                 '',
