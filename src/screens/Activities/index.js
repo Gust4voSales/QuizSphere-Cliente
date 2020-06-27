@@ -47,7 +47,7 @@ export default function Activities() {
             else  // Loading next page
                 setLoadingMore(true); 
 
-            const { data } = await api.get(`/user/notifications?page=${page}`);
+            const { data } = await api.get(`/notifications?page=${page}`);
 
             if (isMounted.current) {
                 if (page===1) // refreshing
@@ -100,7 +100,7 @@ export default function Activities() {
                     activitiesIdsToUpdate.push(activity._id);
             }
             if (activitiesIdsToUpdate.length>0)
-                await api.put('/user/notifications/setSeenActivities', activitiesIdsToUpdate);
+                await api.put('/notifications/setasread', activitiesIdsToUpdate);
         } 
         catch (err) {
             console.log(err);

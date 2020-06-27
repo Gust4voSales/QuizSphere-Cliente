@@ -104,7 +104,7 @@ export function UserActionsProvider({ children }) {
     async function sendFriendInvitation(userName) {
         const response = {};
         try {
-            const { data } = await api.post(`/user/friend?userName=${userName}`);
+            const { data } = await api.post(`/friends/add?userName=${userName}`);
 
             response.success = true;
             response.message = data.message;
@@ -148,7 +148,7 @@ export function UserActionsProvider({ children }) {
 
     async function addFavoriteQuiz(quizId) {
         try {
-            const { data } = await api.post(`/user/savedQuizzes/${quizId}`);
+            const { data } = await api.post(`/quiz/saved/add/${quizId}`);
             if (isMounted.current)
                 setUser(data.user);
 
@@ -161,7 +161,7 @@ export function UserActionsProvider({ children }) {
 
     async function removeFavoriteQuiz(quizId) {
         try {
-            const { data } = await api.delete(`/user/savedQuizzes/${quizId}`);
+            const { data } = await api.delete(`/quiz/saved/remove/${quizId}`);
             if (isMounted.current)
                 setUser(data.user);
 
@@ -175,7 +175,7 @@ export function UserActionsProvider({ children }) {
 
     async function shareQuiz(quizId, friendsIds) {
         try {
-            await api.post(`/shareQuiz/${quizId}`, {friendsIds, userName: user.userName});
+            await api.post(`/quiz/share/${quizId}`, {friendsIds, userName: user.userName});
             ToastAndroid.show('Quiz compartilhado', ToastAndroid.SHORT);
         } catch (err) {
             console.log(err);

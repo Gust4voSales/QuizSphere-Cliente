@@ -30,7 +30,7 @@ export default function SharedQuizzes() {
             else 
                 setLoadingMore(true);  
 
-            const { data } = await api.get(`/shareQuiz?page=${page}`);
+            const { data } = await api.get(`/quiz/received?page=${page}`);
 
             if (isMounted.current) {
                 if (page===1) // refreshing

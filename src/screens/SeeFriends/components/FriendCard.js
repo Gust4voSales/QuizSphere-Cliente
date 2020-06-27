@@ -12,7 +12,7 @@ export default function FriendCard({ friend, relationId, userFeedbackAfterPressi
     async function removeFriend() {
         try {   
             setLoading(true);
-            const { data } = await api.delete(`/user/friend/${relationId}`);
+            const { data } = await api.delete(`/friends/remove/${relationId}`);
             // console.log(data.user);
             userFeedbackAfterPressing(relationId, data.message, true);
         } catch (err) {
