@@ -69,7 +69,7 @@ export function UserActionsProvider({ children }) {
     
     async function loadUserInfo() {
         try {
-            const { data } = await api.get(`/user/${user._id}`);
+            const { data } = await api.get(`/users/${user._id}`);
             
             if (isMounted.current) {
                 setUser(data.user);
@@ -137,7 +137,7 @@ export function UserActionsProvider({ children }) {
     
     async function deslikeQuiz(quizId) {
         try {
-            await api.delete(`/quiz/${quizId}/deslike`);
+            await api.delete(`/quiz/${quizId}/dislike`);
 
             return true;
         } catch (err) {

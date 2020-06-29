@@ -196,7 +196,10 @@ export default function CreateQuestionComponent(props) {
             [
                 {
                 text: 'Não salvar',
-                onPress: () => { setModalVisible(false) },
+                onPress: () => { 
+                    clearActualVariables();
+                    setModalVisible(false);
+                },
                 style: 'cancel',
                 },
                 {text: 'OK', onPress: () => updateQuestion()},

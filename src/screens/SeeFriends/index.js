@@ -30,7 +30,7 @@ export default function SeeFriends() {
             else  // Loading next page
                 setLoadingMore(true);            
 
-            const { data } = await api.get(`/user/friend?page=${page}`);
+            const { data } = await api.get(`/friends?page=${page}`);
 
             if (page===1) // refreshing
                 setFriends(data.friends.docs);

@@ -36,46 +36,46 @@ export default function FeedTrending() {
                     <Icon name="book-open-page-variant" color="white" size={20}/>
                     <Text style={styles.categoryText}>{categoriesString[0].charAt(0).toUpperCase() + categoriesString[0].slice(1)}</Text>
                 </View>
-                <QuizList scrollRef={scrollRef} request={`/quiz?category=${categoriesString[0]}`} refreshControl={refreshing}/>
+                <QuizList scrollRef={scrollRef} request={`/quiz/list?category=${categoriesString[0]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="react" color="white" size={25}/>
                     <Text style={styles.categoryText}>{categoriesString[1].charAt(0).toUpperCase() + categoriesString[1].slice(1)}</Text>
                 </View>                
-                <QuizList request={`/quiz?category=${categoriesString[1]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[1]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="infinity" color="white" size={20}/>
                     <Text style={styles.categoryText}>{categoriesString[2].charAt(0).toUpperCase() + categoriesString[2].slice(1)}</Text>
                 </View>    
-                <QuizList request={`/quiz?category=${categoriesString[2]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[2]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="video-vintage" color="white" size={20}/>
                     <Text style={styles.categoryText}>{categoriesString[3].charAt(0).toUpperCase() + categoriesString[3].slice(1)}</Text>
                 </View>                
-                <QuizList request={`/quiz?category=${categoriesString[3]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[3]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="basketball" color="white" size={22}/>
                     <Text style={styles.categoryText}>{categoriesString[4].charAt(0).toUpperCase() + categoriesString[4].slice(1)}</Text>
                 </View>                
-                <QuizList request={`/quiz?category=${categoriesString[4]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[4]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="script-text" color="white" size={20}/>
                     <Text style={styles.categoryText}>{categoriesString[5].charAt(0).toUpperCase() + categoriesString[5].slice(1)}</Text>
                 </View>                
-                <QuizList request={`/quiz?category=${categoriesString[5]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[5]}`} refreshControl={refreshing}/>
 
                 <View style={styles.categoryContainer}>
                     <Icon name="earth" color="white" size={24}/>
                     <Text style={styles.categoryText}>{categoriesString[6].charAt(0).toUpperCase() + categoriesString[6].slice(1)}</Text>
                 </View>                
-                <QuizList request={`/quiz?category=${categoriesString[6]}`} refreshControl={refreshing}/>
+                <QuizList request={`/quiz/list?category=${categoriesString[6]}`} refreshControl={refreshing}/>
                 
                 {/* <Text style={styles.categoryText}>{categoriesString[7].charAt(0).toUpperCase() + categoriesString[7].slice(1)}</Text>
-                <QuizList request={`/quiz?category=${categoriesString[7]}`} refreshControl={refreshing}/> */}
+                <QuizList request={`/quiz/list?category=${categoriesString[7]}`} refreshControl={refreshing}/> */}
             </View>
         </ScrollView>
     );

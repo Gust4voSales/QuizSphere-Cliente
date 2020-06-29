@@ -42,7 +42,7 @@ export default function Activities() {
             else  // Loading next page
                 setLoadingMore(true); 
 
-            const { data } = await api.get(`/friends/pendingInvitations/pendingInvitations?page=${page}`);
+            const { data } = await api.get(`/friends/pendingInvitations?page=${page}`);
 
             if (isMounted.current) {
                 if (page===1) // refreshing

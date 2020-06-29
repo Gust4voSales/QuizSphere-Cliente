@@ -70,7 +70,7 @@ export default function Screen({ navigation }) {
             </View>
             { 
             inputFilter.length>0 &&
-            <QuizList request={`/quiz?${filter}=${inputFilter}`} horizontal={false}/>
+            <QuizList request={`/quiz/list?${filter}=${inputFilter}`} horizontal={false}/>
             }
             
         </View>

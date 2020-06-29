@@ -99,6 +99,7 @@ export default function Activities() {
                 if (!activity.seen) 
                     activitiesIdsToUpdate.push(activity._id);
             }
+            
             if (activitiesIdsToUpdate.length>0)
                 await api.put('/notifications/setasread', activitiesIdsToUpdate);
         } 
