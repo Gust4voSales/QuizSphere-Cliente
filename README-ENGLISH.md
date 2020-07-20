@@ -44,7 +44,7 @@ has received the private quiz can play it);
 1. Clone this repo running on your terminal ````git clone https://github.com/Gust4voSales/QuizSphere-Cliente.git ```` 
 2. Inside the project's folder run ```yarn``` to install all dependencies
 3. (Optional). If you're running your own server instance from the app, change the connection link in the file: src/services/api.js 
-4. Lastly, ```react-native run-android``` to start the app on your physical device and/or Android emulator
+4. Lastly, ```npx react-native run-android``` to start the app on your physical device and/or Android emulator
 
 <hr />
 App development page on Trello - https://trello.com/b/niEoJsnl/quizsphere
