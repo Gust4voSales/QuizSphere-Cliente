@@ -1,3 +1,4 @@
+[README em Português](https://github.com/Gust4voSales/QuizSphere-Cliente/blob/master/README.md)
 <h1 align="center">
 <img src="https://i.imgur.com/HMr0tyZ.png" alt="icon" height="100">
 <br>
@@ -5,7 +6,8 @@ QuizSphere
 </h1>
 
 <p align="center">Create public or private quizzes, favorite the best ones and share them with your friends.</p>
-<p>Link in PlayStore: https://play.google.com/store/apps/details?id=com.gust4</p>
+👉Youtube link demonstrating app: https://www.youtube.com/watch?v=bO2aJ0DFudk
+<p>👉Link in PlayStore: https://play.google.com/store/apps/details?id=com.gust4</p>
 
 Some screens from the app:
 <div>
@@ -19,7 +21,7 @@ Some screens from the app:
 </div>
 <hr />
 
-## 📜About
+## 📜 About
 This project contains the mobile interface from the QuizSphere application (backend code: https://github.com/Gust4voSales/QuizSphere-Backend).
 The app was developed with the objective of gaining experience and knowledge using updated technologies. QuizSphere is a mix of a quiz game and social networking features
 
@@ -35,12 +37,12 @@ has received the private quiz can play it);
  - Receive real-time notifications in the app whenever a user accepts your friends invitations or when someone shares a quiz with you; 
 
 
-## ⚙Features
+## ⚙ Techs
 [//]: # (Add the features of your project here:)
 - **React Native** — A framework that provides a way to create native IOS and Android apps using React.
 - **SocketIO** — Socket.IO enables real-time, bidirectional and event-based communication.
 
-## 🛠Getting started
+## 🛠 Getting started
 1. Clone this repo running on your terminal ````git clone https://github.com/Gust4voSales/QuizSphere-Cliente.git ```` 
 2. Inside the project's folder run ```yarn``` to install all dependencies
 3. (Optional). If you're running your own server instance from the app, change the connection link in the file: src/services/api.js 
