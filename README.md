@@ -38,7 +38,7 @@ O que o aplicativo faz/permite:
  - Receber notificações no aplicativo em tempo real quando algum usuário aceita sua solicitação de amizade ou quando compartilham um quiz com você.
 
 
-##  Tecnologias
+## 💻 Tecnologias
 [//]: # (Add the features of your project here:)
 - **React Native** — Uma lib que provê uma maneira de criar apps nativos IOS e Android utilizando React
 - **SocketIO** — Socket.IO possibilita comunicação em tempo real, biderecional e baseada em eventos.
