@@ -37,7 +37,7 @@ has received the private quiz can play it);
  - Receive real-time notifications in the app whenever a user accepts your friends invitations or when someone shares a quiz with you; 
 
 
-## ⚙ Techs
+## 💻 Techs
 [//]: # (Add the features of your project here:)
 - **React Native** — A framework that provides a way to create native IOS and Android apps using React.
 - **SocketIO** — Socket.IO enables real-time, bidirectional and event-based communication.
